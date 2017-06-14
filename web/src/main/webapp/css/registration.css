@@ -1,0 +1,39 @@
+.login-form > form > fieldset > div {
+    float: left;
+    margin-left: 30px;
+    text-align: left;
+}
+
+.login-form > form > fieldset > div > button {
+    height: 27px;
+    width: 23px;
+    margin-left: 5px;
+    margin-top: 6px;
+    padding-left: 6px;
+}
+
+.login-form > form > fieldset > div > input[type="submit"] {
+    background-color: #ebebeb;
+    border: none;
+    border-radius: 3px;
+    color: #404040;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 12px 10px;
+    display: block;
+    margin-left: 10px;
+}
+
+.login-form > form > fieldset > div > input[type="submit"]:hover {
+    background-color: #e0e0e0;
+}
+
+.login-form > form > a {
+    display: block;
+    padding: 12px;
+}
+
+.err {
+    color: red;
+}

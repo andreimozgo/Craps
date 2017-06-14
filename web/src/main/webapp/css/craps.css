@@ -1,0 +1,227 @@
+a {
+    text-decoration: none;
+    color: #71c0ff;
+}
+
+a:hover {
+    color: #ff6900
+}
+
+body {
+    font-size: 16px;
+    text-align: center;
+    background: url("/img/onlinecasino.jpg") no-repeat fixed;
+    color: white;
+    font-family: 'PT Sans', sans-serif;
+}
+
+header {
+    position: fixed;
+    background-color: #ff6900;
+    font-weight: bold;
+    display: block;
+    top: 0;
+    right: 0;
+    left: 0;
+    text-decoration: none;
+}
+
+.title {
+    float: left;
+    padding-left: 10px;
+}
+
+.title > h1 {
+    margin: 0;
+}
+
+.menu {
+    float: right;
+}
+
+.menu-link {
+    width: 130px;
+    float: left;
+    font-size: 18px;
+    padding: 10px;
+    color: #ffffff;
+}
+
+.menu-link:hover {
+    background-color: #353535;
+    color: #71c0ff;
+}
+
+.menu-locale {
+    float: left;
+    font-size: 14px;
+    padding: 12px;
+    color: #ffffff;
+}
+
+.menu-locale:hover {
+    color: #71c0ff;
+}
+
+section {
+    width: 90%;
+    max-width: 900px;
+    min-width: 200px;
+    background-color: transparent;
+    margin: auto;
+    margin-top: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+section > a {
+    color: #71c0ff;
+}
+
+section > a:hover {
+    color: #ff6900
+}
+
+.error-page {
+    width: 400px;
+    background-color: #353535;
+    margin: auto;
+    padding: 15px;
+}
+
+.context {
+    background-color: #353535;
+    padding: 5px;
+}
+
+.context > h2 {
+    margin-top: 5px;
+}
+
+.login-form {
+    background-color: #363636;
+    border-radius: 5px;
+    width: 350px;
+    font-size: 16px;
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.3);
+    margin: auto;
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+.login-form > h2 {
+    background-color: #ff6900;
+    border-radius: 5px 5px 0 0;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.login-form > form {
+    overflow: hidden;
+    width: 320px;
+    margin: auto;
+}
+
+.login-form > form > fieldset {
+    border: none;
+    padding: 0;
+    position: relative;
+}
+
+.login-form > form > fieldset > .message {
+    padding-bottom: 10px;
+}
+
+.login-form > form > fieldset > div > input {
+    border: 1px solid #292829;
+    border-top: none;
+    padding: 12px 10px;
+    font-size: 14px;
+    outline: none;
+    width: 238px;
+}
+
+.login-form > form > fieldset > div > input[type="submit"] {
+    background-color: #ebebeb;
+    border: none;
+    border-radius: 3px;
+    color: #404040;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.login-form > form > fieldset > div > input[type="submit"]:hover {
+    background-color: #e0e0e0;
+}
+
+.login-form > form > a {
+    display: block;
+    padding: 12px;
+}
+
+.contacts {
+    position: fixed;
+    background-color: #ff6900;
+    padding: 8px;
+    font-size: 12px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+}
+
+.contacts > a {
+    color: #ffffff;
+}
+
+table {
+    background-color: white;
+    color: black;
+    margin: auto;
+}
+
+@media screen and (max-width: 1080px) {
+    body {
+        background: url("/img/onlinecasino1080.jpg") no-repeat fixed;
+    }
+
+    section {
+        min-width: 100px;
+    }
+}
+
+@media screen and (max-width: 619px) {
+    body {
+        background-color: #000C15;
+    }
+
+    header {
+        position: static;
+    }
+
+    .title {
+        text-align: center;
+        float: none;
+        margin-top: 10px;
+    }
+
+    .menu {
+        float: none;
+        margin-top: 10px;
+    }
+
+    .menu-link {
+        float: none;
+        display: block;
+        margin: auto;
+    }
+
+    section {
+        margin-top: 0;
+        padding-top: 0;
+    }
+}
