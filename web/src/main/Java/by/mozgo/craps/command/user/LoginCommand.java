@@ -1,11 +1,6 @@
 package by.mozgo.craps.command.user;
 
-import by.mozgo.craps.command.ActionCommand;
-import by.mozgo.craps.command.ConfigurationManager;
-import by.mozgo.craps.command.MessageManager;
-import by.mozgo.craps.command.StringConstant;
-import by.mozgo.craps.command.admin.AdminPageCommand;
-import by.mozgo.craps.command.client.ClientPageCommand;
+import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -15,11 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
 
+import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
+import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
+
 public class LoginCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
 
-    public String execute(HttpServletRequest request) {
+    public ActionResult execute(HttpServletRequest request) {
         UserServiceImpl userService = UserServiceImpl.getInstance();
+        ActionResult result = null;
         String page = null;
         String userRole;
         boolean userExist = false;
@@ -41,18 +40,20 @@ public class LoginCommand implements ActionCommand {
 
                 // getting page depending on user role
                 if (userRole.equals("admin")) {
-                    page = new AdminPageCommand().execute(request);
+                    page = ConfigurationManager.getProperty("command.adminpage");
                 } else {
-                    page = new ClientPageCommand().execute(request);
+                    page = ConfigurationManager.getProperty("command.clientpage");
                 }
                 userExist = true;
+                result = new ActionResult(REDIRECT, page);
             }
         }
         if (!userExist) {
             Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
             request.setAttribute("errorLoginPassMessage", MessageManager.getProperty("error.loginerror", locale));
             page = ConfigurationManager.getProperty("path.page.login");
+            result = new ActionResult(FORWARD, page);
         }
-        return page;
+        return result;
     }
 }

@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
 </head>
 <body>
-<jsp:include page="/WEB-INF/view/elements/header.jsp"/>
+<jsp:include page="/jsp/elements/header.jsp"/>
 <section>
     <div class="error-page">
         <fmt:message key="error.error"/>
@@ -24,6 +24,6 @@
         <br/> Exception: ${pageContext.errorData.throwable}
     </div>
 </section>
-<jsp:include page="/WEB-INF/view/elements/footer.jsp"/>
+<jsp:include page="/jsp/elements/footer.jsp"/>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package by.mozgo.craps.command;
 
 import by.mozgo.craps.command.admin.AdminPageCommand;
+import by.mozgo.craps.command.admin.ChangeRoleCommand;
 import by.mozgo.craps.command.admin.DeleteUserCommand;
 import by.mozgo.craps.command.client.ClientPageCommand;
 import by.mozgo.craps.command.user.AddRegistrationCommand;
@@ -19,9 +20,9 @@ public enum CommandEnum {
             this.command = new LogoutCommand();
         }
     },
-    ADDFLIGHT {
+    CHANGEROLE {
         {
-            //          this.command = new AddFlightCommand();
+            this.command = new ChangeRoleCommand();
         }
     },
     REGISTRATION {

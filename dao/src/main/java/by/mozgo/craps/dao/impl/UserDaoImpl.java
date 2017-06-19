@@ -3,7 +3,6 @@ package by.mozgo.craps.dao.impl;
 import by.mozgo.craps.dao.UserDao;
 import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.entity.User;
-import by.mozgo.craps.util.ConnectionPool;
 import by.mozgo.craps.util.ConnectionWrapper;
 
 import java.sql.PreparedStatement;
@@ -33,7 +32,6 @@ public class UserDaoImpl implements UserDao {
 
     public User findUserByEmail(String email) throws DaoException {
         String query = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id WHERE email = ?";
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         User user = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, email);
@@ -56,7 +54,6 @@ public class UserDaoImpl implements UserDao {
 
     public void create(User entity) throws DaoException {
         String query = "INSERT INTO user (email, password, username) VALUES (?, ?, ?)";
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, entity.getEmail());
             ps.setString(2, entity.getPassword());
@@ -76,7 +73,6 @@ public class UserDaoImpl implements UserDao {
 
     public void delete(Integer id) throws DaoException {
         String query = "DELETE FROM user WHERE id = ?";
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, id);
             ps.executeUpdate();
@@ -88,7 +84,6 @@ public class UserDaoImpl implements UserDao {
     public List<User> getAll() throws DaoException {
         String query = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id ORDER BY user.id";
         List<User> users = new ArrayList<>();
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
@@ -108,17 +103,53 @@ public class UserDaoImpl implements UserDao {
         return users;
     }
 
-    public void updateRole(Integer userId, User.UserRole role) throws DaoException {
-        String query = "UPDATE user SET role = ? WHERE user_id = ?";
-        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection()) {
-            try (PreparedStatement prepStatement = connection.prepareStatement(query)) {
-                prepStatement.setString(1, role.toString());
-                prepStatement.setLong(2, userId);
-                prepStatement.executeUpdate();
+    public List getAll(int recordsPerPage, int currentPage) throws DaoException {
+        String query = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id ORDER BY user.id LIMIT ?,?";
+        List<User> users = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, (currentPage - 1) * recordsPerPage);
+            preparedStatement.setInt(2, recordsPerPage);
+            ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
+                User user = new User();
+                user.setId(result.getInt(1));
+                user.setEmail(result.getString(2));
+                user.setUsername(result.getString(3));
+                user.setCreateTime(result.getTimestamp(4).toLocalDateTime());
+                user.setMoney(result.getBigDecimal(5));
+                user.setUserRole(User.UserRole.valueOf(result.getString(6).toUpperCase()));
+                users.add(user);
             }
+            result.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+        return users;
+    }
+
+    public void updateRole(Integer userId, int role) throws DaoException {
+        String query = "UPDATE user SET role_id = ? WHERE id = ?";
+        try (PreparedStatement prepStatement = connection.prepareStatement(query)) {
+            prepStatement.setInt(1, role);
+            prepStatement.setLong(2, userId);
+            prepStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public int getAmount() throws DaoException {
+        String query = "SELECT COUNT(*) FROM user";
+        int amount;
+        try (Statement statement = connection.createStatement()) {
+            ResultSet result = statement.executeQuery(query);
+            result.next();
+            amount = result.getInt(1);
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return amount;
     }
 
     public void setConnection(ConnectionWrapper connection) {

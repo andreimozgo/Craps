@@ -1,13 +1,16 @@
 package by.mozgo.craps.command.client;
 
 import by.mozgo.craps.command.ActionCommand;
+import by.mozgo.craps.command.ActionResult;
 import by.mozgo.craps.command.ConfigurationManager;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
+
 public class ClientPageCommand implements ActionCommand {
 
-    public String execute(HttpServletRequest request) {
+    public ActionResult execute(HttpServletRequest request) {
         String page;
 /*        final Logger LOG = Logger.getLogger(ClientPageCommand.class);
         TicketServiceImpl ticketService = TicketServiceImpl.getInstance();
@@ -51,6 +54,6 @@ public class ClientPageCommand implements ActionCommand {
         request.setAttribute("recordsPerPage", recordsPerPage);*/
 
         page = ConfigurationManager.getProperty("path.page.user");
-        return page;
+        return new ActionResult(FORWARD, page);
     }
 }

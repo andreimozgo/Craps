@@ -1,18 +1,23 @@
 package by.mozgo.craps.controller;
 
-import by.mozgo.craps.command.*;
+import by.mozgo.craps.command.ActionCommand;
+import by.mozgo.craps.command.ActionFactory;
+import by.mozgo.craps.command.ActionResult;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Locale;
 
-@WebServlet(urlPatterns = {"/controller"})
+@WebServlet(urlPatterns = {"/craps"})
+@MultipartConfig(fileSizeThreshold = 1024 * 512, // 512 Kb
+        maxFileSize = 1024 * 512, // 512 Kb
+        maxRequestSize = 1024 * 528 // 520 Kb (512 Kb for image + 16 Kb for other data)
+)
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = -6668349208729370249L;
@@ -29,26 +34,22 @@ public class Controller extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ActionResult result;
         String page;
         // get the command from JSP
         ActionFactory client = new ActionFactory();
         ActionCommand command = client.defineCommand(request);
 
         // call execute() and forward request
-        page = command.execute(request); // gives answer page
-        if (page != null) {
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-            // calls response page
-            dispatcher.forward(request, response);
-        } else {
-            // gets error page
-            page = ConfigurationManager.getProperty("path.page.index");
-            HttpSession session = request.getSession(true);
-            if (session.getAttribute("role").equals(1)) {
-                Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
-                session.setAttribute("nullPage", MessageManager.getProperty("message.nullpage", locale));
-            }
-            response.sendRedirect(request.getContextPath() + page);
+        result = command.execute(request); // gives answer page
+        switch (result.getType()) {
+            case FORWARD:
+                RequestDispatcher dispatcher = request.getRequestDispatcher(result.getPage());
+                dispatcher.forward(request, response);
+                break;
+            case REDIRECT:
+                response.sendRedirect(result.getPage());
+                break;
         }
     }
 }

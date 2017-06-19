@@ -3,5 +3,5 @@ package by.mozgo.craps.command;
 import javax.servlet.http.HttpServletRequest;
 
 public interface ActionCommand {
-    String execute(HttpServletRequest request);
+    ActionResult execute(HttpServletRequest request);
 }

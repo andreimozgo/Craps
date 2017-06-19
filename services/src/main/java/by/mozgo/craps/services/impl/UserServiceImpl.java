@@ -20,7 +20,6 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     private static final Logger LOG = LogManager.getLogger();
     private static UserServiceImpl instance = null;
 
-
     public UserServiceImpl() {
     }
 
@@ -108,6 +107,21 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         return users;
     }
 
+    public List<User> getAll(int recordsPerPage, int currentPage) {
+        List<User> users = null;
+        UserDaoImpl userDao = new UserDaoImpl();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+        userDao.setConnection(connection);
+        try {
+            users = userDao.getAll(recordsPerPage, currentPage);
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception {}", e);
+        } finally {
+            connection.close();
+        }
+        return users;
+    }
+
     protected String hash(String input) {
         String md5Hashed = null;
         if (null == input) {
@@ -124,7 +138,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         return md5Hashed;
     }
 
-    public void updateRole(Integer userId, User.UserRole role) {
+    public void updateRole(Integer userId, int role) {
         UserDaoImpl userDao = new UserDaoImpl();
         ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         userDao.setConnection(connection);
@@ -135,5 +149,21 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         } finally {
             connection.close();
         }
+    }
+
+    public int getNumberOfPages(int recordsPerPage) {
+        UserDaoImpl userDao = new UserDaoImpl();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+        userDao.setConnection(connection);
+        int numberOfPages = 1;
+        try {
+            int numberOfRecords = userDao.getAmount();
+            numberOfPages = Math.round(numberOfRecords / recordsPerPage);
+            if ((numberOfRecords % recordsPerPage) > 0) numberOfPages++;
+            LOG.info("Count of flight pages: " + numberOfPages);
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception {}", e);
+        }
+        return numberOfPages;
     }
 }

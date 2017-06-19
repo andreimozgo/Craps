@@ -8,14 +8,14 @@
 <head>
     <meta charset="UTF-8">
     <title><fmt:message key="header.title"/></title>
-    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../../css/normalize.css">
-    <link rel="stylesheet" href="../../css/craps.css">
-    <link rel="stylesheet" href="../../css/user.css">
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="../css/craps.css">
+    <link rel="stylesheet" href="../css/user.css">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
 </head>
 <body>
-<jsp:include page="/WEB-INF/view/elements/header.jsp"/>
+<jsp:include page="/jsp/elements/header.jsp"/>
 <section>
     <h3>Система бронирования билетов LOWCOST</h3>
     <hr/>
@@ -198,6 +198,6 @@
     <br>
     <a href="controller?command=logout">Logout</a>
 </section>
-<jsp:include page="/WEB-INF/view/elements/footer.jsp"/>
+<jsp:include page="/jsp/elements/footer.jsp"/>
 </body>
 </html>

@@ -1,32 +1,50 @@
 package by.mozgo.craps.command.user;
 
-import by.mozgo.craps.command.ActionCommand;
-import by.mozgo.craps.command.ConfigurationManager;
-import by.mozgo.craps.command.MessageManager;
-import by.mozgo.craps.command.StringConstant;
+import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.impl.UserServiceImpl;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.io.IOException;
 import java.util.Locale;
-import java.util.Map;
+
+import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
+import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
 
 public class AddRegistrationCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
 
-    public String execute(HttpServletRequest request) {
+    public ActionResult execute(HttpServletRequest request) {
         UserServiceImpl userService = UserServiceImpl.getInstance();
+        ActionResult result = null;
         String page = null;
-        Map<String, String[]> params = request.getParameterMap();
-
         String email = request.getParameter("email");
         Locale locale = (Locale) request.getSession().getAttribute(StringConstant.ATTRIBUTE_LOCALE);
         String username = request.getParameter("username");
-        ;
 
         if (userService.findUserByEmail(email) == null) {
+            Part part = null;
+            try {
+                part = request.getPart("photo");
+            } catch (IOException e) {
+                LOG.log(Level.ERROR, "Unable to save file: {}", e);
+            } catch (ServletException e) {
+                // no file - it's ok;
+            } catch (IllegalStateException e) {
+                LOG.log(Level.WARN, "File is too big: {}", e);
+                request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.bigfile", locale));
+                request.setAttribute(StringConstant.ATTRIBUTE_MAIN_FORM, JSPPathManager.getProperty("form.register"));
+
+                result = new ActionResult(FORWARD, JSPPathManager.getProperty("page.main"));
+            }
+
+
+
             String password = request.getParameter("pwd1");
             User user = new User();
             user.setEmail(email);
@@ -36,12 +54,14 @@ public class AddRegistrationCommand implements ActionCommand {
             LOG.info("New registration added successfully");
             request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.success", locale));
             page = ConfigurationManager.getProperty("path.page.login");
+            result = new ActionResult(REDIRECT, page);
         } else {
             request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.failemail", locale));
             page = ConfigurationManager.getProperty("path.page.registration");
             request.setAttribute("email", email);
             request.setAttribute("username", username);
+            result = new ActionResult(FORWARD, page);
         }
-        return page;
+        return result;
     }
 }

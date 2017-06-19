@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
@@ -6,6 +7,6 @@
     <title>index</title>
 </head>
 <body>
-<jsp:forward page="/WEB-INF/view/login.jsp"/>
+<jsp:forward page="/jsp/login.jsp"/>
 </body>
 </html>
