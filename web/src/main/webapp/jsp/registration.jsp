@@ -18,9 +18,9 @@
 <section>
     <div class="login-form">
         <h2><fmt:message key="login.registration"/></h2>
-        <form id="user" onsubmit="return validateForm()" method="POST" action="craps">
+        <form id="user" onsubmit="return validateForm()" method="POST" action="craps" enctype="multipart/form-data">
             <fieldset id="fieldset">
-                <div class="message">${registrationResultMessage}</div>
+                <div id="message-logic" class="message">${registrationResultMessage}</div>
                 <div><input form="user" type="email" name="email" placeholder="<fmt:message key="login.email"/>"
                             value="${email}"/>
                     <div class="err" id="err-email"></div>
@@ -38,6 +38,8 @@
                 <div><input form="null" type="number" name="age" placeholder="<fmt:message key="login.age"/>"/>
                     <div class="err" id="err-age"></div>
                 </div>
+                <div><input type="file" name="photo" accept="image/jpeg,image/png"
+                            alt="<fmt:message key="button.file"/>" placeholder="<fmt:message key="login.age"/>"/></div>
                 <div><input type="submit" value="<fmt:message key="login.submit"/>"/></div>
                 <input type="hidden" name="command" value="addregistration"/>
             </fieldset>
@@ -66,13 +68,15 @@
             errPwd1 = document.getElementById("err-pwd1"),
             errPwd2 = document.getElementById("err-pwd2"),
             errAge = document.getElementById("err-age"),
-            errEmail = document.getElementById("err-email");
+            errEmail = document.getElementById("err-email"),
+            messageLogic = document.getElementById("message-logic");
 
         errUname.innerHTML = "";
         errPwd1.innerHTML = "";
         errPwd2.innerHTML = "";
         errAge.innerHTML = "";
         errEmail.innerHTML = "";
+        messageLogic.innerHTML = "";
 
         var usr = document.forms[0]["username"].value,
             pwd1 = document.forms[0]["pwd1"].value,

@@ -34,27 +34,27 @@ public class AddRegistrationCommand implements ActionCommand {
             } catch (IOException e) {
                 LOG.log(Level.ERROR, "Unable to save file: {}", e);
             } catch (ServletException e) {
-                // no file - it's ok;
+                // no file
             } catch (IllegalStateException e) {
                 LOG.log(Level.WARN, "File is too big: {}", e);
-                request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.bigfile", locale));
-                request.setAttribute(StringConstant.ATTRIBUTE_MAIN_FORM, JSPPathManager.getProperty("form.register"));
-
-                result = new ActionResult(FORWARD, JSPPathManager.getProperty("page.main"));
+                request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.bigfile", locale));
+                page = ConfigurationManager.getProperty("path.page.registration");
+                request.setAttribute("email", email);
+                request.setAttribute("username", username);
+                result = new ActionResult(FORWARD, page);
             }
-
-
-
-            String password = request.getParameter("pwd1");
-            User user = new User();
-            user.setEmail(email);
-            user.setPassword(password);
-            user.setUsername(username);
-            userService.createOrUpdate(user);
-            LOG.info("New registration added successfully");
-            request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.success", locale));
-            page = ConfigurationManager.getProperty("path.page.login");
-            result = new ActionResult(REDIRECT, page);
+            if (result == null) {
+                String password = request.getParameter("pwd1");
+                User user = new User();
+                user.setEmail(email);
+                user.setPassword(password);
+                user.setUsername(username);
+                userService.createOrUpdate(user);
+                LOG.info("New registration added successfully");
+                // request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.success", locale));
+                page = ConfigurationManager.getProperty("path.page.registered");
+                result = new ActionResult(REDIRECT, page);
+            }
         } else {
             request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.failemail", locale));
             page = ConfigurationManager.getProperty("path.page.registration");
