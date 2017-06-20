@@ -1,10 +1,11 @@
-package by.mozgo.craps.writer;
+package by.mozgo.craps.manager;
 
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
@@ -14,23 +15,24 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PhotoManager {
+public class AvatarManager {
     private static final String PHOTO_FOLDER = "img\\avatars";
     private static final String PATTERN_PHOTO_EXTENSION = "(.png$)|(.jpg$)";
     private static final String PHOTO_EXTENSION = ".png;.jpg";
     private static final String EXTENSION_DELIMITER = ";";
+    private static final String DEFAULT_AVATAR = "noavatar.png";
     private static final Logger LOG = LogManager.getLogger();
-    private String applicationPath;
+    private ServletContext servletContext;
 
-    public PhotoManager(String applicationPath) {
-        this.applicationPath = applicationPath;
+    public AvatarManager(ServletContext servletContext) {
+        this.servletContext = servletContext;
     }
 
     public void uploadPhoto(Part part, Integer userId) {
         String fileExtension = getFileExtension(part);
 
         if (!fileExtension.isEmpty()) {
-            String photoFilePath = applicationPath + PHOTO_FOLDER + File.separator + userId;
+            String photoFilePath = servletContext.getRealPath("") + PHOTO_FOLDER + File.separator + userId;
             deletePhoto(photoFilePath);
             try {
                 part.write(photoFilePath + fileExtension);
@@ -83,5 +85,24 @@ public class PhotoManager {
         } else {
             return "";
         }
+    }
+
+    public String findPhotoRelativePath(Integer userId) {
+        String photoDirPath = servletContext.getRealPath("") + PHOTO_FOLDER + File.separator;
+        String photoFilePath = null;
+        String[] extensionsArray = PHOTO_EXTENSION.split(EXTENSION_DELIMITER);
+        List<String> extensions = new ArrayList<>(Arrays.asList(extensionsArray));
+        for (String extension : extensions) {
+            File photo = new File(photoDirPath + userId + extension);
+            if (photo.exists()) {
+                photoFilePath = servletContext.getContextPath() + PHOTO_FOLDER + File.separator + userId + extension;
+            }
+        }
+
+        if (photoFilePath == null) {
+            photoFilePath = servletContext.getContextPath() + PHOTO_FOLDER + File.separator + DEFAULT_AVATAR;
+        }
+
+        return photoFilePath;
     }
 }

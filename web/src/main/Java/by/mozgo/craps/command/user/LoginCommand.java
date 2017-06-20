@@ -21,18 +21,17 @@ public class LoginCommand implements ActionCommand {
         ActionResult result = null;
         String page = null;
         String userRole;
-        boolean userExist = false;
 
         // getting email from request
         String email = request.getParameter("email");
         HttpSession session = request.getSession(true);
         // email check
-        if (userService.findUserByEmail(email) != null) {
+        User user = userService.findUserByEmail(email);
+        if (user != null) {
             String pass = request.getParameter("password");
             if (userService.checkPassword(email, pass)) {
                 // getting user role
-                User user = userService.findUserByEmail(email);
-                session.setAttribute("username", user.getUsername());
+                session.setAttribute("user", user);
                 userRole = user.getUserRole().toString();
                 // setting user role to session
                 session.setAttribute("role", userRole);
@@ -44,11 +43,9 @@ public class LoginCommand implements ActionCommand {
                 } else {
                     page = ConfigurationManager.getProperty("command.clientpage");
                 }
-                userExist = true;
                 result = new ActionResult(REDIRECT, page);
             }
-        }
-        if (!userExist) {
+        } else {
             Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
             request.setAttribute("errorLoginPassMessage", MessageManager.getProperty("error.loginerror", locale));
             page = ConfigurationManager.getProperty("path.page.login");

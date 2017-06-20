@@ -1,3 +1,7 @@
 section {
     background-color: darkslategrey;
 }
+
+.avatar > img {
+    height: 80px;
+}

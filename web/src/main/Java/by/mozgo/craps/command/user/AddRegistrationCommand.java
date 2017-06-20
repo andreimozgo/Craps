@@ -2,8 +2,8 @@ package by.mozgo.craps.command.user;
 
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
+import by.mozgo.craps.manager.AvatarManager;
 import by.mozgo.craps.services.impl.UserServiceImpl;
-import by.mozgo.craps.writer.PhotoManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,7 +53,7 @@ public class AddRegistrationCommand implements ActionCommand {
                 userService.createOrUpdate(user);
                 user = userService.findUserByEmail(user.getEmail());
 
-                PhotoManager uploader = new PhotoManager(request.getServletContext().getRealPath(""));
+                AvatarManager uploader = new AvatarManager(request.getServletContext());
                 uploader.uploadPhoto(part, user.getId());
                 LOG.log(Level.INFO, "New registration added successfully");
                 page = ConfigurationManager.getProperty("path.page.registered");

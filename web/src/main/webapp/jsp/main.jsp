@@ -19,7 +19,7 @@
 <section>
     <h1><fmt:message key="admin.panel"/></h1>
     <hr>
-    <div> ${username}, hello!</div>
+    <div> ${user.username}, hello!</div>
     <hr>
     <h3><fmt:message key="admin.users"/></h3>
     <form method="get" action="craps">
@@ -73,9 +73,8 @@
                     <td>
                         <select name="newRole">
                             <option value="1">admin</option>
-                            <option value="2">new</option>
-                            <option value="3">user</option>
-                            <option value="4">blocked</option>
+                            <option value="2">user</option>
+                            <option value="3">blocked</option>
                         </select>
                     </td>
                     <td>

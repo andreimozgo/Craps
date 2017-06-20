@@ -53,7 +53,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         try {
             userDao.create(user);
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception {}", e);
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
         } finally {
             connection.close();
         }
@@ -70,7 +70,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         try {
             userDao.delete(id);
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception {}", e);
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
         } finally {
             connection.close();
         }
@@ -85,7 +85,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         try {
             user = userDao.findUserByEmail(email);
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception {}", e);
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
         } finally {
             connection.close();
         }
@@ -100,7 +100,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         try {
             users = userDao.getAll();
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception {}", e);
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
         } finally {
             connection.close();
         }
@@ -115,7 +115,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         try {
             users = userDao.getAll(recordsPerPage, currentPage);
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception {}", e);
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
         } finally {
             connection.close();
         }
@@ -145,7 +145,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         try {
             userDao.updateRole(userId, role);
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception {}", e);
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
         } finally {
             connection.close();
         }
@@ -162,7 +162,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
             if ((numberOfRecords % recordsPerPage) > 0) numberOfPages++;
             LOG.info("Count of flight pages: " + numberOfPages);
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception {}", e);
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }
         return numberOfPages;
     }
