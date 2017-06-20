@@ -39,6 +39,10 @@ header {
     float: right;
 }
 
+.menu > div {
+    float: left;
+}
+
 .menu-link {
     width: 130px;
     float: left;
@@ -53,6 +57,7 @@ header {
 }
 
 .menu-locale {
+    width: 40px;
     float: left;
     font-size: 14px;
     padding: 12px;
@@ -60,6 +65,7 @@ header {
 }
 
 .menu-locale:hover {
+    background-color: #353535;
     color: #71c0ff;
 }
 
@@ -69,7 +75,7 @@ section {
     min-width: 200px;
     background-color: transparent;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 80px;
     margin-bottom: 50px;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -216,6 +222,12 @@ table {
     }
 
     .menu-link {
+        float: none;
+        display: block;
+        margin: auto;
+    }
+
+    .menu-locale {
         float: none;
         display: block;
         margin: auto;

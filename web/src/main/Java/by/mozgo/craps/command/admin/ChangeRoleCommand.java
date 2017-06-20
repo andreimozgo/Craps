@@ -7,7 +7,7 @@ import by.mozgo.craps.services.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
+import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 /**
  * Created by Andrei Mozgo. 2017.
@@ -22,6 +22,6 @@ public class ChangeRoleCommand implements ActionCommand {
         int newRole = Integer.parseInt(request.getParameter("newRole"));
         userService.updateRole(id, newRole);
         page = ConfigurationManager.getProperty("command.adminpage");
-        return new ActionResult(REDIRECT, page);
+        return new ActionResult(FORWARD, page);
     }
 }

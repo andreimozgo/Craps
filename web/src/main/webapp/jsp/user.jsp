@@ -21,8 +21,10 @@
     <div class="avatar">
         <ctg:user-avatar/> ${user.username}, hello!
     </div>
-
-    <a href="controller?command=logout">Logout</a>
+    <br>
+    <hr>
+    <br>
+    <a href="craps?command=logout"><fmt:message key="logout"/></a>
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
 </body>

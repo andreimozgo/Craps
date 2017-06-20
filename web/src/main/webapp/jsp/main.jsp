@@ -12,6 +12,7 @@
     <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../css/normalize.css">
     <link rel="stylesheet" href="../css/craps.css">
+    <link rel="stylesheet" href="../css/user.css">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
 </head>
 <body>
@@ -23,20 +24,17 @@
     <hr>
     <h3><fmt:message key="admin.users"/></h3>
     <form method="get" action="craps">
-        <td><fmt:message key="pagination.linesperpage"/>:</td>
-        <td>
-            <div>
+        <fmt:message key="pagination.linesperpage"/>:
                 <select name="recordsPerPage">
-                    <option value="${recordsPerPage}"></option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="10">5</option>
+                    <option>${recordsPerPage}</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
                 </select>
-            </div>
-        </td>
         <input type="hidden" name="command" value="adminpage"/>
         <input type="submit" value="<fmt:message key="pagination.search"/>"/>
     </form>
+    <hr>
     <table border="1">
         <thead align="center">
         <tr>
@@ -148,6 +146,8 @@
             <td></td>
         </c:otherwise>
     </c:choose>
+    <br>
+    <hr>
     <br>
     <a href="craps?command=logout"><fmt:message key="logout"/></a>
 </section>

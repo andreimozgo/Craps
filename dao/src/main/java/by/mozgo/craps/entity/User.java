@@ -91,7 +91,7 @@ public class User extends AbstractEntity implements Serializable {
     }
 
     public enum UserRole {
-        ADMIN, NEW, USER, BLOCKED;
+        ADMIN, USER, BLOCKED;
 
         @Override
         public String toString() {

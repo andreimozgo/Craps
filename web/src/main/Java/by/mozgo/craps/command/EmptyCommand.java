@@ -22,31 +22,19 @@ public class EmptyCommand implements ActionCommand {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if (user != null) {
-            String userRole = user.getUserRole().toString();
             // getting page depending on user role
-
             switch (user.getUserRole()) {
                 case ADMIN:
                     page = ConfigurationManager.getProperty("command.adminpage");
                     break;
-                case NEW:
-                    response.sendRedirect(result.getPage());
+                default:
+                    page = ConfigurationManager.getProperty("command.clientpage");
                     break;
             }
-
-
-            if (userRole.equals("admin")) {
-
-            } else if (userRole.equals("new") || userRole.equals("user")) {
-                page = ConfigurationManager.getProperty("command.clientpage");
-            } else {
-                page = ConfigurationManager.getProperty("path.page.login");
-            }
-
         } else {
             page = ConfigurationManager.getProperty("path.page.login");
         }
-
         return new ActionResult(FORWARD, page);
     }
 }
+

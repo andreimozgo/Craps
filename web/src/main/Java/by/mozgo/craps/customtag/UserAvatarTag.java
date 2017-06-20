@@ -54,7 +54,6 @@ public class UserAvatarTag extends TagSupport {
 			/* if user param isn't defined - take user from session */
             if (user == null) {
                 user = (User) pageContext.getSession().getAttribute("user");
-                System.out.println("TAG user - session");
             }
 			/* get user avatar path */
             if (user != null) {
@@ -64,7 +63,6 @@ public class UserAvatarTag extends TagSupport {
             } else {
                 out.write("' alt='");
                 out.write("no image");
-                System.out.println("TAG user - null");
             }
             out.write("'");
         } catch (IOException e) {
