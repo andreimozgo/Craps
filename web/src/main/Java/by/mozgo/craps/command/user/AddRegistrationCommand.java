@@ -3,6 +3,7 @@ package by.mozgo.craps.command.user;
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.impl.UserServiceImpl;
+import by.mozgo.craps.writer.PhotoManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +35,7 @@ public class AddRegistrationCommand implements ActionCommand {
             } catch (IOException e) {
                 LOG.log(Level.ERROR, "Unable to save file: {}", e);
             } catch (ServletException e) {
-                // no file
+                LOG.log(Level.ERROR, "Unable to save file: {}", e);
             } catch (IllegalStateException e) {
                 LOG.log(Level.WARN, "File is too big: {}", e);
                 request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.bigfile", locale));
@@ -50,8 +51,11 @@ public class AddRegistrationCommand implements ActionCommand {
                 user.setPassword(password);
                 user.setUsername(username);
                 userService.createOrUpdate(user);
-                LOG.info("New registration added successfully");
-                // request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.success", locale));
+                user = userService.findUserByEmail(user.getEmail());
+
+                PhotoManager uploader = new PhotoManager(request.getServletContext().getRealPath(""));
+                uploader.uploadPhoto(part, user.getId());
+                LOG.log(Level.INFO, "New registration added successfully");
                 page = ConfigurationManager.getProperty("path.page.registered");
                 result = new ActionResult(REDIRECT, page);
             }

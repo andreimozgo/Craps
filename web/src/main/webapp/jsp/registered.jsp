@@ -18,6 +18,7 @@
 <section>
     <div>
         <fmt:message key="registration.success"/>
+        <a href="/"><fmt:message key="login.login"/></a>
     </div>
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
