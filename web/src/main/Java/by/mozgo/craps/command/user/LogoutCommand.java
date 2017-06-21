@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
+import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
 
 public class LogoutCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
@@ -17,7 +17,7 @@ public class LogoutCommand implements ActionCommand {
     public ActionResult execute(HttpServletRequest request) {
         request.getSession().invalidate();
         LOG.log(Level.INFO, "User logged out successfully");
-        String page = ConfigurationManager.getProperty("path.page.index");
-        return new ActionResult(FORWARD, page);
+        String page = ConfigurationManager.getProperty("command.empty");
+        return new ActionResult(REDIRECT, page);
     }
 }

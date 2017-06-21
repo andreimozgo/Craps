@@ -22,6 +22,7 @@ public class LoginCommand implements ActionCommand {
         String page = null;
         String userRole;
 
+
         // getting email from request
         String email = request.getParameter("email");
         HttpSession session = request.getSession(true);
@@ -37,12 +38,8 @@ public class LoginCommand implements ActionCommand {
                 session.setAttribute("role", userRole);
                 LOG.info("User " + email + " logged in successfully");
 
-                // getting page depending on user role
-                if (userRole.equals("admin")) {
-                    page = ConfigurationManager.getProperty("command.adminpage");
-                } else {
-                    page = ConfigurationManager.getProperty("command.clientpage");
-                }
+                page = ConfigurationManager.getProperty("command.empty");
+
                 result = new ActionResult(REDIRECT, page);
             }
         } else {

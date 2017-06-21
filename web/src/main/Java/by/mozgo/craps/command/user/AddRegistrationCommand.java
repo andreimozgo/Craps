@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.Locale;
@@ -51,11 +52,12 @@ public class AddRegistrationCommand implements ActionCommand {
                 user.setPassword(password);
                 user.setUsername(username);
                 userService.createOrUpdate(user);
+                LOG.log(Level.INFO, "New registration added successfully");
                 user = userService.findUserByEmail(user.getEmail());
-
                 AvatarManager uploader = new AvatarManager(request.getServletContext());
                 uploader.uploadPhoto(part, user.getId());
-                LOG.log(Level.INFO, "New registration added successfully");
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);
                 page = ConfigurationManager.getProperty("path.page.registered");
                 result = new ActionResult(REDIRECT, page);
             }

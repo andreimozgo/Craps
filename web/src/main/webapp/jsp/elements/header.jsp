@@ -6,7 +6,7 @@
 <header>
     <div class="title"><h1><fmt:message key="header.title"/></h1></div>
     <nav class="menu">
-        <a href="craps" class="menu-link"><fmt:message key="menu.main"/></a>
+        <a href="/craps" class="menu-link"><fmt:message key="menu.main"/></a>
         <a href="/play/" class="menu-link"> PLAY</a>
         <a href="/rules/" class="menu-link">RULES</a>
         <a href="/history/" class="menu-link">HISTORY</a>
