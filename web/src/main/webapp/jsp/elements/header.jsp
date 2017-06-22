@@ -9,7 +9,7 @@
         <a href="/craps" class="menu-link"><fmt:message key="menu.main"/></a>
         <a href="/play/" class="menu-link"> PLAY</a>
         <a href="/rules/" class="menu-link">RULES</a>
-        <a href="/history/" class="menu-link">HISTORY</a>
+        <a href="/jsp/history.jsp" class="menu-link"><fmt:message key="menu.history"/></a>
         <div>
             <a href="?curLocale=ru" class="menu-locale">Рус</a>
             <a href="?curLocale=en" class="menu-locale">En</a>
