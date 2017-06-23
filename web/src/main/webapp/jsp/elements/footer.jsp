@@ -1,5 +1,5 @@
 <footer>
     <div class="contacts">
-        <a href="mailto:info@craps.com">info@craps.com</a>
+        &copy; Andrei Mozgo <a href="mailto:andrei.mozgo@gmail.com">andrei.mozgo@gmail.com</a>
     </div>
 </footer>

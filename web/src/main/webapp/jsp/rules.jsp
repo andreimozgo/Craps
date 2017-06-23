@@ -18,13 +18,17 @@
 <body>
 <jsp:include page="/jsp/elements/header.jsp"/>
 <section>
-    <h1><fmt:message key="page.history.title"/></h1>
+    <h1><fmt:message key="page.rules.title"/></h1>
     <hr>
-    <h2><fmt:message key="page.history1"/></h2>
-    <p><fmt:message key="page.history2"/></p>
-    <p><fmt:message key="page.history3"/></p>
-    <p><fmt:message key="page.history4"/></p>
-
+    <h2><fmt:message key="page.rules1"/></h2>
+    <p><fmt:message key="page.rules2"/></p>
+    <p><fmt:message key="page.rules3"/></p>
+    <p><fmt:message key="page.rules4"/></p>
+    <p><fmt:message key="page.rules5"/></p>
+    <p><fmt:message key="page.rules6"/></p>
+    <p><fmt:message key="page.rules7"/></p>
+    <p><fmt:message key="page.rules8"/></p>
+    <p><fmt:message key="page.rules9"/></p>
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
 </body>

@@ -9,10 +9,10 @@
 <head>
     <meta charset="UTF-8">
     <title><fmt:message key="header.title"/></title>
-    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../css/normalize.css">
-    <link rel="stylesheet" href="../css/craps.css">
-    <link rel="stylesheet" href="../css/user.css">
+    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/normalize.css">
+    <link rel="stylesheet" href="../../css/craps.css">
+    <link rel="stylesheet" href="../../css/user.css">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
 </head>
 <body>
