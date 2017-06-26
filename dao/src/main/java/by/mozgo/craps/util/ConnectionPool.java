@@ -196,6 +196,6 @@ public class ConnectionPool {
     }
 
     public boolean isConnectionOpen() {
-        return threadLocalConnection.get().isOpen();
+        return (threadLocalConnection.get() != null);
     }
 }
