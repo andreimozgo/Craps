@@ -35,7 +35,7 @@ public class LoginCommand implements ActionCommand {
                 session.setAttribute("user", user);
                 userRole = user.getUserRole().toString();
                 // setting user role to session
-                session.setAttribute("role", userRole);
+                // session.setAttribute("role", userRole);
                 LOG.info("User " + email + " logged in successfully");
 
                 page = ConfigurationManager.getProperty("command.empty");

@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="${curLocale}">
 <head>
-    <meta charset="UTF-8" http-equiv="refresh" content="5;/craps">
+    <meta charset="UTF-8" http-equiv="refresh" content="5;jsp/login.jsp">
     <title><fmt:message key="header.title"/></title>
     <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../css/normalize.css">

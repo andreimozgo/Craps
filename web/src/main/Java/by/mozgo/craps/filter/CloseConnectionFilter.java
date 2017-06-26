@@ -1,7 +1,6 @@
 package by.mozgo.craps.filter;
 
 import by.mozgo.craps.util.ConnectionPool;
-import by.mozgo.craps.util.ConnectionWrapper;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,10 +16,11 @@ public class CloseConnectionFilter implements Filter {
     public void init(FilterConfig fConfig) throws ServletException {
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response,
-                         FilterChain chain) throws IOException, ServletException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
-        connection.close();
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        if (pool.isConnectionOpen()) {
+            pool.getConnection().close();
+        }
 
         chain.doFilter(request, response);
         LOG.log(Level.INFO, "DB connection closed");

@@ -21,7 +21,7 @@ public class EmptyCommand implements ActionCommand {
         LOG.info("Empty command");
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        if (user != null) {
+        if (user != null && !user.getUserRole().equals(User.UserRole.BLOCKED)) {
             // getting page depending on user role
             switch (user.getUserRole()) {
                 case ADMIN:

@@ -102,7 +102,7 @@ public class ConnectionPool {
     /**
      * Method closes pool and all connections.
      */
-    public void close() {
+    public void closePool() {
         while (connectionsCount.get() > 0) {
             try {
                 availableConnections.take().close();
@@ -193,5 +193,9 @@ public class ConnectionPool {
             LOG.fatal(POOL_IS_CLOSING);
             throw new RuntimeException("Cannot perform operation: pool is closing.");
         }
+    }
+
+    public boolean isConnectionOpen() {
+        return threadLocalConnection.get().isOpen();
     }
 }
