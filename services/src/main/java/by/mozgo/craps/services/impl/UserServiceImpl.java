@@ -3,7 +3,6 @@ package by.mozgo.craps.services.impl;
 import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.dao.impl.UserDaoImpl;
 import by.mozgo.craps.entity.User;
-import by.mozgo.craps.services.AbstractService;
 import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.util.ConnectionPool;
 import by.mozgo.craps.util.ConnectionWrapper;
@@ -16,7 +15,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public class UserServiceImpl extends AbstractService<User> implements UserService {
+public class UserServiceImpl implements UserService, by.mozgo.craps.services.Service<User> {
     private static final Logger LOG = LogManager.getLogger();
     private static UserServiceImpl instance = null;
 
@@ -45,7 +44,7 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         return passCheckResult;
     }
 
-    public void createOrUpdate(User user) {
+    public void create(User user) {
         user.setPassword(hash(user.getPassword()));
         UserDaoImpl userDao = new UserDaoImpl();
         ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
@@ -74,7 +73,6 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
         } finally {
             connection.close();
         }
-
     }
 
     public User findUserByEmail(String email) {

@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 public class User extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
-
     private String email;
 
     private String password;
@@ -22,14 +20,6 @@ public class User extends AbstractEntity implements Serializable {
     private UserRole userRole;
 
     public User() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getEmail() {

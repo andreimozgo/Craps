@@ -3,7 +3,6 @@ package by.mozgo.craps.dao.impl;
 import by.mozgo.craps.dao.UserDao;
 import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.entity.User;
-import by.mozgo.craps.util.ConnectionWrapper;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,9 +11,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoImpl implements UserDao {
-    private ConnectionWrapper connection;
+public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
+    private static final String TABLE_NAME = "user";
 
+    public UserDaoImpl() {
+        tableName = TABLE_NAME;
+    }
+
+    @Override
     public String getPassword(String email) throws DaoException {
         String query = "SELECT password FROM user WHERE email = ?";
         String pass = null;
@@ -30,6 +34,7 @@ public class UserDaoImpl implements UserDao {
         return pass;
     }
 
+    @Override
     public User findUserByEmail(String email) throws DaoException {
         String query = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id WHERE email = ?";
         User user = null;
@@ -52,6 +57,7 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
+    @Override
     public void create(User entity) throws DaoException {
         String query = "INSERT INTO user (email, password, username) VALUES (?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -64,21 +70,12 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
     public User findEntityById(Integer id) {
         return null;
     }
 
     public void update(User entity) {
-    }
-
-    public void delete(Integer id) throws DaoException {
-        String query = "DELETE FROM user WHERE id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
     }
 
     public List<User> getAll() throws DaoException {
@@ -103,6 +100,7 @@ public class UserDaoImpl implements UserDao {
         return users;
     }
 
+    @Override
     public List getAll(int recordsPerPage, int currentPage) throws DaoException {
         String query = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id ORDER BY user.id LIMIT ?,?";
         List<User> users = new ArrayList<>();
@@ -152,8 +150,6 @@ public class UserDaoImpl implements UserDao {
         return amount;
     }
 
-    public void setConnection(ConnectionWrapper connection) {
-        this.connection = connection;
-    }
+
 }
 

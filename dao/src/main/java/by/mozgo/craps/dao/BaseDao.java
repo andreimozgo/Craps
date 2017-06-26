@@ -4,7 +4,7 @@ import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.entity.AbstractEntity;
 import by.mozgo.craps.util.ConnectionWrapper;
 
-public interface Dao<T extends AbstractEntity> {
+public interface BaseDao<T extends AbstractEntity> {
 
     void create(T entity) throws DaoException;
 

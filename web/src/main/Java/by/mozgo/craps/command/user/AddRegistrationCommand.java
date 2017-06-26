@@ -51,7 +51,7 @@ public class AddRegistrationCommand implements ActionCommand {
                 user.setEmail(email);
                 user.setPassword(password);
                 user.setUsername(username);
-                userService.createOrUpdate(user);
+                userService.create(user);
                 LOG.log(Level.INFO, "New registration added successfully");
                 user = userService.findUserByEmail(user.getEmail());
                 AvatarManager uploader = new AvatarManager(request.getServletContext());
