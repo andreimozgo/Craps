@@ -13,4 +13,7 @@ public interface UserDao extends BaseDao<User> {
 
     List getAll(int recordsPerPage, int currentPage) throws DaoException;
 
+    void updateRole(Integer userId, int role) throws DaoException;
+
+    int getAmount() throws DaoException;
 }

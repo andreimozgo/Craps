@@ -3,6 +3,7 @@ package by.mozgo.craps.dao.impl;
 import by.mozgo.craps.dao.BetDao;
 import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.entity.Bet;
+import by.mozgo.craps.util.ConnectionPool;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -12,14 +13,21 @@ import java.sql.SQLException;
  */
 public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
     private static final String TABLE_NAME = "bet";
+    private static BetDaoImpl instance = null;
 
-    public BetDaoImpl() {
+    private BetDaoImpl() {
         tableName = TABLE_NAME;
+    }
+
+    public static synchronized BetDaoImpl getInstance() {
+        if (instance == null) instance = new BetDaoImpl();
+        return instance;
     }
 
     @Override
     public void create(Bet entity) throws DaoException {
         String query = "INSERT INTO bet (game_id, amount, profit) VALUES (?, ?, ?)";
+        connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, entity.getGameId());
             ps.setBigDecimal(2, entity.getAmount());

@@ -34,6 +34,7 @@ public class ConnectionPool {
     private static int MIN_POOL_SIZE = Integer.parseInt(resource.getString("db.minPoolSize"));
     private static Semaphore semaphore = new Semaphore(1);
     private static AtomicBoolean isEmpty = new AtomicBoolean(true);
+    private final ThreadLocal<ConnectionWrapper> threadLocalConnection = new ThreadLocal<>();
     private AtomicInteger connectionsCount;
     private BlockingQueue<Connection> availableConnections;
     private AtomicBoolean isClosing;
@@ -121,31 +122,35 @@ public class ConnectionPool {
      * @return connection wrapper
      */
     public ConnectionWrapper getConnection() {
-        assertNotClosing();
-        Connection conn = null;
-        try {
-            conn = availableConnections.poll(RETRIEVE_TIMEOUT, TimeUnit.MILLISECONDS);
-            if (conn == null) {
-                if (connectionsCount.get() < MAX_POOL_SIZE) {
-                    conn = this.createConnection();
-                } else {
-                    conn = availableConnections.take();
-                }
-            }
+        ConnectionWrapper connectionWrapper = threadLocalConnection.get();
+        if (connectionWrapper == null) {
+            assertNotClosing();
+            Connection conn = null;
             try {
-                if (!conn.isValid(VALID_TIMEOUT)) {
-                    conn.close();
-                    connectionsCount.decrementAndGet();
-                    conn = this.createConnection();
+                conn = availableConnections.poll(RETRIEVE_TIMEOUT, TimeUnit.MILLISECONDS);
+                if (conn == null) {
+                    if (connectionsCount.get() < MAX_POOL_SIZE) {
+                        conn = this.createConnection();
+                    } else {
+                        conn = availableConnections.take();
+                    }
                 }
-            } catch (SQLException e) {
-                LOG.error(ESTABLISH_CONNECTION_ERROR, e);
+                try {
+                    if (!conn.isValid(VALID_TIMEOUT)) {
+                        conn.close();
+                        connectionsCount.decrementAndGet();
+                        conn = this.createConnection();
+                    }
+                } catch (SQLException e) {
+                    LOG.error(ESTABLISH_CONNECTION_ERROR, e);
+                }
+            } catch (InterruptedException e) {
+                LOG.warn(UNEXPECTED_INTERRUPT, e);
             }
-        } catch (InterruptedException e) {
-            LOG.warn(UNEXPECTED_INTERRUPT, e);
+            connectionWrapper = new ConnectionWrapper(conn);
+            threadLocalConnection.set(connectionWrapper);
         }
-
-        return new ConnectionWrapper(conn);
+        return connectionWrapper;
     }
 
     /**
@@ -170,6 +175,7 @@ public class ConnectionPool {
                 e.printStackTrace();
             }
         }
+        threadLocalConnection.remove();
     }
 
     /**
