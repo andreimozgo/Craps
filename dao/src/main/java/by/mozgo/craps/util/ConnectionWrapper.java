@@ -17,7 +17,6 @@ public class ConnectionWrapper implements AutoCloseable {
     ConnectionWrapper(Connection connection) {
         this.connection = connection;
         this.isOpen = true;
-
     }
 
     public boolean isOpen() {

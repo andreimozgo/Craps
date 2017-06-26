@@ -100,7 +100,7 @@ public class ConnectionPool {
     }
 
     /**
-     * close pool and all connection.
+     * Method closes pool and all connections.
      */
     public void close() {
         while (connectionsCount.get() > 0) {
@@ -116,7 +116,7 @@ public class ConnectionPool {
     }
 
     /**
-     * Retrive connection from pool. Its creates wrapper and put connection to
+     * Retrieve connection from pool. It creates wrapper and puts connection to
      * wrapper before retrieve.
      *
      * @return connection wrapper
@@ -155,11 +155,11 @@ public class ConnectionPool {
 
     /**
      * Available only in package scope. Put connection back to pool. It's
-     * usually calls from wrapper
+     * usually called from wrapper
      *
      * @param conn
      */
-    public void releaseConnection(Connection conn) {
+    void releaseConnection(Connection conn) {
         if (availableConnections.size() < MIN_POOL_SIZE) {
             try {
                 availableConnections.put(conn);
