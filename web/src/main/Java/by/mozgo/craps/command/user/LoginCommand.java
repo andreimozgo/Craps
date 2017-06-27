@@ -3,6 +3,7 @@ package by.mozgo.craps.command.user;
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.impl.UserServiceImpl;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,9 +20,7 @@ public class LoginCommand implements ActionCommand {
     public ActionResult execute(HttpServletRequest request) {
         UserServiceImpl userService = UserServiceImpl.getInstance();
         ActionResult result = null;
-        String page = null;
-        String userRole;
-
+        String page;
 
         // getting email from request
         String email = request.getParameter("email");
@@ -33,13 +32,8 @@ public class LoginCommand implements ActionCommand {
             if (userService.checkPassword(email, pass)) {
                 // getting user role
                 session.setAttribute("user", user);
-                userRole = user.getUserRole().toString();
-                // setting user role to session
-                // session.setAttribute("role", userRole);
-                LOG.info("User " + email + " logged in successfully");
-
+                LOG.log(Level.INFO,"User " + email + " logged in successfully");
                 page = ConfigurationManager.getProperty("command.empty");
-
                 result = new ActionResult(REDIRECT, page);
             }
         } else {

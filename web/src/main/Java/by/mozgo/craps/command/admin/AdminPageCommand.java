@@ -46,7 +46,7 @@ public class AdminPageCommand implements ActionCommand {
         session.setAttribute("currentPage", currentPage);
         session.setAttribute("recordsPerPage", recordsPerPage);
 
-        page = ConfigurationManager.getProperty("path.page.main");
+        page = ConfigurationManager.getProperty("path.page.admin");
         return new ActionResult(FORWARD, page);
     }
 }

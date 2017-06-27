@@ -21,8 +21,12 @@ public class UserFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         User user = (User) httpRequest.getSession().getAttribute("user");
-        if (user == null || user.getUserRole().equals(User.UserRole.BLOCKED)) {
-            String page = ConfigurationManager.getProperty("path.page.error404");
+        if (user == null) {
+            String page = ConfigurationManager.getProperty("path.page.error.404");
+            RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(page);
+            dispatcher.forward(request, response);
+        } else if (user.getUserRole().equals(User.UserRole.BLOCKED)){
+            String page = ConfigurationManager.getProperty("path.page.error.blocked");
             RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(page);
             dispatcher.forward(request, response);
         }

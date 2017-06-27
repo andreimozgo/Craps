@@ -4,6 +4,7 @@ import by.mozgo.craps.command.admin.AdminPageCommand;
 import by.mozgo.craps.command.admin.ChangeRoleCommand;
 import by.mozgo.craps.command.admin.DeleteUserCommand;
 import by.mozgo.craps.command.client.ClientPageCommand;
+import by.mozgo.craps.command.client.PlayCommand;
 import by.mozgo.craps.command.user.AddRegistrationCommand;
 import by.mozgo.craps.command.user.LoginCommand;
 import by.mozgo.craps.command.user.LogoutCommand;
@@ -40,9 +41,9 @@ public enum CommandEnum {
             this.command = new DeleteUserCommand();
         }
     },
-    RECALCULATE {
+    PLAY {
         {
-            //           this.command = new RecalculateCommand();
+            this.command = new PlayCommand();
         }
     },
     BUYTICKET {

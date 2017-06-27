@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="${curLocale}">
 <head>
-    <meta charset="UTF-8" http-equiv="refresh" content="5;/craps">
+    <meta charset="UTF-8" http-equiv="refresh" content="5;/craps?command=logout">
     <title><fmt:message key="header.title"/></title>
     <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../css/normalize.css">
@@ -17,9 +17,7 @@
 <jsp:include page="/jsp/elements/header.jsp"/>
 <section>
     <div class="error-page">
-        <fmt:message key="error.error"/>
-        <br>
-        <fmt:message key="error.404"/>
+        <fmt:message key="error.blocked"/>
         <br>
         <fmt:message key="redirect.main"/>
     </div>

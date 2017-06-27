@@ -22,7 +22,7 @@ public class AdminFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         User user = (User) httpRequest.getSession().getAttribute("user");
         if (user == null || !user.getUserRole().equals(User.UserRole.ADMIN)) {
-            String page = ConfigurationManager.getProperty("path.page.error404");
+            String page = ConfigurationManager.getProperty("path.page.error.404");
             RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(page);
             dispatcher.forward(request, response);
         }
