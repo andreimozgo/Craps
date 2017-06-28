@@ -1,7 +1,7 @@
 package by.mozgo.craps.entity;
 
 public abstract class AbstractEntity {
-    Integer id;
+    private Integer id;
 
     public Integer getId() {
         return id;

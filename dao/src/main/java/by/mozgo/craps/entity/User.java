@@ -19,6 +19,8 @@ public class User extends AbstractEntity implements Serializable {
 
     private UserRole userRole;
 
+    private Game game;
+
     public User() {
     }
 
@@ -70,10 +72,18 @@ public class User extends AbstractEntity implements Serializable {
         this.userRole = userRole;
     }
 
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + super.getId() +
                 ", name='" + email + '\'' +
                 ", login='" + email + '\'' +
                 ", userRole='" + userRole + '\'' +

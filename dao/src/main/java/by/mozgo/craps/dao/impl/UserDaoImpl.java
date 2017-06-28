@@ -67,7 +67,8 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     @Override
-    public void create(User entity) throws DaoException {
+    public Integer create(User entity) throws DaoException {
+        Integer id = null;
         String query = "INSERT INTO user (email, password, username) VALUES (?, ?, ?)";
         connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -75,9 +76,14 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
             ps.setString(2, entity.getPassword());
             ps.setString(3, entity.getUsername());
             ps.executeUpdate();
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                id = generatedKeys.getInt(1);
+            }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+        return id;
     }
 
     @Override

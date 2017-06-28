@@ -1,16 +1,29 @@
 package by.mozgo.craps.services.impl;
 
+import by.mozgo.craps.dao.BaseDao;
+import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.entity.AbstractEntity;
 import by.mozgo.craps.services.Service;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by Andrei Mozgo. 2017.
  */
-public class ServiceImpl<T extends AbstractEntity> implements Service<T> {
+public abstract class ServiceImpl<T extends AbstractEntity> implements Service<T> {
+    private static final Logger LOG = LogManager.getLogger();
+    BaseDao baseDao;
 
     @Override
-    public void create(T t) {
-
+    public Integer create(T t) {
+        Integer id = null;
+        try {
+            id = baseDao.create(t);
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+        }
+        return id;
     }
 
     @Override
@@ -20,6 +33,5 @@ public class ServiceImpl<T extends AbstractEntity> implements Service<T> {
 
     @Override
     public void delete(Integer id) {
-
     }
 }

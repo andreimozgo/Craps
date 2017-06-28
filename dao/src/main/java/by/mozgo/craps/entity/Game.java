@@ -2,6 +2,7 @@ package by.mozgo.craps.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,13 @@ public class Game extends AbstractEntity implements Serializable {
     private LocalDateTime createTime;
     private Integer userId;
     private List<Bet> bets;
+
+    public Game(){}
+
+    public Game(Integer userId){
+        this.userId = userId;
+        bets = new ArrayList<>();
+    }
 
     public LocalDateTime getCreateTime() {
         return createTime;

@@ -10,10 +10,16 @@ public class Bet extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer gameId;
-    private Integer userId;
-    private Integer betTypeId;
+    private BetType betType;
     private BigDecimal amount;
     private BigDecimal profit;
+    private boolean isFirstRoll = true;
+    private int point;
+
+    public Bet(BetType betType, BigDecimal amount){
+        this.betType = betType;
+        this.amount = amount;
+    }
 
     public Integer getGameId() {
         return gameId;
@@ -23,20 +29,12 @@ public class Bet extends AbstractEntity implements Serializable {
         this.gameId = gameId;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public BetType getBetType() {
+        return betType;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getBetTypeId() {
-        return betTypeId;
-    }
-
-    public void setBetTypeId(Integer betTypeId) {
-        this.betTypeId = betTypeId;
+    public void setBetType(BetType betType) {
+        this.betType = betType;
     }
 
     public BigDecimal getAmount() {
@@ -53,5 +51,31 @@ public class Bet extends AbstractEntity implements Serializable {
 
     public void setProfit(BigDecimal profit) {
         this.profit = profit;
+    }
+
+    public boolean isFirstRoll() {
+        return isFirstRoll;
+    }
+
+    public void setFirstRoll(boolean firstRoll) {
+        isFirstRoll = firstRoll;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
+    public enum BetType {
+        PASS, DONTPASS, COME, DONTCOME;
+
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+
     }
 }

@@ -6,7 +6,9 @@ import by.mozgo.craps.entity.Game;
 import by.mozgo.craps.util.ConnectionPool;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Created by Andrei Mozgo. 2017.
@@ -25,15 +27,21 @@ public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     }
 
     @Override
-    public void create(Game entity) throws DaoException {
+    public Integer create(Game entity) throws DaoException {
+        Integer id = null;
         String query = "INSERT INTO game (user_id) VALUES (?)";
         connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, entity.getUserId());
             ps.executeUpdate();
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                id = generatedKeys.getInt(1);
+            }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+        return id;
     }
 
     @Override

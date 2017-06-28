@@ -6,6 +6,7 @@ import by.mozgo.craps.entity.Bet;
 import by.mozgo.craps.util.ConnectionPool;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -25,7 +26,8 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
     }
 
     @Override
-    public void create(Bet entity) throws DaoException {
+    public Integer create(Bet entity) throws DaoException {
+        Integer id = null;
         String query = "INSERT INTO bet (game_id, amount, profit) VALUES (?, ?, ?)";
         connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -33,9 +35,14 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
             ps.setBigDecimal(2, entity.getAmount());
             ps.setBigDecimal(3, entity.getProfit());
             ps.executeUpdate();
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                id = generatedKeys.getInt(1);
+            }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
+        return id;
     }
 
     @Override

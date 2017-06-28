@@ -14,12 +14,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-public class UserServiceImpl implements UserService, by.mozgo.craps.services.Service<User> {
+public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     private static final Logger LOG = LogManager.getLogger();
     private static UserServiceImpl instance = null;
     private UserDao userDao = UserDaoImpl.getInstance();
 
     private UserServiceImpl() {
+        baseDao = userDao;
     }
 
     public static synchronized UserServiceImpl getInstance() {
@@ -39,13 +40,16 @@ public class UserServiceImpl implements UserService, by.mozgo.craps.services.Ser
         return passCheckResult;
     }
 
-    public void create(User user) {
+    @Override
+    public Integer create(User user) {
+        Integer id = null;
         user.setPassword(hash(user.getPassword()));
         try {
-            userDao.create(user);
+            id = userDao.create(user);
         } catch (DaoException e) {
             LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }
+        return id;
     }
 
     public User findEntityById(Integer id) {
