@@ -30,7 +30,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
         String query = "SELECT password FROM user WHERE email = ?";
         connection = ConnectionPool.getInstance().getConnection();
         String pass = null;
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, email);
             ResultSet result = preparedStatement.executeQuery();
@@ -44,7 +43,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
     public User findUserByEmail(String email) throws DaoException {
-        String query = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id WHERE email = ?";
+        String query = "SELECT user.id, email, password, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id WHERE email = ?";
         connection = ConnectionPool.getInstance().getConnection();
         User user = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -55,10 +54,11 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
                 user = new User();
                 user.setId(result.getInt(1));
                 user.setEmail(result.getString(2));
-                user.setUsername(result.getString(3));
-                user.setCreateTime(result.getTimestamp(4).toLocalDateTime());
-                user.setMoney(result.getBigDecimal(5));
-                user.setUserRole(User.UserRole.valueOf(result.getString(6).toUpperCase()));
+                user.setPassword(result.getString(3));
+                user.setUsername(result.getString(4));
+                user.setCreateTime(result.getTimestamp(5).toLocalDateTime());
+                user.setBalance(result.getBigDecimal(6));
+                user.setUserRole(User.UserRole.valueOf(result.getString(7).toUpperCase()));
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -91,9 +91,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
         return null;
     }
 
-    public void update(User entity) {
-    }
-
     @Override
     public List getAll(int recordsPerPage, int currentPage) throws DaoException {
         String query = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id ORDER BY user.id LIMIT ?,?";
@@ -110,7 +107,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
                 user.setEmail(result.getString(2));
                 user.setUsername(result.getString(3));
                 user.setCreateTime(result.getTimestamp(4).toLocalDateTime());
-                user.setMoney(result.getBigDecimal(5));
+                user.setBalance(result.getBigDecimal(5));
                 user.setUserRole(User.UserRole.valueOf(result.getString(6).toUpperCase()));
                 users.add(user);
             }
@@ -124,11 +121,10 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     public void updateRole(Integer userId, int role) throws DaoException {
         String query = "UPDATE user SET role_id = ? WHERE id = ?";
         connection = ConnectionPool.getInstance().getConnection();
-
-        try (PreparedStatement prepStatement = connection.prepareStatement(query)) {
-            prepStatement.setInt(1, role);
-            prepStatement.setLong(2, userId);
-            prepStatement.executeUpdate();
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, role);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -138,7 +134,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     public int getAmount() throws DaoException {
         String query = "SELECT COUNT(*) FROM user";
         connection = ConnectionPool.getInstance().getConnection();
-
         int amount;
         try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(query);
@@ -148,5 +143,20 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
             throw new DaoException(e);
         }
         return amount;
+    }
+
+    public void update(User entity) throws DaoException {
+        String query = "UPDATE user SET email=?, password=?, username=?, money=? WHERE id = ?";
+        connection = ConnectionPool.getInstance().getConnection();
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, entity.getEmail());
+            ps.setString(2, entity.getPassword());
+            ps.setString(3, entity.getUsername());
+            ps.setBigDecimal(4, entity.getBalance());
+            ps.setInt(5, entity.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
     }
 }

@@ -21,16 +21,16 @@ public class PlayCommand implements ActionCommand {
     public ActionResult execute(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
-
         User user = (User) session.getAttribute("user");
-        GameLogic gameLogic = new GameLogic(user);
-        String passBet = request.getParameter("passBet");
-        gameLogic.addBet(Bet.BetType.PASS, passBet);
-        String dontPassBet = request.getParameter("dontPassBet");
-        gameLogic.addBet(Bet.BetType.DONTPASS, dontPassBet);
-        RollResult rollResult = gameLogic.roll();
-        request.setAttribute("dice", rollResult);
-
+        if(user != null) {
+            GameLogic gameLogic = new GameLogic(user);
+            String passBet = request.getParameter("passBet");
+            gameLogic.addBet(Bet.BetType.PASS, passBet);
+            String dontPassBet = request.getParameter("dontPassBet");
+            gameLogic.addBet(Bet.BetType.DONTPASS, dontPassBet);
+            RollResult rollResult = gameLogic.roll();
+            request.setAttribute("dice", rollResult);
+        }
         String page = ConfigurationManager.getProperty("path.page.play");
         return new ActionResult(FORWARD, page);
     }

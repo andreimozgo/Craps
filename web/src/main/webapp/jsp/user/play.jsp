@@ -19,43 +19,47 @@
 <jsp:include page="/jsp/elements/header.jsp"/>
 <section>
     <h1><fmt:message key="page.play.title"/></h1>
+    <br>
+    Player: ${user.username}
+    <br>
+    Balance: ${user.balance}
+    <br>
     <form method="POST" action="craps">
         <fieldset>
             <div><input type="hidden" name="command" value="play"/></div>
             <div>Pass Line <input type="number" name="passBet" placeholder="Enter your bet"/></div>
             <div>Don't Pass Line<input type="number" name="dontPassBet" placeholder="Enter your bet"/></div>
             <div><input type="submit" value="<fmt:message key="button.roll" />"/></div>
-            <div><span>${dice.dice1}</span><span>${dice.dice2}</span></div>
-            <table border="1">
-                <thead align="center">
-                <tr>
-                    <th>Bet type</th>
-                    <th>Bet</th>
-                    <th>Point</th>
-                    <th>Profit</th>
-                </tr>
-                <tbody align="center">
-                <c:forEach items="${user.game.bets}" var="bet">
-                    <tr>
-                        <td>
-                            <div><c:out value="${bet.betType}"/></div>
-                        </td>
-                        <td>
-                            <div><c:out value="${bet.amount}"/></div>
-                        </td>
-                        <td>
-                            <div><c:out value="${bet.point}"/></div>
-                        </td>
-                        <td>
-                            <div><c:out value="${bet.profit}"/></div>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-
         </fieldset>
     </form>
+    <div><span>${dice.dice1}</span><span>${dice.dice2}</span></div>
+    <table border="1">
+        <thead align="center">
+        <tr>
+            <th>Bet type</th>
+            <th>Bet</th>
+            <th>Point</th>
+            <th>Profit</th>
+        </tr>
+        <tbody align="center">
+        <c:forEach items="${user.game.bets}" var="bet">
+            <tr>
+                <td>
+                    <div><c:out value="${bet.betType}"/></div>
+                </td>
+                <td>
+                    <div><c:out value="${bet.amount}"/></div>
+                </td>
+                <td>
+                    <div><c:out value="${bet.point}"/></div>
+                </td>
+                <td>
+                    <div><c:out value="${bet.profit}"/></div>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
     <br>
     <a href="craps?command=logout"><fmt:message key="logout"/></a>
 </section>

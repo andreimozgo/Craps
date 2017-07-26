@@ -1,9 +1,11 @@
 package by.mozgo.craps.services.impl;
 
 import by.mozgo.craps.dao.BetDao;
+import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.dao.impl.BetDaoImpl;
 import by.mozgo.craps.entity.Bet;
 import by.mozgo.craps.services.BetService;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,17 +26,6 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
         return instance;
     }
 
-/*    @Override
-    public Integer create(Bet bet) {
-        Integer id = null;
-        try {
-            id = betDao.create(bet);
-        } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception in DAO {}", e);
-        }
-        return id;
-    }*/
-
     @Override
     public Bet findEntityById(Integer id) {
         return null;
@@ -42,6 +33,14 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
 
     @Override
     public void delete(Integer id) {
+    }
 
+    @Override
+    public void update(Bet bet) {
+        try {
+            betDao.update(bet);
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+        }
     }
 }

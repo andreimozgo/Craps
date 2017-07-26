@@ -9,4 +9,6 @@ public interface Service<T extends AbstractEntity> {
     T findEntityById(Integer id);
 
     void delete(Integer id);
+
+    void update(T t);
 }

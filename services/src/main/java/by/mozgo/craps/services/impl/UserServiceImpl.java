@@ -74,6 +74,15 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         return user;
     }
 
+    @Override
+    public void update(User user) {
+        try {
+            userDao.update(user);
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+        }
+    }
+
     public List<User> getAll(int recordsPerPage, int currentPage) {
         List<User> users = null;
         try {
@@ -103,6 +112,10 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
             LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }
         return numberOfPages;
+    }
+
+    public void removeGame(User user){
+        user.setGame(null);
     }
 
     private String hash(String input) {

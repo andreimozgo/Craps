@@ -5,10 +5,18 @@ import by.mozgo.craps.entity.Game;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.BetService;
 import by.mozgo.craps.services.GameService;
+import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.services.impl.BetServiceImpl;
 import by.mozgo.craps.services.impl.GameServiceImpl;
+import by.mozgo.craps.services.impl.UserServiceImpl;
+import by.mozgo.craps.util.ConnectionPool;
+import by.mozgo.craps.util.ConnectionWrapper;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,18 +25,22 @@ import java.util.Random;
  * Created by Andrei Mozgo. 2017.
  */
 public class GameLogic {
+    private static final Logger LOG = LogManager.getLogger();
     private int dice1;
     private int dice2;
     private int sumDice;
     private boolean isGame = false;
     private User user;
-    private GameService gameService = GameServiceImpl.getInstance();
-    private BetService betService = BetServiceImpl.getInstance();
-
     private List<Bet> newBets = new ArrayList<>();
 
-    public GameLogic (User user){
+    ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+    private GameService gameService = GameServiceImpl.getInstance();
+    private BetService betService = BetServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
+
+    public GameLogic(User user) {
         this.user = user;
+        clearOldBets();
     }
 
     public void addBet(Bet.BetType betType, String amount) {
@@ -36,10 +48,32 @@ public class GameLogic {
             Bet bet = new Bet(betType, new BigDecimal(amount));
             bet.setGameId(getGameId());
             newBets.add(bet);
+            BigDecimal newUserBalance = user.getBalance().subtract(bet.getAmount());
+            try {
+                connection.setAutoCommit(false);
+                Integer betId = betService.create(bet);
+                bet.setId(betId);
+                user.setBalance(newUserBalance);
+                userService.update(user);
+                connection.commit();
+            } catch (SQLException e) {
+                LOG.log(Level.ERROR, "Transaction failed. {}", e);
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    LOG.log(Level.ERROR, "Transaction rollback failed. {}", e);
+                }
+            } finally {
+                try {
+                    connection.setAutoCommit(true);
+                } catch (SQLException e) {
+                    LOG.log(Level.ERROR, "Transaction failed. {}", e);
+                }
+            }
         }
     }
 
-    private int getGameId(){
+    private int getGameId() {
         int gameId;
         if (user.getGame() != null) {
             gameId = user.getGame().getId();
@@ -50,6 +84,17 @@ public class GameLogic {
             isGame = true;
         }
         return gameId;
+    }
+
+    private void clearOldBets() {
+        if (user.getGame() != null) {
+            List<Bet> bets = user.getGame().getBets();
+              bets.removeIf(bet -> bet.getProfit() != null);
+
+            if (user.getGame().getBets().isEmpty()) {
+                userService.removeGame(user);
+            }
+        }
     }
 
     public RollResult roll() {
@@ -65,6 +110,32 @@ public class GameLogic {
                 sumDice = dice1 + dice2;
                 for (Bet bet : bets) {
                     checkBet(bet);
+                    if (bet.getProfit() != null) {
+                        if (bet.getProfit().compareTo(new BigDecimal(0)) > 0) {
+                            BigDecimal newUserBalance = user.getBalance().add(bet.getProfit());
+                            try {
+                                connection.setAutoCommit(false);
+                                betService.update(bet);
+                                user.setBalance(newUserBalance);
+                                userService.update(user);
+                                connection.commit();
+                            } catch (SQLException e) {
+                                try {
+                                    connection.rollback();
+                                } catch (SQLException e1) {
+                                    LOG.log(Level.ERROR, "Transaction rollback failed. {}", e);
+                                }
+                                LOG.log(Level.ERROR, "Transaction failed. {}", e);
+
+                            } finally {
+                                try {
+                                    connection.setAutoCommit(true);
+                                } catch (SQLException e) {
+                                    LOG.log(Level.ERROR, "Transaction failed. {}", e);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -15,7 +15,7 @@ public class User extends AbstractEntity implements Serializable {
 
     private LocalDateTime createTime;
 
-    private BigDecimal money;
+    private BigDecimal balance;
 
     private UserRole userRole;
 
@@ -56,12 +56,12 @@ public class User extends AbstractEntity implements Serializable {
         this.createTime = createTime;
     }
 
-    public BigDecimal getMoney() {
-        return money;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setMoney(BigDecimal money) {
-        this.money = money;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     public UserRole getUserRole() {

@@ -16,6 +16,18 @@ public abstract class BaseDaoImpl<T extends AbstractEntity> implements BaseDao<T
     ConnectionWrapper connection;
     String tableName;
 
+    public Integer create(T entity) throws DaoException{
+        throw new DaoException("Method unavailable");
+    }
+
+    public T findEntityById(Integer id) throws DaoException{
+        throw new DaoException("Method unavailable");
+    }
+
+    public void update(T t) throws DaoException{
+        throw new DaoException("Method unavailable");
+    }
+
     @Override
     public void delete(Integer id) throws DaoException {
         String query = "DELETE FROM " + tableName + " WHERE id = ?";

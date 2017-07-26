@@ -6,4 +6,5 @@ public interface UserService extends Service<User> {
     boolean checkPassword(String enterLogin, String enterPass);
     User findUserByEmail(String login);
 
+    void removeGame(User user);
 }

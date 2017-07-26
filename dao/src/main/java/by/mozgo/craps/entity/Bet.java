@@ -14,7 +14,7 @@ public class Bet extends AbstractEntity implements Serializable {
     private BigDecimal amount;
     private BigDecimal profit;
     private boolean isFirstRoll = true;
-    private int point;
+    private Integer point = 0;
 
     public Bet(BetType betType, BigDecimal amount){
         this.betType = betType;

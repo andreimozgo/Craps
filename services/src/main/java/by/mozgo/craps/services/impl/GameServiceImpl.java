@@ -24,17 +24,6 @@ public class GameServiceImpl extends ServiceImpl<Game> implements GameService {
         return instance;
     }
 
-/*    @Override
-    public Integer create(Game game) {
-        Integer id = null;
-        try {
-            id = gameDao.create(game);
-        } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception in DAO {}", e);
-        }
-        return id;
-    }*/
-
     @Override
     public Game findEntityById(Integer id) {
         return null;
@@ -42,6 +31,9 @@ public class GameServiceImpl extends ServiceImpl<Game> implements GameService {
 
     @Override
     public void delete(Integer id) {
+    }
 
+    @Override
+    public void update(Game game) {
     }
 }

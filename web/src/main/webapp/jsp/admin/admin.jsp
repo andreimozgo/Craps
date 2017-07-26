@@ -62,7 +62,7 @@
                     <div><c:out value="${user.email}"/></div>
                 </td>
                 <td>
-                    <div><c:out value="${user.money}"/></div>
+                    <div><c:out value="${user.balance}"/></div>
                 </td>
                 <td>
                     <div><c:out value="${user.userRole}"/></div>
