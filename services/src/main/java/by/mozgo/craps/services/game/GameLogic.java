@@ -165,6 +165,20 @@ public class GameLogic {
                     checkDoNotPassLineOneMore(bet);
                 }
                 break;
+            case COME:
+                if (bet.isFirstRoll()) {
+                    checkComeFirst(bet);
+                } else {
+                    checkComeOneMore(bet);
+                }
+                break;
+            case DONTCOME:
+                if (bet.isFirstRoll()) {
+                    checkDoNotComeFirst(bet);
+                } else {
+                    checkDoNotComeOneMore(bet);
+                }
+                break;
         }
     }
 
@@ -226,12 +240,56 @@ public class GameLogic {
     }
 
     private void checkComeFirst(Bet bet) {
+        if (sumDice == 7 || sumDice == 11) {
+            //player win
+            bet.setProfit(bet.getAmount().multiply(new BigDecimal(2)));
+
+        } else if (sumDice == 2 || sumDice == 3 || sumDice == 12) {
+            //player lose
+            bet.setProfit(new BigDecimal(0));
+        } else {
+            //set Point
+            bet.setPoint(sumDice);
+            bet.setFirstRoll(false);
+        }
+    }
+
+    private void checkComeOneMore(Bet bet) {
+        if (sumDice == bet.getPoint()) {
+            //player win
+            bet.setProfit(bet.getAmount().multiply(new BigDecimal(2)));
+            user.getGame().setFirstRoll(true);
+        } else if (sumDice == 7) {
+            //player lose
+            bet.setProfit(new BigDecimal(0));
+        }
+    }
+
+    private void checkDoNotComeFirst(Bet bet) {
+        if (sumDice == 2 || sumDice == 3) {
+            //player win
+            bet.setProfit(bet.getAmount().multiply(new BigDecimal(2)));
+        } else if (sumDice == 7 || sumDice == 11) {
+            //player lose
+            bet.setProfit(new BigDecimal(0));
+        } else if (sumDice == 12) {
+            //player gets his bet back
+            bet.setProfit(bet.getAmount());
+        } else {
+            bet.setPoint(sumDice);
+            bet.setFirstRoll(false);
+        }
+    }
+
+    private void checkDoNotComeOneMore(Bet bet) {
         if (sumDice == 7) {
             //player win
             bet.setProfit(bet.getAmount().multiply(new BigDecimal(2)));
+            user.getGame().setFirstRoll(true);
         } else if (sumDice == bet.getPoint()) {
             //player lose
             bet.setProfit(new BigDecimal(0));
         }
     }
+
 }

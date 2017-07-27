@@ -32,15 +32,15 @@
             <div><input type="submit" value="<fmt:message key="button.roll" />"/></div>
         </fieldset>
     </form>
-    <div><span>Dice: </span><span>${dice.dice1} </span><span>${dice.dice2}</span></div>
+    <div><span><fmt:message key="page.play.dice"/>: </span><span>${dice.dice1} </span><span>${dice.dice2}</span></div>
     <table border="1">
         <thead align="center">
         <tr>
-            <th>Bet type</th>
-            <th>Bet</th>
+            <th><fmt:message key="page.play.bettype"/></th>
+            <th><fmt:message key="page.play.bet"/></th>
             <th>Point</th>
-            <th>Profit</th>
-            <th>Result</th>
+            <th><fmt:message key="page.play.profit"/></th>
+            <th></th>
         </tr>
         <tbody align="center">
         <c:forEach items="${user.game.bets}" var="bet">
