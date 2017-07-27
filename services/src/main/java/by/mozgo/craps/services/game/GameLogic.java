@@ -80,6 +80,7 @@ public class GameLogic {
         } else {
             Game game = new Game(user.getId());
             gameId = gameService.create(game);
+            game.setId(gameId);
             user.setGame(game);
             isGame = true;
         }

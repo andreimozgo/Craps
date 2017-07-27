@@ -29,6 +29,10 @@ public class PlayCommand implements ActionCommand {
             gameLogic.addBet(Bet.BetType.PASS, passBet);
             String dontPassBet = request.getParameter("dontPassBet");
             gameLogic.addBet(Bet.BetType.DONTPASS, dontPassBet);
+            String comeBet = request.getParameter("comeBet");
+            gameLogic.addBet(Bet.BetType.COME, comeBet);
+            String dontComeBet = request.getParameter("dontComeBet");
+            gameLogic.addBet(Bet.BetType.DONTCOME, dontComeBet);
             RollResult rollResult = gameLogic.roll();
             request.setAttribute("dice", rollResult);
             if (user.getGame() != null) {
