@@ -14,6 +14,7 @@ public class Game extends AbstractEntity implements Serializable {
     private LocalDateTime createTime;
     private Integer userId;
     private List<Bet> bets;
+    private boolean isFirstRoll = true;
 
     public Game(){}
 
@@ -44,5 +45,13 @@ public class Game extends AbstractEntity implements Serializable {
 
     public void setBets(List<Bet> bets) {
         this.bets = bets;
+    }
+
+    public boolean isFirstRoll() {
+        return isFirstRoll;
+    }
+
+    public void setFirstRoll(boolean firstRoll) {
+        isFirstRoll = firstRoll;
     }
 }

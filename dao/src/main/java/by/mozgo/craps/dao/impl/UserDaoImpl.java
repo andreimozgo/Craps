@@ -33,8 +33,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, email);
             ResultSet result = preparedStatement.executeQuery();
-            result.next();
-            pass = result.getString(1);
+            if(result.next()) {
+                pass = result.getString(1);
+            }
         } catch (SQLException e) {
             throw new DaoException(e);
         }

@@ -32,7 +32,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         boolean passCheckResult = false;
         if (!email.equals("") & !password.equals("")) {
             try {
-                passCheckResult = userDao.getPassword(email).equals((hash(password)));
+                passCheckResult = (hash(password)).equals(userDao.getPassword(email));
             } catch (DaoException e) {
                 LOG.log(Level.ERROR, "Exception {}", e);
             }

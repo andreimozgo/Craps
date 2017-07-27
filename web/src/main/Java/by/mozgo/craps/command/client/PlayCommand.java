@@ -22,7 +22,8 @@ public class PlayCommand implements ActionCommand {
 
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        if(user != null) {
+        String page = ConfigurationManager.getProperty("path.page.play");
+        if (user != null) {
             GameLogic gameLogic = new GameLogic(user);
             String passBet = request.getParameter("passBet");
             gameLogic.addBet(Bet.BetType.PASS, passBet);
@@ -30,8 +31,12 @@ public class PlayCommand implements ActionCommand {
             gameLogic.addBet(Bet.BetType.DONTPASS, dontPassBet);
             RollResult rollResult = gameLogic.roll();
             request.setAttribute("dice", rollResult);
+            if (user.getGame() != null) {
+                if (!user.getGame().isFirstRoll()) {
+                    page = ConfigurationManager.getProperty("path.page.secondroll");
+                }
+            }
         }
-        String page = ConfigurationManager.getProperty("path.page.play");
         return new ActionResult(FORWARD, page);
     }
 }

@@ -25,17 +25,14 @@ public class LoginCommand implements ActionCommand {
         // getting email from request
         String email = request.getParameter("email");
         HttpSession session = request.getSession(true);
-        // email check
-        User user = userService.findUserByEmail(email);
-        if (user != null) {
-            String pass = request.getParameter("password");
-            if (userService.checkPassword(email, pass)) {
-                // getting user role
-                session.setAttribute("user", user);
-                LOG.log(Level.INFO,"User " + email + " logged in successfully");
-                page = ConfigurationManager.getProperty("command.empty");
-                result = new ActionResult(REDIRECT, page);
-            }
+        String pass = request.getParameter("password");
+
+        if (userService.checkPassword(email, pass)) {
+            User user = userService.findUserByEmail(email);
+            session.setAttribute("user", user);
+            LOG.log(Level.INFO, "User " + email + " logged in successfully");
+            page = ConfigurationManager.getProperty("command.empty");
+            result = new ActionResult(REDIRECT, page);
         } else {
             Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
             request.setAttribute("errorLoginPassMessage", MessageManager.getProperty("error.loginerror", locale));

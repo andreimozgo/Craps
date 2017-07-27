@@ -27,8 +27,8 @@
     <form method="POST" action="craps">
         <fieldset>
             <div><input type="hidden" name="command" value="play"/></div>
-            <div>Pass Line <input type="number" name="passBet" placeholder="Enter your bet"/></div>
-            <div>Don't Pass Line<input type="number" name="dontPassBet" placeholder="Enter your bet"/></div>
+            <div>Come <input type="number" name="comeBet" placeholder="Enter your bet"/></div>
+            <div>Don't Come<input type="number" name="dontComeBet" placeholder="Enter your bet"/></div>
             <div><input type="submit" value="<fmt:message key="button.roll" />"/></div>
         </fieldset>
     </form>
@@ -58,12 +58,12 @@
                     <div><c:out value="${bet.profit}"/></div>
                 </td>
                 <td>
-                        <c:if test="${bet.profit == 0}">
-                            You lose!
-                        </c:if>
-                        <c:if test="${bet.profit > 0}">
-                            You win!
-                        </c:if>
+                    <c:if test="${bet.profit == 0}">
+                        You lose!
+                    </c:if>
+                    <c:if test="${bet.profit > 0}">
+                        You win!
+                    </c:if>
                 </td>
             </tr>
         </c:forEach>

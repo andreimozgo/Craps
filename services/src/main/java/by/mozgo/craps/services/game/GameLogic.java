@@ -179,6 +179,7 @@ public class GameLogic {
             //set Point
             bet.setPoint(sumDice);
             bet.setFirstRoll(false);
+            user.getGame().setFirstRoll(false);
         }
     }
 
@@ -186,9 +187,11 @@ public class GameLogic {
         if (sumDice == bet.getPoint()) {
             //player win
             bet.setProfit(bet.getAmount().multiply(new BigDecimal(2)));
+            user.getGame().setFirstRoll(true);
         } else if (sumDice == 7) {
             //player lose
             bet.setProfit(new BigDecimal(0));
+            user.getGame().setFirstRoll(true);
         }
     }
 
@@ -205,10 +208,23 @@ public class GameLogic {
         } else {
             bet.setPoint(sumDice);
             bet.setFirstRoll(false);
+            user.getGame().setFirstRoll(false);
         }
     }
 
     private void checkDoNotPassLineOneMore(Bet bet) {
+        if (sumDice == 7) {
+            //player win
+            bet.setProfit(bet.getAmount().multiply(new BigDecimal(2)));
+            user.getGame().setFirstRoll(true);
+        } else if (sumDice == bet.getPoint()) {
+            //player lose
+            bet.setProfit(new BigDecimal(0));
+            user.getGame().setFirstRoll(true);
+        }
+    }
+
+    private void checkComeFirst(Bet bet) {
         if (sumDice == 7) {
             //player win
             bet.setProfit(bet.getAmount().multiply(new BigDecimal(2)));

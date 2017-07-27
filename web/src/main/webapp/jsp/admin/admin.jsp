@@ -25,12 +25,12 @@
     <h3><fmt:message key="admin.users"/></h3>
     <form method="get" action="craps">
         <fmt:message key="pagination.linesperpage"/>:
-                <select name="recordsPerPage">
-                    <option>${recordsPerPage}</option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                </select>
+        <select name="recordsPerPage">
+            <option>${recordsPerPage}</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+        </select>
         <input type="hidden" name="command" value="adminpage"/>
         <input type="submit" value="<fmt:message key="pagination.search"/>"/>
     </form>
@@ -119,14 +119,14 @@
             <c:forEach begin="2" end="${numberOfPages-0}" var="i">
             <c:choose>
             <c:when test="${currentPage eq i}">
-    <td>${i}</td>
-    </c:when>
-    <c:otherwise>
-        <option value="craps?command=adminpage&currentPage=${i}&recordsPerPage=${recordsPerPage}">${i}</option>
-    </c:otherwise>
-    </c:choose>
-    </c:forEach>
-    </select>
+                <td>${i}</td>
+            </c:when>
+            <c:otherwise>
+                <option value="craps?command=adminpage&currentPage=${i}&recordsPerPage=${recordsPerPage}">${i}</option>
+            </c:otherwise>
+            </c:choose>
+            </c:forEach>
+        </select>
     </td>
     <c:choose>
         <c:when test="${currentPage lt numberOfPages}">
