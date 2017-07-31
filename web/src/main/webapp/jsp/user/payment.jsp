@@ -22,12 +22,18 @@
         <ctg:user-avatar/>
     </div>
     <div>
-        ${user.username}, <fmt:message key="user.hello"/>
+        ${user.username}
     </div>
     <div>
         <fmt:message key="user.balance"/>: ${user.balance}
     </div>
-    <a href="craps?command=pay"><fmt:message key="user.payment"/></a>
+    <form method="POST" action="craps">
+        <fieldset>
+            <div><input type="hidden" name="command" value="pay"/></div>
+            <div>Amount: <input type="number" name="amount" placeholder="Specify amount"/></div>
+             <div><input type="submit" value="<fmt:message key="user.button.payment" />"/></div>
+        </fieldset>
+    </form>
     <br>
     <hr>
     <br>

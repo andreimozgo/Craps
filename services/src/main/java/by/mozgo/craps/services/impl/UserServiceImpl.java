@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -116,6 +117,13 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
 
     public void removeGame(User user){
         user.setGame(null);
+    }
+
+    public User makePayment(User user, String amount){
+        BigDecimal balance = user.getBalance();
+        user.setBalance(balance.add(new BigDecimal(amount)));
+        update(user);
+        return user;
     }
 
     private String hash(String input) {

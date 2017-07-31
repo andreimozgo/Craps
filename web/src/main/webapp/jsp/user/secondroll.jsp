@@ -18,11 +18,11 @@
 <body>
 <jsp:include page="/jsp/elements/header.jsp"/>
 <section>
-    <h1><fmt:message key="page.play.title"/></h1>
+    <h1><fmt:message key="play.title"/></h1>
     <br>
-    <fmt:message key="page.play.player"/>: ${user.username}
+    <fmt:message key="play.player"/>: ${user.username}
     <br>
-    <fmt:message key="page.play.balance"/>: ${user.balance}
+    <fmt:message key="play.balance"/>: ${user.balance}
     <br>
     <form method="POST" action="craps">
         <fieldset>
@@ -32,14 +32,14 @@
             <div><input type="submit" value="<fmt:message key="button.roll" />"/></div>
         </fieldset>
     </form>
-    <div><span><fmt:message key="page.play.dice"/>: </span><span>${dice.dice1} </span><span>${dice.dice2}</span></div>
+    <div><span><fmt:message key="play.dice"/>: </span><span>${dice.dice1} </span><span>${dice.dice2}</span></div>
     <table border="1">
         <thead align="center">
         <tr>
-            <th><fmt:message key="page.play.bettype"/></th>
-            <th><fmt:message key="page.play.bet"/></th>
+            <th><fmt:message key="play.bettype"/></th>
+            <th><fmt:message key="play.bet"/></th>
             <th>Point</th>
-            <th><fmt:message key="page.play.profit"/></th>
+            <th><fmt:message key="play.profit"/></th>
             <th></th>
         </tr>
         <tbody align="center">
