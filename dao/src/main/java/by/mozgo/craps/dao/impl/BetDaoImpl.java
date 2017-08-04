@@ -15,13 +15,15 @@ import java.sql.Statement;
  */
 public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
     private static final String TABLE_NAME = "bet";
+    private static final String QUERY_INSERT = "INSERT INTO bet (game_id, amount) VALUES (?, ?)";
+    private static final String QUERY_UPDATE = "UPDATE bet SET game_id=?, amount=?, profit=? WHERE id = ?";
     private static BetDaoImpl instance = null;
 
     private BetDaoImpl() {
         tableName = TABLE_NAME;
     }
 
-    public static synchronized BetDaoImpl getInstance() {
+    public static BetDaoImpl getInstance() {
         if (instance == null) instance = new BetDaoImpl();
         return instance;
     }
@@ -29,9 +31,8 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
     @Override
     public Integer create(Bet entity) throws DaoException {
         Integer id = null;
-        String query = "INSERT INTO bet (game_id, amount) VALUES (?, ?)";
         connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, entity.getGameId());
             ps.setBigDecimal(2, entity.getAmount());
             ps.executeUpdate();
@@ -52,9 +53,8 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
 
     @Override
     public void update(Bet entity) throws DaoException {
-        String query = "UPDATE bet SET game_id=?, amount=?, profit=? WHERE id = ?";
         connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE)) {
             ps.setInt(1, entity.getGameId());
             ps.setBigDecimal(2, entity.getAmount());
             ps.setBigDecimal(3, entity.getProfit());

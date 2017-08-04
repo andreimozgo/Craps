@@ -21,7 +21,6 @@ public class CloseConnectionFilter implements Filter {
         if (pool.isConnectionOpen()) {
             pool.getConnection().close();
         }
-
         chain.doFilter(request, response);
         LOG.log(Level.INFO, "DB connection closed");
     }

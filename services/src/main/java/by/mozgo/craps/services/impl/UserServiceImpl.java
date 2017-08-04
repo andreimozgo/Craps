@@ -24,7 +24,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         baseDao = userDao;
     }
 
-    public static synchronized UserServiceImpl getInstance() {
+    public static UserServiceImpl getInstance() {
         if (instance == null) instance = new UserServiceImpl();
         return instance;
     }

@@ -21,10 +21,11 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
         baseDao = betDao;
     }
 
-    public static synchronized BetServiceImpl getInstance() {
+    public static BetServiceImpl getInstance() {
         if (instance == null) instance = new BetServiceImpl();
         return instance;
     }
+
 
     @Override
     public Bet findEntityById(Integer id) {

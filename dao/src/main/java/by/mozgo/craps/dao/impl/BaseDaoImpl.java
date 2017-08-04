@@ -13,8 +13,8 @@ import java.sql.SQLException;
  * Created by Andrei Mozgo. 2017.
  */
 public abstract class BaseDaoImpl<T extends AbstractEntity> implements BaseDao<T> {
-    ConnectionWrapper connection;
-    String tableName;
+    protected ConnectionWrapper connection;
+    protected String tableName;
 
     public Integer create(T entity) throws DaoException{
         throw new DaoException("Method unavailable");

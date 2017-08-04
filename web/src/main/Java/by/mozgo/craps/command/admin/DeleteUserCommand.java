@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 public class DeleteUserCommand implements ActionCommand {
-
+    @Override
     public ActionResult execute(HttpServletRequest request) {
         UserServiceImpl userService = UserServiceImpl.getInstance();
         String page;

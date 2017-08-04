@@ -13,7 +13,7 @@ import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
 
 public class LogoutCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
-
+    @Override
     public ActionResult execute(HttpServletRequest request) {
         request.getSession().invalidate();
         LOG.log(Level.INFO, "User logged out successfully");

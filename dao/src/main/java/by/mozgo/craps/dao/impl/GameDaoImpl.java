@@ -15,13 +15,14 @@ import java.sql.Statement;
  */
 public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     private static final String TABLE_NAME = "game";
+    private static final String QUERY_INSERT = "INSERT INTO game (user_id) VALUES (?)";
     private static GameDaoImpl instance = null;
 
     public GameDaoImpl() {
         tableName = TABLE_NAME;
     }
 
-    public static synchronized GameDaoImpl getInstance() {
+    public static GameDaoImpl getInstance() {
         if (instance == null) instance = new GameDaoImpl();
         return instance;
     }
@@ -29,9 +30,8 @@ public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     @Override
     public Integer create(Game entity) throws DaoException {
         Integer id = null;
-        String query = "INSERT INTO game (user_id) VALUES (?)";
         connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, entity.getUserId());
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();

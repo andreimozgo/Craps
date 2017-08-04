@@ -13,7 +13,7 @@ import java.util.List;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 public class AdminPageCommand implements ActionCommand {
-
+    @Override
     public ActionResult execute(HttpServletRequest request) {
         UserServiceImpl userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession();

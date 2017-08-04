@@ -8,17 +8,11 @@ public class User extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String email;
-
     private String password;
-
     private String username;
-
     private LocalDateTime createTime;
-
     private BigDecimal balance;
-
     private UserRole userRole;
-
     private Game game;
 
     public User() {

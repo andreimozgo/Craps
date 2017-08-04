@@ -19,7 +19,7 @@ public class GameServiceImpl extends ServiceImpl<Game> implements GameService {
         baseDao = gameDao;
     }
 
-    public static synchronized GameServiceImpl getInstance() {
+    public static GameServiceImpl getInstance() {
         if (instance == null) instance = new GameServiceImpl();
         return instance;
     }

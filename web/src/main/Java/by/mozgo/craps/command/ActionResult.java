@@ -18,6 +18,6 @@ public class ActionResult {
     }
 
     public enum ActionType {
-        FORWARD, REDIRECT;
+        FORWARD, REDIRECT
     }
 }

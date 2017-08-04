@@ -13,7 +13,7 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
  * Created by Andrei Mozgo. 2017.
  */
 public class ChangeRoleCommand implements ActionCommand {
-
+    @Override
     public ActionResult execute(HttpServletRequest request) {
         UserServiceImpl userService = UserServiceImpl.getInstance();
         ActionResult result;

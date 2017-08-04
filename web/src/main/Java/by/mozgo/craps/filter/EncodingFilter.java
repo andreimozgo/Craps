@@ -1,5 +1,6 @@
 package by.mozgo.craps.filter;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +26,7 @@ public class EncodingFilter implements Filter {
         if (code != null && !code.equalsIgnoreCase(codeRequest)) {
             request.setCharacterEncoding(code);
             response.setCharacterEncoding(code);
-            LOG.info("Encoding changed to UTF-8 successfully");
+            LOG.log(Level.INFO,"Encoding changed to UTF-8 successfully");
         }
 
         chain.doFilter(request, response);

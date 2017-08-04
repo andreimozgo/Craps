@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -20,11 +21,8 @@ import java.util.concurrent.atomic.AtomicReference;
  * Created by Andrei Mozgo. 2017.
  */
 public class ConnectionPool {
-    private static final String POOL_IS_CLOSING = "Illegal state - connection pool is closing";
-    private static final String CLOSE_CONNECTION_ERROR = "Unable to close connection";
+
     private static final String UNEXPECTED_INTERRUPT = "Unexpected interrupt";
-    private static final String ESTABLISH_CONNECTION_ERROR = "Unable to establish database connection.";
-    private static final String UNABLE_TO_REGISTER_DRIVER = "Unable to register DB driver";
     private static final Logger LOG = LogManager.getLogger();
     private static AtomicReference<ConnectionPool> instance = new AtomicReference<>();
     private static int VALID_TIMEOUT = 3; // seconds
@@ -38,6 +36,7 @@ public class ConnectionPool {
     private AtomicInteger connectionsCount;
     private BlockingQueue<Connection> availableConnections;
     private AtomicBoolean isClosing;
+    private Driver driver;
 
 
     private ConnectionPool() {
@@ -47,9 +46,10 @@ public class ConnectionPool {
         availableConnections = new ArrayBlockingQueue<>(MAX_POOL_SIZE);
 
         try {
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            driver = new com.mysql.jdbc.Driver();
+            DriverManager.registerDriver(driver);
         } catch (SQLException e) {
-            LOG.log(Level.FATAL, "{}. {}", UNABLE_TO_REGISTER_DRIVER, e);
+            LOG.log(Level.FATAL, "Unable to register DB driver. {}", e, e);
             throw new RuntimeException("Unable to load db driver.\n" + e.getMessage(), e);
         }
         for (int i = 0; i < MIN_POOL_SIZE; i++) {
@@ -74,7 +74,7 @@ public class ConnectionPool {
                     isEmpty.set(false);
                 }
             } catch (InterruptedException e) {
-                LOG.log(Level.ERROR, "{}. {}", UNEXPECTED_INTERRUPT, e);
+                LOG.log(Level.ERROR, "{}. {}", UNEXPECTED_INTERRUPT, e, e);
             } finally {
                 semaphore.release();
             }
@@ -94,7 +94,7 @@ public class ConnectionPool {
                     resource.getString("db.password"));
             connectionsCount.incrementAndGet();
         } catch (SQLException e) {
-            LOG.log(Level.ERROR, "{}. {}", ESTABLISH_CONNECTION_ERROR, e);
+            LOG.log(Level.ERROR, "Unable to establish database connection. {}", e, e);
         }
         return conn;
     }
@@ -103,15 +103,21 @@ public class ConnectionPool {
      * Method closes pool and all connections.
      */
     public void closePool() {
+        isClosing.set(true);
         while (connectionsCount.get() > 0) {
             try {
                 availableConnections.take().close();
                 connectionsCount.decrementAndGet();
             } catch (SQLException e) {
-                LOG.error(CLOSE_CONNECTION_ERROR, e);
+                LOG.log(Level.ERROR, "Unable to close connection", e, e);
             } catch (InterruptedException e) {
-                LOG.warn(UNEXPECTED_INTERRUPT, e);
+                LOG.log(Level.WARN, "{}. {}", UNEXPECTED_INTERRUPT, e, e);
             }
+        }
+        try {
+            DriverManager.deregisterDriver(driver);
+        } catch (SQLException e) {
+            LOG.log(Level.ERROR, "Unable to deregister DB driver. {}", e, e);
         }
     }
 
@@ -134,18 +140,19 @@ public class ConnectionPool {
                     } else {
                         conn = availableConnections.take();
                     }
-                }
-                try {
-                    if (!conn.isValid(VALID_TIMEOUT)) {
-                        conn.close();
-                        connectionsCount.decrementAndGet();
-                        conn = this.createConnection();
+                } else {
+                    try {
+                        if (!conn.isValid(VALID_TIMEOUT)) {
+                            conn.close();
+                            connectionsCount.decrementAndGet();
+                            conn = this.createConnection();
+                        }
+                    } catch (SQLException e) {
+                        LOG.log(Level.ERROR, "Unable to establish database connection. {}", e, e);
                     }
-                } catch (SQLException e) {
-                    LOG.error(ESTABLISH_CONNECTION_ERROR, e);
                 }
             } catch (InterruptedException e) {
-                LOG.warn(UNEXPECTED_INTERRUPT, e);
+                LOG.log(Level.WARN, "{}. {}", UNEXPECTED_INTERRUPT, e, e);
             }
             connectionWrapper = new ConnectionWrapper(conn);
             threadLocalConnection.set(connectionWrapper);
@@ -164,33 +171,32 @@ public class ConnectionPool {
             try {
                 availableConnections.put(conn);
             } catch (InterruptedException e) {
-                LOG.warn(UNEXPECTED_INTERRUPT, e);
+                LOG.log(Level.WARN, "{}. {}", UNEXPECTED_INTERRUPT, e, e);
             }
         } else {
             try {
                 conn.close();
                 connectionsCount.decrementAndGet();
             } catch (SQLException e) {
-                LOG.error(CLOSE_CONNECTION_ERROR, e);
-                e.printStackTrace();
+                LOG.log(Level.ERROR, "Unable to close connection. {}", e, e);
             }
         }
         threadLocalConnection.remove();
     }
 
     /**
-     * @return connections count avaliable in pool at moment
+     * @return connections count available in pool at moment
      */
     public int getAvailableConnectionsCount() {
         return availableConnections.size();
     }
 
     /**
-     * throws exception if perform action on is clossing pool
+     * throws exception if perform action on closing pool
      */
     private void assertNotClosing() {
         if (isClosing.get()) {
-            LOG.fatal(POOL_IS_CLOSING);
+            LOG.log(Level.FATAL, "Illegal state - connection pool is closing.");
             throw new RuntimeException("Cannot perform operation: pool is closing.");
         }
     }

@@ -11,7 +11,7 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 public class EmptyCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
-
+    @Override
     public ActionResult execute(HttpServletRequest request) {
         /*
          * if error occurred or direct call controller
