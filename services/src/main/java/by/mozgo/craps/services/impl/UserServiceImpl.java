@@ -20,6 +20,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     private static UserServiceImpl instance = null;
     private UserDao userDao = UserDaoImpl.getInstance();
 
+
     private UserServiceImpl() {
         baseDao = userDao;
     }
@@ -29,16 +30,14 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         return instance;
     }
 
-    public boolean checkPassword(String email, String password) {
-        boolean passCheckResult = false;
-        if (!email.equals("") & !password.equals("")) {
+    public boolean checkUser(String email, String password) {
+        boolean result = false;
             try {
-                passCheckResult = (hash(password)).equals(userDao.getPassword(email));
+                result = (hash(password)).equals(userDao.getPassword(email));
             } catch (DaoException e) {
                 LOG.log(Level.ERROR, "Exception {}", e);
             }
-        }
-        return passCheckResult;
+        return result;
     }
 
     @Override
@@ -115,11 +114,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         return numberOfPages;
     }
 
-    public void removeGame(User user){
-        user.setGame(null);
-    }
-
-    public User makePayment(User user, String amount){
+    public User makePayment(User user, String amount) {
         BigDecimal balance = user.getBalance();
         user.setBalance(balance.add(new BigDecimal(amount)));
         update(user);
@@ -141,4 +136,8 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         }
         return md5Hashed;
     }
+
+
+
+
 }

@@ -2,6 +2,7 @@ package by.mozgo.craps.command.user;
 
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
+import by.mozgo.craps.services.Validator;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -16,6 +17,7 @@ import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
 
 public class LoginCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
+
     @Override
     public ActionResult execute(HttpServletRequest request) {
         UserServiceImpl userService = UserServiceImpl.getInstance();
@@ -26,14 +28,14 @@ public class LoginCommand implements ActionCommand {
         String email = request.getParameter("email");
         HttpSession session = request.getSession(true);
         String pass = request.getParameter("password");
-
-        if (userService.checkPassword(email, pass)) {
-            User user = userService.findUserByEmail(email);
-            session.setAttribute("user", user);
-            LOG.log(Level.INFO, "User {} logged in successfully", email);
-            page = ConfigurationManager.getProperty("command.empty");
-            result = new ActionResult(REDIRECT, page);
-            throw new NullPointerException();
+        if (Validator.validateEmail(email) && Validator.validateLoginPassword(pass)) {
+            if (userService.checkUser(email, pass)) {
+                User user = userService.findUserByEmail(email);
+                session.setAttribute("user", user);
+                LOG.log(Level.INFO, "User {} logged in successfully", email);
+                page = ConfigurationManager.getProperty("command.empty");
+                result = new ActionResult(REDIRECT, page);
+            }
         } else {
             Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
             request.setAttribute("errorLoginPassMessage", MessageManager.getProperty("error.loginerror", locale));

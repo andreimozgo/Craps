@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${curLocale}"/>
 <fmt:setBundle basename="i18n.jsp"/>
@@ -21,21 +21,22 @@
         <form id="user" onsubmit="return validateForm()" method="POST" action="craps" enctype="multipart/form-data">
             <fieldset id="fieldset">
                 <div id="message-logic" class="message">${registrationResultMessage}</div>
-                <div><input form="user" type="email" name="email" placeholder="<fmt:message key="login.email"/>"
-                            value="${email}"/>
+                <div>* <input form="user" type="email" name="email" placeholder="<fmt:message key="login.email"/>"
+                              value="${email}"/>
                     <div class="err" id="err-email"></div>
                 </div>
-                <div><input form="user" type="password" name="pwd1" placeholder="<fmt:message key="login.password"/>"/>
+                <div>* <input form="user" type="password" name="pwd1" placeholder="<fmt:message key="login.password"/>"/>
                     <div class="err" id="err-pwd1"></div>
                 </div>
-                <div><input form="null" type="password" name="pwd2" placeholder="<fmt:message key="login.confirm"/>"/>
+                <div>* <input form="user" type="password" name="pwd2" placeholder="<fmt:message key="login.confirm"/>"/>
                     <div class="err" id="err-pwd2"></div>
                 </div>
-                <div><input form="user" type="text" name="username" placeholder="<fmt:message key="login.username"/>"
-                            value="${username}"/>
+                <div>* <input form="user" type="text" name="username" placeholder="<fmt:message key="login.username"/>"
+                              value="${username}"/>
                     <div class="err" id="err-uname"></div>
                 </div>
-                <div><input form="null" type="number" name="age" placeholder="<fmt:message key="login.age"/>"/>
+                <div>*<input form="user" type="number" name="age" placeholder="<fmt:message key="login.age"/>"
+                             value="${age}"/>
                     <div class="err" id="err-age"></div>
                 </div>
                 <div><input type="file" name="photo" accept="image/jpeg,image/png"
@@ -45,7 +46,6 @@
             </fieldset>
             <a href="/"><fmt:message key="login.login"/></a>
         </form>
-        <form id="null"></form>
     </div>
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>

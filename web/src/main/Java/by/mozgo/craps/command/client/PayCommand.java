@@ -4,6 +4,7 @@ import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionResult;
 import by.mozgo.craps.command.ConfigurationManager;
 import by.mozgo.craps.entity.User;
+import by.mozgo.craps.services.Validator;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,10 +23,8 @@ public class PayCommand implements ActionCommand {
         User user = (User) session.getAttribute("user");
 
         String amount = request.getParameter("amount");
-        if(amount != null) {
-            if (!amount.isEmpty()) {
-                userService.makePayment(user, amount);
-            }
+        if (Validator.validateMoney(amount)) {
+            userService.makePayment(user, amount);
         }
         String page = ConfigurationManager.getProperty("path.page.payment");
         return new ActionResult(FORWARD, page);

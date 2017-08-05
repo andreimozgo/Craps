@@ -93,8 +93,7 @@ public class GameLogic {
               bets.removeIf(bet -> bet.getProfit() != null);
 
             if (user.getGame().getBets().isEmpty()) {
-                userService.removeGame(user);
-            }
+                user.setGame(null);            }
         }
     }
 

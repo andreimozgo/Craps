@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
  */
 public abstract class ServiceImpl<T extends AbstractEntity> implements Service<T> {
     private static final Logger LOG = LogManager.getLogger();
-    BaseDao baseDao;
+    protected BaseDao baseDao;
 
     @Override
     public Integer create(T t) {

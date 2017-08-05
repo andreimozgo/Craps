@@ -5,6 +5,7 @@ import by.mozgo.craps.command.ActionResult;
 import by.mozgo.craps.command.ConfigurationManager;
 import by.mozgo.craps.entity.Bet;
 import by.mozgo.craps.entity.User;
+import by.mozgo.craps.services.Validator;
 import by.mozgo.craps.services.game.GameLogic;
 import by.mozgo.craps.services.game.RollResult;
 
@@ -26,13 +27,21 @@ public class PlayCommand implements ActionCommand {
         if (user != null) {
             GameLogic gameLogic = new GameLogic(user);
             String passBet = request.getParameter("passBet");
-            gameLogic.addBet(Bet.BetType.PASS, passBet);
+            if(Validator.validateMoney(passBet)) {
+                gameLogic.addBet(Bet.BetType.PASS, passBet);
+            }
             String dontPassBet = request.getParameter("dontPassBet");
-            gameLogic.addBet(Bet.BetType.DONTPASS, dontPassBet);
+            if(Validator.validateMoney(dontPassBet)) {
+                gameLogic.addBet(Bet.BetType.DONTPASS, dontPassBet);
+            }
             String comeBet = request.getParameter("comeBet");
-            gameLogic.addBet(Bet.BetType.COME, comeBet);
+            if(Validator.validateMoney(comeBet)) {
+                gameLogic.addBet(Bet.BetType.COME, comeBet);
+            }
             String dontComeBet = request.getParameter("dontComeBet");
-            gameLogic.addBet(Bet.BetType.DONTCOME, dontComeBet);
+            if(Validator.validateMoney(comeBet)) {
+                gameLogic.addBet(Bet.BetType.DONTCOME, dontComeBet);
+            }
             RollResult rollResult = gameLogic.roll();
             request.setAttribute("dice", rollResult);
             if (user.getGame() != null) {
