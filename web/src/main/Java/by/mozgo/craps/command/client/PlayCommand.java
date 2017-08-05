@@ -39,7 +39,7 @@ public class PlayCommand implements ActionCommand {
                 gameLogic.addBet(Bet.BetType.COME, comeBet);
             }
             String dontComeBet = request.getParameter("dontComeBet");
-            if(Validator.validateMoney(comeBet)) {
+            if(Validator.validateMoney(dontComeBet)) {
                 gameLogic.addBet(Bet.BetType.DONTCOME, dontComeBet);
             }
             RollResult rollResult = gameLogic.roll();

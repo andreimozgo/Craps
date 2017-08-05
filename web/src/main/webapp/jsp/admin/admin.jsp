@@ -86,7 +86,7 @@
                 </form>
                 <td>
                     <div>
-                        <form method="post" action="craps">
+                        <form  onclick ="return confirm('<fmt:message key="button.delete"/>?');" method="post" action="craps">
                             <input type="hidden" name="command" value="deleteuser"/> <input
                                 type="hidden" name="user_id" value="${user.id}">
                             <input type="submit" value="<fmt:message key="button.delete"/>"/>

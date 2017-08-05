@@ -35,7 +35,7 @@
                               value="${username}"/>
                     <div class="err" id="err-uname"></div>
                 </div>
-                <div>*<input form="user" type="number" name="age" placeholder="<fmt:message key="login.age"/>"
+                <div>* <input form="user" type="number" name="age" placeholder="<fmt:message key="login.age"/>"
                              value="${age}"/>
                     <div class="err" id="err-age"></div>
                 </div>
