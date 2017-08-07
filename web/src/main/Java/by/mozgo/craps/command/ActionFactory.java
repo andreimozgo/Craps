@@ -22,7 +22,7 @@ public class ActionFactory {
             CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
             current = currentEnum.getCurrentCommand();
         } catch (IllegalArgumentException e) {
-            LOG.log(Level.ERROR, "{}{}", action, MessageManager.getProperty("message.wrongaction"));
+            LOG.log(Level.ERROR, "{} - {}", action, "Command not found or wrong.");
         }
         return current;
     }

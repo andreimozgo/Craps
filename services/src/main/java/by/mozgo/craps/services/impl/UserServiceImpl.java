@@ -76,6 +76,9 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
 
     @Override
     public void update(User user) {
+        if(user.getPassword() != null){
+            user.setPassword(hash(user.getPassword()));
+        }
         try {
             userDao.update(user);
         } catch (DaoException e) {

@@ -21,12 +21,15 @@ public class LoginCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
         UserServiceImpl userService = UserServiceImpl.getInstance();
-        ActionResult result = null;
-        String page;
+        HttpSession session = request.getSession(true);
+        Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+
+        String page = ConfigurationManager.getProperty("path.page.login");
+        ActionResult result = new ActionResult(FORWARD, page);
+        request.setAttribute("errorLoginPassMessage", MessageManager.getProperty("error.loginerror", locale));
 
         // getting email from request
         String email = request.getParameter("email");
-        HttpSession session = request.getSession(true);
         String pass = request.getParameter("password");
         if (Validator.validateEmail(email) && Validator.validateLoginPassword(pass)) {
             if (userService.checkUser(email, pass)) {
@@ -36,11 +39,6 @@ public class LoginCommand implements ActionCommand {
                 page = ConfigurationManager.getProperty("command.empty");
                 result = new ActionResult(REDIRECT, page);
             }
-        } else {
-            Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
-            request.setAttribute("errorLoginPassMessage", MessageManager.getProperty("error.loginerror", locale));
-            page = ConfigurationManager.getProperty("path.page.login");
-            result = new ActionResult(FORWARD, page);
         }
         return result;
     }

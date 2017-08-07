@@ -20,7 +20,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     private static final String QUERY_GET_ALL = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id ORDER BY user.id LIMIT ?,?";
     private static final String QUERY_GET_AMOUNT = "SELECT COUNT(*) FROM user";
     private static final String QUERY_GET_PASSWORD = "SELECT password FROM user WHERE email = ?";
-    private static final String QUERY_FIND_USER = "SELECT user.id, email, password, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id WHERE email = ?";
+    private static final String QUERY_FIND_USER = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id WHERE email = ?";
 
     private static UserDaoImpl instance = null;
 
@@ -61,11 +61,10 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
                 user = new User();
                 user.setId(result.getInt(1));
                 user.setEmail(result.getString(2));
-                user.setPassword(result.getString(3));
-                user.setUsername(result.getString(4));
-                user.setCreateTime(result.getTimestamp(5).toLocalDateTime());
-                user.setBalance(result.getBigDecimal(6));
-                user.setUserRole(User.UserRole.valueOf(result.getString(7).toUpperCase()));
+                user.setUsername(result.getString(3));
+                user.setCreateTime(result.getTimestamp(4).toLocalDateTime());
+                user.setBalance(result.getBigDecimal(5));
+                user.setUserRole(User.UserRole.valueOf(result.getString(6).toUpperCase()));
             }
         } catch (SQLException e) {
             throw new DaoException(e);

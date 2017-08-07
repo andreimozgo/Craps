@@ -29,9 +29,11 @@
     </div>
     <form method="POST" action="craps">
         <fieldset>
-            <div><input type="hidden" name="command" value="pay"/></div>
-            <div><input type="number" name="amount" placeholder="<fmt:message key="user.payment.enter" />" required/></div>
-             <div><input type="submit" value="<fmt:message key="user.button.payment" />"/></div>
+            <div class="message">${changePwdMessage}</div>
+            <div><input type="hidden" name="command" value="changepwd"/></div>
+            <div><input type="password" name="oldPwd" placeholder="Enter old password" required/></div>
+            <div><input type="password" name="newPwd" placeholder="Enter new password" required/></div>
+            <div><input type="submit" value="<fmt:message key="user.changepwd" />"/></div>
         </fieldset>
     </form>
     <br>

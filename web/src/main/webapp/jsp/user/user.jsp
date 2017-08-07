@@ -27,7 +27,8 @@
     <div>
         <fmt:message key="user.balance"/>: ${user.balance}
     </div>
-    <a href="craps?command=pay"><fmt:message key="user.payment"/></a>
+    <div><a href="craps?command=pay"><fmt:message key="user.payment"/></a></div>
+    <div><a href="craps?command=changepwd"><fmt:message key="user.changepwd"/></a></div>
     <br>
     <hr>
     <br>

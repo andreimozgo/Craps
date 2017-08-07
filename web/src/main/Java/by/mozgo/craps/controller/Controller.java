@@ -3,7 +3,6 @@ package by.mozgo.craps.controller;
 import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionFactory;
 import by.mozgo.craps.command.ActionResult;
-import by.mozgo.craps.util.ConnectionPool;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -54,14 +53,9 @@ public class Controller extends HttpServlet {
         }
     }
 
-/*    @Override
-    public void init() throws ServletException {
-        super.init();
-    }*/
-
     @Override
     public void destroy() {
-        ConnectionPool.getInstance().closePool();
-     //   super.destroy();
+    /*    ConnectionPool.getInstance().closePool();
+        super.destroy();*/
     }
 }
