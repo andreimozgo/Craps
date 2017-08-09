@@ -18,21 +18,26 @@
 <body>
 <jsp:include page="/jsp/elements/header.jsp"/>
 <section>
-    <div class="avatar">
-        <ctg:user-avatar/>
+    <div class="login-form">
+        <h2><fmt:message key="user.profile"/></h2>
+        <div class="avatar">
+            <ctg:user-avatar/>
+        </div>
+        <div>
+            ${user.username}, <fmt:message key="user.hello"/>
+        </div>
+        <div>
+            <fmt:message key="user.balance"/>: ${user.balance}
+        </div>
+        <div><a href="/craps?command=play" class="menu-link"><fmt:message key="menu.play"/></a></div>
+        <div><a href="craps?command=pay"><fmt:message key="user.payment"/></a></div>
+        <div><a href="craps?command=changepwd"><fmt:message key="user.changepwd"/></a></div>
+        <br>
+        <hr>
+        <a href="craps?command=logout"><fmt:message key="logout"/></a>
+        <br>
+        <br>
     </div>
-    <div>
-        ${user.username}, <fmt:message key="user.hello"/>
-    </div>
-    <div>
-        <fmt:message key="user.balance"/>: ${user.balance}
-    </div>
-    <div><a href="craps?command=pay"><fmt:message key="user.payment"/></a></div>
-    <div><a href="craps?command=changepwd"><fmt:message key="user.changepwd"/></a></div>
-    <br>
-    <hr>
-    <br>
-    <a href="craps?command=logout"><fmt:message key="logout"/></a>
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
 </body>

@@ -31,7 +31,6 @@
             <a href="craps?command=registration"><fmt:message key="login.registration"/></a>
         </form>
     </div>
-    ${nullPage}
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
 </body>

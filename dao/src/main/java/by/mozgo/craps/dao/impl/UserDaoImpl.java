@@ -15,7 +15,7 @@ import java.util.List;
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     private static final String TABLE_NAME = "user";
     private static final String QUERY_INSERT = "INSERT INTO user (email, password, username) VALUES (?, ?, ?)";
-    private static final String QUERY_UPDATE = "UPDATE user SET email=?, password=?, username=?, money=? WHERE id = ?";
+    private static final String QUERY_UPDATE = "UPDATE user SET email=?, username=?, money=? WHERE id = ?";
     private static final String QUERY_UPDATE_ROLE = "UPDATE user SET role_id = ? WHERE id = ?";
     private static final String QUERY_GET_ALL = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id ORDER BY user.id LIMIT ?,?";
     private static final String QUERY_GET_AMOUNT = "SELECT COUNT(*) FROM user";
@@ -151,10 +151,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
         connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE)) {
             ps.setString(1, entity.getEmail());
-            ps.setString(2, entity.getPassword());
-            ps.setString(3, entity.getUsername());
-            ps.setBigDecimal(4, entity.getBalance());
-            ps.setInt(5, entity.getId());
+            ps.setString(2, entity.getUsername());
+            ps.setBigDecimal(3, entity.getBalance());
+            ps.setInt(4, entity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);

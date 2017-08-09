@@ -27,8 +27,8 @@
     <form method="POST" action="craps">
         <fieldset>
             <div><input type="hidden" name="command" value="play"/></div>
-            <div>Pass Line <input type="number" name="passBet" placeholder="Enter your bet"/></div>
-            <div>Don't Pass Line<input type="number" name="dontPassBet" placeholder="Enter your bet"/></div>
+            <div>Pass Line <input type="number" min="1" max="100" step="1" name="passBet" placeholder="Enter your bet"/></div>
+            <div>Don't Pass Line<input type="number" min="1" max="100" step="1" name="dontPassBet" placeholder="Enter your bet"/></div>
             <div><input type="submit" value="<fmt:message key="button.roll" />"/></div>
         </fieldset>
     </form>

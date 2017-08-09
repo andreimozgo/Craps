@@ -80,8 +80,8 @@
 
         var usr = document.forms[0]["username"].value,
             pwd1 = document.forms[0]["pwd1"].value,
-            pwd2 = document.forms[1]["pwd2"].value,
-            age = document.forms[1]["age"].value,
+            pwd2 = document.forms[0]["pwd2"].value,
+            age = document.forms[0]["age"].value,
             email = document.forms[0]["email"].value;
 
         if (!usr) {

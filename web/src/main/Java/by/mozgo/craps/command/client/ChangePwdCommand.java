@@ -2,6 +2,7 @@ package by.mozgo.craps.command.client;
 
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
+import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.services.Validator;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 
@@ -17,7 +18,7 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 public class ChangePwdCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
-        UserServiceImpl userService = UserServiceImpl.getInstance();
+        UserService userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
         User user = (User) session.getAttribute("user");
@@ -26,7 +27,7 @@ public class ChangePwdCommand implements ActionCommand {
         String newPwd = request.getParameter("newPwd");
 
         if (oldPwd != null) {
-            if (Validator.validateLoginPassword(oldPwd)) {
+            if (userService.checkUser(user.getEmail(), oldPwd)) {
                 if (Validator.validateNewPassword(newPwd)) {
                     user.setPassword(newPwd);
                     userService.update(user);
@@ -37,7 +38,10 @@ public class ChangePwdCommand implements ActionCommand {
             } else {
                 request.setAttribute("changePwdMessage", MessageManager.getProperty("changepwd.wrong", locale));
             }
+        } else {
+            request.setAttribute("changePwdMessage", MessageManager.getProperty("changepwd.wrong", locale));
         }
+
         String page = ConfigurationManager.getProperty("path.page.password");
         return new ActionResult(FORWARD, page);
     }

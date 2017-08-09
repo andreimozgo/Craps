@@ -7,7 +7,6 @@
     <div class="title"><h1><fmt:message key="header.title"/></h1></div>
     <nav class="menu">
         <a href="/craps" class="menu-link"><fmt:message key="menu.main"/></a>
-        <a href="/craps?command=play" class="menu-link"><fmt:message key="menu.play"/></a>
         <a href="/jsp/rules.jsp" class="menu-link"><fmt:message key="menu.rules"/></a>
         <a href="/jsp/history.jsp" class="menu-link"><fmt:message key="menu.history"/></a>
         <div>
