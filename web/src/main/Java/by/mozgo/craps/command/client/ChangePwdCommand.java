@@ -24,22 +24,26 @@ public class ChangePwdCommand implements ActionCommand {
         User user = (User) session.getAttribute("user");
 
         String oldPwd = request.getParameter("oldPwd");
-        String newPwd = request.getParameter("newPwd");
 
         if (oldPwd != null) {
-            if (userService.checkUser(user.getEmail(), oldPwd)) {
-                if (Validator.validateNewPassword(newPwd)) {
-                    user.setPassword(newPwd);
-                    userService.update(user);
-                    request.setAttribute("changePwdMessage", MessageManager.getProperty("changepwd.success", locale));
+            if (userService.checkUser(user.getEmail(), oldPwd.trim())) {
+                String newPwd1 = request.getParameter("newPwd1");
+                if (Validator.validateNewPassword(newPwd1)) {
+                    newPwd1 = newPwd1.trim();
+                    String newPwd2 = request.getParameter("newPwd2").trim();
+                    if(newPwd1.equals(newPwd2)) {
+                        user.setPassword(newPwd1);
+                        userService.update(user);
+                        request.setAttribute("changePwdMessage", MessageManager.getProperty("changepwd.success", locale));
+                    } else {
+                        request.setAttribute("changePwdMessage", MessageManager.getProperty("changepwd.newpass2", locale));
+                    }
                 } else {
                     request.setAttribute("changePwdMessage", MessageManager.getProperty("changepwd.bad", locale));
                 }
             } else {
                 request.setAttribute("changePwdMessage", MessageManager.getProperty("changepwd.wrong", locale));
             }
-        } else {
-            request.setAttribute("changePwdMessage", MessageManager.getProperty("changepwd.wrong", locale));
         }
 
         String page = ConfigurationManager.getProperty("path.page.password");

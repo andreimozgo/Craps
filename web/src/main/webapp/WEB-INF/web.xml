@@ -8,14 +8,10 @@
         <welcome-file>/jsp/index.jsp</welcome-file>
     </welcome-file-list>
     <error-page>
-        <error-code>404</error-code>
-        <location>/jsp/error/404.jsp</location>
-    </error-page>
-    <error-page>
         <exception-type>java.lang.RuntimeException</exception-type>
         <location>/jsp/error/error.jsp</location>
     </error-page>
     <error-page>
-        <location>/jsp/error/error.jsp</location>
+        <location>/jsp/error/404.jsp</location>
     </error-page>
 </web-app>

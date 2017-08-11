@@ -21,7 +21,7 @@
     <div class="login-form">
         <h2><fmt:message key="admin.panel"/></h2>
         <hr>
-        <div> ${user.username}, hello!</div>
+        <div> ${user.username}, <fmt:message key="user.hello"/></div>
         <hr>
         <h3><fmt:message key="admin.users"/></h3>
         <form method="get" action="craps">

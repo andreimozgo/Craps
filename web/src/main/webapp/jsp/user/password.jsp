@@ -26,16 +26,15 @@
         <div>
             ${user.username}
         </div>
-        <div>
-            <fmt:message key="user.balance"/>: ${user.balance}
-        </div>
         <form method="POST" action="craps">
             <fieldset>
                 <div class="message">${changePwdMessage}</div>
                 <div><input type="hidden" name="command" value="changepwd"/></div>
-                <div><input type="password" name="oldPwd" placeholder="Enter old password" required/></div>
-                <div><input type="password" name="newPwd" placeholder="Enter new password" required/></div>
-                <div><input type="submit" value="<fmt:message key="user.changepwd" />"/></div>
+                <div>* <input type="password" name="oldPwd" placeholder="<fmt:message key="changepwd.oldpass"/>" required/></div>
+                <div>* <input type="password" name="newPwd1" placeholder="<fmt:message key="changepwd.newpass1"/>" required/></div>
+                <div>* <input type="password" name="newPwd2" placeholder="<fmt:message key="changepwd.newpass2"/>" required/></div>
+                <fmt:message key="changepwd.limitations"/>
+                <div><input type="submit" value="<fmt:message key="user.changepwd"/>"/></div>
             </fieldset>
         </form>
         <br>

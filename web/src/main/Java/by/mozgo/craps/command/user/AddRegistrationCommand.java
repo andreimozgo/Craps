@@ -49,7 +49,7 @@ public class AddRegistrationCommand implements ActionCommand {
             request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.badpassword", locale));
         } else if (!pass1.equals(pass2)) {
             validation = false;
-            request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.badpassword.repeat", locale));
+            request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.repeatpwd", locale));
         } else if (!Validator.validateName(name)) {
             validation = false;
             request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.badname", locale));

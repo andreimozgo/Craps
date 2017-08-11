@@ -13,18 +13,15 @@ public class ActionFactory {
         ActionCommand current = new EmptyCommand();
         // get command from request
         String action = request.getParameter("command");
-        if (action == null || action.isEmpty()) {
-            // if command empty
-            return current;
-        }
-        // call of the corresponding object
-        try {
-            CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
-            current = currentEnum.getCurrentCommand();
-        } catch (IllegalArgumentException e) {
-            LOG.log(Level.ERROR, "{} - {}", action, "Command not found or wrong.");
+        if (!(action == null || action.isEmpty())) {
+            // call of the corresponding object
+            try {
+                CommandEnum currentEnum = CommandEnum.valueOf(action.toUpperCase());
+                current = currentEnum.getCurrentCommand();
+            } catch (IllegalArgumentException e) {
+                LOG.log(Level.ERROR, "{} - {}", action, "Command not found or wrong.");
+            }
         }
         return current;
     }
-
 }

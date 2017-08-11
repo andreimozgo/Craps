@@ -1,6 +1,11 @@
 section {
+    margin-top: 20px;
 }
 
 .avatar > img {
     height: 80px;
+}
+.login-form {
+    width: 450px;
+    margin-top: 10px;
 }

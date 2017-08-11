@@ -32,11 +32,11 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
 
     public boolean checkUser(String email, String password) {
         boolean result = false;
-            try {
-                result = (hash(password)).equals(userDao.getPassword(email));
-            } catch (DaoException e) {
-                LOG.log(Level.ERROR, "Exception {}", e);
-            }
+        try {
+            result = (hash(password)).equals(userDao.getPassword(email));
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception {}", e);
+        }
         return result;
     }
 
@@ -76,13 +76,21 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
 
     @Override
     public void update(User user) {
-        if(user.getPassword() != null){
+        if (user.getPassword() != null) {
             user.setPassword(hash(user.getPassword()));
-        }
-        try {
-            userDao.update(user);
-        } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+            try {
+                userDao.updateWithPass(user);
+            } catch (DaoException e) {
+                LOG.log(Level.ERROR, "Exception in DAO {}", e);
+            } finally {
+                user.setPassword(null);
+            }
+        } else {
+            try {
+                userDao.update(user);
+            } catch (DaoException e) {
+                LOG.log(Level.ERROR, "Exception in DAO {}", e);
+            }
         }
     }
 
@@ -139,8 +147,6 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         }
         return md5Hashed;
     }
-
-
 
 
 }

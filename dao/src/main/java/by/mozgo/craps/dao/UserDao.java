@@ -18,4 +18,6 @@ public interface UserDao extends BaseDao<User> {
     int getAmount() throws DaoException;
 
     void update(User user)  throws DaoException;
+
+    void updateWithPass(User user)  throws DaoException;
 }

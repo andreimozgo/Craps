@@ -98,11 +98,12 @@
                                id="amount" placeholder=<fmt:message key="card.money"/> required>
                     </div>
                 </div>
-                <div class="form-group last">
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <button type="submit" class="btn btn-success btn-sm"><fmt:message
+                <br>
+                <div>
+                    <div>
+                        <button type="submit"><fmt:message
                                 key="user.button.payment"/></button>
-                        <button type="reset" class="btn btn-default btn-sm"><fmt:message
+                        <button type="reset"><fmt:message
                                 key="user.button.reset"/></button>
                     </div>
                 </div>

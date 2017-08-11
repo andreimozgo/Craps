@@ -25,22 +25,22 @@
                               value="${email}"/>
                     <div class="err" id="err-email"></div>
                 </div>
-                <div>* <input form="user" type="password" name="pwd1" placeholder="<fmt:message key="login.password"/>"/>
+                <div>* <input form="user" type="password" name="pwd1" title="<fmt:message key="changepwd.limitations"/>" placeholder="<fmt:message key="login.password"/>"/>
                     <div class="err" id="err-pwd1"></div>
                 </div>
-                <div>* <input form="user" type="password" name="pwd2" placeholder="<fmt:message key="login.confirm"/>"/>
+                <div>* <input form="user" type="password" name="pwd2" title="<fmt:message key="registration.error.repeatpwd"/>"placeholder="<fmt:message key="login.confirm"/>"/>
                     <div class="err" id="err-pwd2"></div>
                 </div>
-                <div>* <input form="user" type="text" name="username" placeholder="<fmt:message key="login.username"/>"
+                <div>* <input form="user" type="text" name="username" title="<fmt:message key="registration.error.badname"/>" placeholder="<fmt:message key="login.username"/>"
                               value="${username}"/>
                     <div class="err" id="err-uname"></div>
                 </div>
-                <div>* <input form="user" type="number" name="age" placeholder="<fmt:message key="login.age"/>"
+                <div>* <input form="user" type="number" name="age" title="<fmt:message key="registration.error.age"/>" placeholder="<fmt:message key="login.age"/>"
                              value="${age}"/>
                     <div class="err" id="err-age"></div>
                 </div>
                 <div><input type="file" name="photo" accept="image/jpeg,image/png"
-                            alt="<fmt:message key="button.file"/>" placeholder="<fmt:message key="login.age"/>"/></div>
+                            alt="<fmt:message key="button.file"/>" title="<fmt:message key="registration.error.bigfile"/>" placeholder="<fmt:message key="login.age"/>"/></div>
                 <div><input type="submit" value="<fmt:message key="login.submit"/>"/></div>
                 <input type="hidden" name="command" value="addregistration"/>
             </fieldset>
@@ -88,7 +88,7 @@
             errUname.innerHTML = FILL_FIELD;
             result = false;
         }
-        if (usr && usr.search(/^\w{4,}$/i) !== 0) {
+        if (usr && usr.search(/^[\wа-яё]{5,}$/i) !== 0) {
             errUname.innerHTML = BAD_NAME;
             result = false;
         }
@@ -100,11 +100,11 @@
             errPwd1.innerHTML = BAD_PASS_LENGTH;
             result = false;
         }
-        else if (pwd1.search(/[A-Z]+/) < 0) {
+        else if (pwd1.search(/[A-ZА-ЯЁ]+/) < 0) {
             errPwd1.innerHTML = BAD_PASS_UPPER;
             result = false;
         }
-        else if (pwd1.search(/[a-z]+/) < 0) {
+        else if (pwd1.search(/[a-zа-яё]+/) < 0) {
             errPwd1.innerHTML = BAD_PASS_LOWER;
             result = false;
         }

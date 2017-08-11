@@ -6,22 +6,32 @@
 <!DOCTYPE html>
 <html lang="${curLocale}">
 <head>
-    <meta charset="UTF-8" http-equiv="refresh" content="5;/craps">
+    <meta charset="UTF-8" http-equiv="refresh" content="4;/craps">
     <title>Play Craps Online</title>
     <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../css/normalize.css">
     <link rel="stylesheet" href="../css/craps.css">
+    <link rel="stylesheet" href="../css/admin.css">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
 </head>
 <body>
 <jsp:include page="/jsp/elements/header.jsp"/>
 <section>
-    <div>
-        <fmt:message key="registration.success"/>
+    <div class="login-form">
+        <div>
+            <br>
+            <div>
+                <fmt:message key="registration.success"/>
+            </div>
+            <div>
+                <fmt:message key="redirect.main"/>
+            </div>
+        </div>
         <br>
-        <fmt:message key="redirect.main"/>
+        <a href="/"><fmt:message key="login.login"/></a>
+        <br>
+        <br>
     </div>
-    <a href="/"><fmt:message key="login.login"/></a>
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
 </body>

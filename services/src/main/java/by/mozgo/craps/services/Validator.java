@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
  * Created by Andrei Mozgo. 2017.
  */
 public class Validator {
-    private static final String PASSWORD_REGEX = "^\\w{6,}$";
+    private static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-zА-яё])(?=.*[A-ZА-ЯЁ])(?=\\S+$).{6,}$";
     private static final String EMAIL_REGEX = "^[\\w.-_]+@\\w+\\.[.\\w]+$";
-    private static final String NAME_REGEX = "^\\w{5,}$";
+    private static final String NAME_REGEX = "^[\\p{L}\\d_]{5,}$";
     private static final String NUMBER_REGEX = "^\\d+$";
     private static final int MIN_AGE = 18;
     private static final int MAX_AGE = 120;
@@ -17,10 +17,6 @@ public class Validator {
 
     public static boolean validateNewPassword(String password) {
         return validate(PASSWORD_REGEX, password);
-    }
-
-    public static boolean validateLoginPassword(String password) {
-        return password != null;
     }
 
     public static boolean validateEmail(String email) {

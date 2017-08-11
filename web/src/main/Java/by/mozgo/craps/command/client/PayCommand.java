@@ -21,9 +21,9 @@ public class PayCommand implements ActionCommand {
         UserServiceImpl userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-
         String amount = request.getParameter("amount");
         if (Validator.validateMoney(amount)) {
+            amount = amount.trim();
             userService.makePayment(user, amount);
         }
         String page = ConfigurationManager.getProperty("path.page.payment");

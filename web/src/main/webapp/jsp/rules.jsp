@@ -12,23 +12,25 @@
     <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../css/normalize.css">
     <link rel="stylesheet" href="../css/craps.css">
-    <link rel="stylesheet" href="../css/user.css">
+    <link rel="stylesheet" href="../css/admin.css">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
 </head>
 <body>
 <jsp:include page="/jsp/elements/header.jsp"/>
 <section>
-    <h1><fmt:message key="page.rules.title"/></h1>
-    <hr>
-    <h2><fmt:message key="page.rules1"/></h2>
-    <p><fmt:message key="page.rules2"/></p>
-    <p><fmt:message key="page.rules3"/></p>
-    <p><fmt:message key="page.rules4"/></p>
-    <p><fmt:message key="page.rules5"/></p>
-    <p><fmt:message key="page.rules6"/></p>
-    <p><fmt:message key="page.rules7"/></p>
-    <p><fmt:message key="page.rules8"/></p>
-    <p><fmt:message key="page.rules9"/></p>
+    <div class="login-form">
+        <h2><fmt:message key="page.rules.title"/></h2>
+        <hr>
+        <h3><fmt:message key="page.rules1"/></h3>
+        <p><fmt:message key="page.rules2"/></p>
+        <p><fmt:message key="page.rules3"/></p>
+        <p><fmt:message key="page.rules4"/></p>
+        <p><fmt:message key="page.rules5"/></p>
+        <p><fmt:message key="page.rules6"/></p>
+        <p><fmt:message key="page.rules7"/></p>
+        <p><fmt:message key="page.rules8"/></p>
+        <p><fmt:message key="page.rules9"/></p>
+    </div>
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
 </body>
