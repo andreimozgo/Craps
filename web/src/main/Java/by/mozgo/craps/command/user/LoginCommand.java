@@ -31,7 +31,7 @@ public class LoginCommand implements ActionCommand {
         // getting email from request
         String email = request.getParameter("email");
         String pass = request.getParameter("password");
-        if (Validator.validateEmail(email) && pass != null) {
+        if (Validator.validateEmail(email) && Validator.validatePassword(pass)) {
             email = email.trim();
             pass = pass.trim();
             if (userService.checkUser(email, pass)) {
