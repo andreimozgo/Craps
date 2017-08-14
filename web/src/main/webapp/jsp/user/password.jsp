@@ -54,7 +54,7 @@
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
 <script>
-    function validateFor() {
+    function validateForm() {
         var result = true;
 
         var FILL_FIELD = "<fmt:message key="registration.error.fill"/>",
