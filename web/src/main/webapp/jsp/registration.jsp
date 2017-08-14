@@ -61,8 +61,7 @@
             BAD_PASS_LOWER = "<fmt:message key="registration.error.pwdlower"/>",
             BAD_PASS_NUMBER = "<fmt:message key="registration.error.pwdnumeral"/>",
             BAD_AGE = "<fmt:message key="registration.error.age"/>",
-            BAD_EMAIL_AT = "<fmt:message key="registration.error.emailat"/>",
-            BAD_EMAIL_DOT = "<fmt:message key="registration.error.emaildot"/>";
+            BAD_EMAIL = "<fmt:message key="registration.bademail"/>";
 
         var errUname = document.getElementById("err-uname"),
             errPwd1 = document.getElementById("err-pwd1"),
@@ -137,12 +136,8 @@
             errEmail.innerHTML = FILL_FIELD;
             result = false;
         }
-        else if (email.search(/@/) < 0) {
-            errEmail.innerHTML = BAD_EMAIL_AT;
-            result = false;
-        }
-        else if (email.search(/\./) < 0) {
-            errEmail.innerHTML = BAD_EMAIL_DOT;
+        else if (email.search(/^[\w.-_]+@\w+\.[.\w]+$/i) !== 0) {
+            errEmail.innerHTML = BAD_EMAIL;
             result = false;
         }
 
