@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="${curLocale}">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" http-equiv="refresh" content="4;/craps">
     <title><fmt:message key="header.title"/></title>
     <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../css/normalize.css">
@@ -23,6 +23,8 @@
         <br/> Servlet name or type: ${pageContext.errorData.servletName}
         <br/> Status code: ${pageContext.errorData.statusCode}
         <br/> Exception: ${pageContext.errorData.throwable}
+        <br>
+        <fmt:message key="redirect.main"/>
     </div>
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>

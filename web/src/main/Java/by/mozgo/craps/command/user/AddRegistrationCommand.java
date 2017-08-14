@@ -44,7 +44,7 @@ public class AddRegistrationCommand implements ActionCommand {
         if (!Validator.validateEmail(email)) {
             validation = false;
             request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.bademail", locale));
-        } else if (!Validator.validateNewPassword(pass1)) {
+        } else if (!Validator.validatePassword(pass1)) {
             validation = false;
             request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.badpassword", locale));
         } else if (!pass1.equals(pass2)) {

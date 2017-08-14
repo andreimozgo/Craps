@@ -15,7 +15,7 @@ public class Validator {
     private static final int MAX_AGE = 120;
 
 
-    public static boolean validateNewPassword(String password) {
+    public static boolean validatePassword(String password) {
         return validate(PASSWORD_REGEX, password);
     }
 
