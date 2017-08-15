@@ -3,6 +3,7 @@ package by.mozgo.craps.command;
 import by.mozgo.craps.command.admin.AdminPageCommand;
 import by.mozgo.craps.command.admin.ChangeRoleCommand;
 import by.mozgo.craps.command.admin.DeleteUserCommand;
+import by.mozgo.craps.command.admin.ShowUsersCommand;
 import by.mozgo.craps.command.client.*;
 import by.mozgo.craps.command.user.AddRegistrationCommand;
 import by.mozgo.craps.command.user.LoginCommand;
@@ -63,6 +64,11 @@ public enum CommandEnum {
     CLIENTPAGE {
         {
             this.command = new ClientPageCommand();
+        }
+    },
+    SHOWUSERS {
+        {
+            this.command = new ShowUsersCommand();
         }
     },
     ADMINPAGE {

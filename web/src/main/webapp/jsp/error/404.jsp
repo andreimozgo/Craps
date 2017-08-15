@@ -23,6 +23,12 @@
         <br>
         <fmt:message key="redirect.main"/>
     </div>
+    <div>
+        <!-- Request from ${pageContext.errorData.requestURI} is failed
+         Servlet name or type: ${pageContext.errorData.servletName}
+         Status code: ${pageContext.errorData.statusCode}
+         Exception: ${pageContext.errorData.throwable} -->
+    </div>
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
 </body>

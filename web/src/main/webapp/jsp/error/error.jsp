@@ -11,7 +11,6 @@
     <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../css/normalize.css">
     <link rel="stylesheet" href="../../css/craps.css">
-    <link rel="stylesheet" href="../../css/user.css">
     <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
 </head>
 <body>
@@ -19,12 +18,16 @@
 <section>
     <div class="error-page">
         <fmt:message key="error.error"/>
-        <br/> Request from ${pageContext.errorData.requestURI} is failed
-        <br/> Servlet name or type: ${pageContext.errorData.servletName}
-        <br/> Status code: ${pageContext.errorData.statusCode}
-        <br/> Exception: ${pageContext.errorData.throwable}
+        <br>
+        <fmt:message key="error.404"/>
         <br>
         <fmt:message key="redirect.main"/>
+    </div>
+    <div>
+        <!-- Request from ${pageContext.errorData.requestURI} is failed
+         Servlet name or type: ${pageContext.errorData.servletName}
+         Status code: ${pageContext.errorData.statusCode}
+         Exception: ${pageContext.errorData.throwable} -->
     </div>
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
