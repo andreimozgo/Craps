@@ -16,8 +16,8 @@ public abstract class ServiceImpl<T extends AbstractEntity> implements Service<T
     protected BaseDao baseDao;
 
     @Override
-    public Integer create(T t) {
-        Integer id = null;
+    public int create(T t) {
+        int id=0;
         try {
             id = baseDao.create(t);
         } catch (DaoException e) {

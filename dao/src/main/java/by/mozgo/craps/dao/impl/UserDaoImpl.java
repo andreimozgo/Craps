@@ -17,11 +17,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     private static final String QUERY_INSERT = "INSERT INTO user (email, password, username) VALUES (?, ?, ?)";
     private static final String QUERY_UPDATE = "UPDATE user SET email=?, username=?, money=? WHERE id = ?";
     private static final String QUERY_UPDATE_WITH_PASS = "UPDATE user SET email=?, password=?, username=?, money=? WHERE id = ?";
-
     private static final String QUERY_UPDATE_ROLE = "UPDATE user SET role_id = ? WHERE id = ?";
-
     private static final String QUERY_GET_ALL = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id ORDER BY user.id LIMIT ?,?";
-    private static final String QUERY_GET_AMOUNT = "SELECT COUNT(*) FROM user";
+    private static final String QUERY_GET_USERS_NUMBER = "SELECT COUNT(*) FROM user";
     private static final String QUERY_GET_PASSWORD = "SELECT password FROM user WHERE email = ?";
     private static final String QUERY_FIND_USER = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id WHERE email = ?";
 
@@ -76,8 +74,8 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     @Override
-    public Integer create(User entity) throws DaoException {
-        Integer id = null;
+    public int create(User entity) throws DaoException {
+        Integer id;
         connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT)) {
             ps.setString(1, entity.getEmail());
@@ -87,6 +85,8 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
             ResultSet generatedKeys = ps.getGeneratedKeys();
             if (generatedKeys.next()) {
                 id = generatedKeys.getInt(1);
+            } else {
+                throw new DaoException("Unable to create entity");
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -137,11 +137,11 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
         }
     }
 
-    public int getAmount() throws DaoException {
+    public int getNumber() throws DaoException {
         connection = ConnectionPool.getInstance().getConnection();
         int amount;
         try (Statement statement = connection.createStatement()) {
-            ResultSet result = statement.executeQuery(QUERY_GET_AMOUNT);
+            ResultSet result = statement.executeQuery(QUERY_GET_USERS_NUMBER);
             result.next();
             amount = result.getInt(1);
         } catch (SQLException e) {

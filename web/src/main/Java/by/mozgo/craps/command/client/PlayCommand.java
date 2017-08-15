@@ -20,7 +20,6 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 public class PlayCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
-
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         String page = ConfigurationManager.getProperty("path.page.play");
@@ -71,7 +70,7 @@ public class PlayCommand implements ActionCommand {
                 }
             }
             if (!isEnoughtMoney){
-                Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+                Locale locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
                 request.setAttribute("playMessage", MessageManager.getProperty("play.badbalance", locale));
             }
         }

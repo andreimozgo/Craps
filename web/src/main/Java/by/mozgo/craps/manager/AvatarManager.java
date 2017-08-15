@@ -21,6 +21,11 @@ public class AvatarManager {
     private static final String PHOTO_EXTENSION = ".png;.jpg";
     private static final String EXTENSION_DELIMITER = ";";
     private static final String DEFAULT_AVATAR = "noavatar.png";
+    private static final String HEADER = "content-disposition";
+    private static final String PARAMETER = "filename";
+    private static final String PARAMS_DELIMITER = ";";
+    private static final String VALUE_DELIMITER = ";";
+    private static final String QUOTE = "\"";
     private static final Logger LOG = LogManager.getLogger();
     private ServletContext servletContext;
 
@@ -62,12 +67,6 @@ public class AvatarManager {
 
 
     private String getFileExtension(Part part) {
-        final String HEADER = "content-disposition";
-        final String PARAMETER = "filename";
-        final String PARAMS_DELIMITER = ";";
-        final String VALUE_DELIMITER = ";";
-        final String QUOTE = "\"";
-
         String partHeader = part.getHeader(HEADER);
         String fileName = "";
 

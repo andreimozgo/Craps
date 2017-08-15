@@ -7,5 +7,8 @@ import by.mozgo.craps.entity.Game;
  */
 public interface GameService extends Service<Game> {
 
-    Integer create (Game game);
+    int create (Game game);
+
+    int getGamesNumber(int userId);
+
 }

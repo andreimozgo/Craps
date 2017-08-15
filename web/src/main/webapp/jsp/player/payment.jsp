@@ -20,11 +20,11 @@
 <section>
     <div class="login-form">
         <h2><fmt:message key="user.profile"/></h2>
+        <div>
+            ${user.username}, <fmt:message key="user.hello"/>
+        </div>
         <div class="avatar">
             <ctg:user-avatar/>
-        </div>
-        <div>
-            ${user.username}
         </div>
         <div>
             <fmt:message key="user.balance"/>: ${user.balance}

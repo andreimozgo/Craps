@@ -2,6 +2,7 @@ package by.mozgo.craps.command.user;
 
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
+import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.services.Validator;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 import org.apache.logging.log4j.Level;
@@ -20,9 +21,9 @@ public class LoginCommand implements ActionCommand {
 
     @Override
     public ActionResult execute(HttpServletRequest request) {
-        UserServiceImpl userService = UserServiceImpl.getInstance();
+        UserService userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession(true);
-        Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+        Locale locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
 
         String page = ConfigurationManager.getProperty("path.page.login");
         ActionResult result = new ActionResult(FORWARD, page);

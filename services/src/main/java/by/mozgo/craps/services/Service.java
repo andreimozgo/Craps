@@ -4,7 +4,7 @@ import by.mozgo.craps.entity.AbstractEntity;
 
 public interface Service<T extends AbstractEntity> {
 
-    Integer create(T t);
+    int create(T t);
 
     T findEntityById(Integer id);
 

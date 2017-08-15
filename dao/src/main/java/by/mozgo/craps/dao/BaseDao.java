@@ -5,7 +5,7 @@ import by.mozgo.craps.entity.AbstractEntity;
 
 public interface BaseDao<T extends AbstractEntity> {
 
-    Integer create(T entity) throws DaoException;
+    int create(T entity) throws DaoException;
 
     T findEntityById(Integer id) throws DaoException;
 

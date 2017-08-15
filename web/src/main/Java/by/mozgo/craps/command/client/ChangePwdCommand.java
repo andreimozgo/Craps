@@ -20,9 +20,10 @@ public class ChangePwdCommand implements ActionCommand {
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession();
-        Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+        Locale locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
         User user = (User) session.getAttribute("user");
         String oldPwd = request.getParameter("oldPwd");
+        String page;
 
         if (oldPwd != null) {
             if (Validator.validatePassword(oldPwd)) {
@@ -73,7 +74,7 @@ public class ChangePwdCommand implements ActionCommand {
             }
         }
 
-        String page = ConfigurationManager.getProperty("path.page.password");
+        page = ConfigurationManager.getProperty("path.page.password");
         return new ActionResult(FORWARD, page);
     }
 }

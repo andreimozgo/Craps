@@ -41,7 +41,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     }
 
     @Override
-    public Integer create(User user) {
+    public int create(User user) {
         Integer id = null;
         user.setPassword(hash(user.getPassword()));
         try {
@@ -115,7 +115,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     public int getNumberOfPages(int recordsPerPage) {
         int numberOfPages = 1;
         try {
-            int numberOfRecords = userDao.getAmount();
+            int numberOfRecords = userDao.getNumber();
             numberOfPages = Math.round(numberOfRecords / recordsPerPage);
             if ((numberOfRecords % recordsPerPage) > 0) numberOfPages++;
             LOG.info("Count of flight pages: " + numberOfPages);

@@ -40,7 +40,7 @@
             <thead align="center">
             <tr>
                 <th>Id</th>
-                <th>:<fmt:message key="admin.users.name"/></th>
+                <th><fmt:message key="admin.users.name"/></th>
                 <th><fmt:message key="admin.users.registration"/></th>
                 <th>Email</th>
                 <th><fmt:message key="admin.users.balance"/></th>

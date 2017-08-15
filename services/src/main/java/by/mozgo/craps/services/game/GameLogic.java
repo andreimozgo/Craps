@@ -47,12 +47,12 @@ public class GameLogic {
         if (amount != null && !amount.isEmpty()) {
             Bet bet = new Bet(betType, new BigDecimal(amount));
             bet.setGameId(getGameId());
-            newBets.add(bet);
             BigDecimal newUserBalance = user.getBalance().subtract(bet.getAmount());
             try {
                 connection.setAutoCommit(false);
-                Integer betId = betService.create(bet);
+                int betId = betService.create(bet);
                 bet.setId(betId);
+                newBets.add(bet);
                 user.setBalance(newUserBalance);
                 userService.update(user);
                 connection.commit();

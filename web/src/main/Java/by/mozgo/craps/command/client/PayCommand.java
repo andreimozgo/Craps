@@ -4,6 +4,7 @@ import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionResult;
 import by.mozgo.craps.command.ConfigurationManager;
 import by.mozgo.craps.entity.User;
+import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.services.Validator;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 
@@ -18,10 +19,11 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 public class PayCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
-        UserServiceImpl userService = UserServiceImpl.getInstance();
+        UserService userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         String amount = request.getParameter("amount");
+
         if (Validator.validateMoney(amount)) {
             amount = amount.trim();
             userService.makePayment(user, amount);

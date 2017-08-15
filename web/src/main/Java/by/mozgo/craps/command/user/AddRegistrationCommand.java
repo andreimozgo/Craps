@@ -3,6 +3,7 @@ package by.mozgo.craps.command.user;
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.manager.AvatarManager;
+import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.services.Validator;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 import org.apache.logging.log4j.Level;
@@ -24,8 +25,8 @@ public class AddRegistrationCommand implements ActionCommand {
 
     @Override
     public ActionResult execute(HttpServletRequest request) {
-        UserServiceImpl userService = UserServiceImpl.getInstance();
-        Locale locale = (Locale) request.getSession().getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+        UserService userService = UserServiceImpl.getInstance();
+        Locale locale = (Locale) request.getSession().getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
         boolean validation = true;
         Part part = null;
 

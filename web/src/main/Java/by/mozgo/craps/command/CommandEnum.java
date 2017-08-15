@@ -3,10 +3,7 @@ package by.mozgo.craps.command;
 import by.mozgo.craps.command.admin.AdminPageCommand;
 import by.mozgo.craps.command.admin.ChangeRoleCommand;
 import by.mozgo.craps.command.admin.DeleteUserCommand;
-import by.mozgo.craps.command.client.ChangePwdCommand;
-import by.mozgo.craps.command.client.ClientPageCommand;
-import by.mozgo.craps.command.client.PayCommand;
-import by.mozgo.craps.command.client.PlayCommand;
+import by.mozgo.craps.command.client.*;
 import by.mozgo.craps.command.user.AddRegistrationCommand;
 import by.mozgo.craps.command.user.LoginCommand;
 import by.mozgo.craps.command.user.LogoutCommand;
@@ -56,6 +53,11 @@ public enum CommandEnum {
     CHANGEPWD {
         {
             this.command = new ChangePwdCommand();
+        }
+    },
+    STATS {
+        {
+            this.command = new StatsCommand();
         }
     },
     CLIENTPAGE {

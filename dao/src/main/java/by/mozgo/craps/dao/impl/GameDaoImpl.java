@@ -16,6 +16,7 @@ import java.sql.Statement;
 public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     private static final String TABLE_NAME = "game";
     private static final String QUERY_INSERT = "INSERT INTO game (user_id) VALUES (?)";
+    private static final String QUERY_GET_NUMBER_BY_USER = "SELECT COUNT(*) FROM game WHERE user_id=?";
     private static GameDaoImpl instance = null;
 
     public GameDaoImpl() {
@@ -28,16 +29,15 @@ public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     }
 
     @Override
-    public Integer create(Game entity) throws DaoException {
-        Integer id = null;
+    public int create(Game entity) throws DaoException {
+        int id;
         connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, entity.getUserId());
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                id = generatedKeys.getInt(1);
-            }
+            generatedKeys.next();
+            id = generatedKeys.getInt(1);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -47,5 +47,20 @@ public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     @Override
     public Game findEntityById(Integer id) throws DaoException {
         return null;
+    }
+
+    @Override
+    public int getGamesNumber(int userId) throws DaoException {
+        connection = ConnectionPool.getInstance().getConnection();
+        int number;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NUMBER_BY_USER)) {
+            preparedStatement.setInt(1, userId);
+            ResultSet result = preparedStatement.executeQuery();
+            result.next();
+            number = result.getInt(1);
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return number;
     }
 }

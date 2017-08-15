@@ -44,4 +44,26 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
             LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }
     }
+
+    @Override
+    public int getBetsNumber(int userId) {
+        int number = 0;
+        try {
+            number = betDao.getBetsNumber(userId);
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+        }
+        return number;
+    }
+
+    @Override
+    public int getWonBetsNumber(int userId) {
+        int number = 0;
+        try {
+            number = betDao.getWonBetsNumber(userId);
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+        }
+        return number;
+    }
 }

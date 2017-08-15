@@ -16,7 +16,7 @@ public abstract class BaseDaoImpl<T extends AbstractEntity> implements BaseDao<T
     protected ConnectionWrapper connection;
     protected String tableName;
 
-    public Integer create(T entity) throws DaoException{
+    public int create(T entity) throws DaoException{
         throw new DaoException("Method unavailable");
     }
 
