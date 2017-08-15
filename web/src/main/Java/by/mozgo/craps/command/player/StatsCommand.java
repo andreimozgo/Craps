@@ -1,4 +1,4 @@
-package by.mozgo.craps.command.client;
+package by.mozgo.craps.command.player;
 
 import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionResult;

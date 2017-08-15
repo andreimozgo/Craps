@@ -28,7 +28,7 @@ public class EmptyCommand implements ActionCommand {
                     page = ConfigurationManager.getProperty("command.adminpage");
                     break;
                 default:
-                    page = ConfigurationManager.getProperty("command.clientpage");
+                    page = ConfigurationManager.getProperty("command.playerpage");
                     break;
             }
         } else {

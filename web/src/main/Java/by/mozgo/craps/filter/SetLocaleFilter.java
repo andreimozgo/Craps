@@ -52,7 +52,7 @@ public class SetLocaleFilter implements Filter {
                 }
 
                 if (localeStr == null) {
-                    //if no cookie - get preferred Locale for the client
+                    //if no cookie - get preferred Locale for the player
                     String browserLocale = request.getLocale().getLanguage();
                     if (browserLocale != null) {
                         localeStr = browserLocale;

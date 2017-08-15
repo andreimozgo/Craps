@@ -1,4 +1,4 @@
-package by.mozgo.craps.command.client;
+package by.mozgo.craps.command.player;
 
 import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionResult;
@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
-public class ClientPageCommand implements ActionCommand {
+public class PlayerPageCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
-        String page = ConfigurationManager.getProperty("path.page.user");
+        String page = ConfigurationManager.getProperty("path.page.player");
         return new ActionResult(FORWARD, page);
     }
 }
