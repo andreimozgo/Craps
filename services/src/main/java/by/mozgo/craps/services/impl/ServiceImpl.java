@@ -17,7 +17,7 @@ public abstract class ServiceImpl<T extends AbstractEntity> implements Service<T
 
     @Override
     public int create(T t) {
-        int id=0;
+        int id = 0;
         try {
             id = baseDao.create(t);
         } catch (DaoException e) {
@@ -27,11 +27,22 @@ public abstract class ServiceImpl<T extends AbstractEntity> implements Service<T
     }
 
     @Override
-    public T findEntityById(Integer id) {
-        return null;
+    public void update(T t){
+        try {
+            baseDao.update(t);
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+        }
     }
 
     @Override
     public void delete(Integer id) {
+        try {
+            baseDao.delete(id);
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+        }
     }
+
+
 }

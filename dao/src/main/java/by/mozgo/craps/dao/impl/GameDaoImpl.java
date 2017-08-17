@@ -47,11 +47,6 @@ public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     }
 
     @Override
-    public Game findEntityById(Integer id) throws DaoException {
-        return null;
-    }
-
-    @Override
     public int findGamesNumber(int userId) throws DaoException {
         connection = ConnectionPool.getInstance().getConnection();
         int number;

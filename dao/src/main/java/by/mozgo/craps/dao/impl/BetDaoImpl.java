@@ -53,11 +53,6 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
     }
 
     @Override
-    public Bet findEntityById(Integer id) throws DaoException {
-        return null;
-    }
-
-    @Override
     public void update(Bet entity) throws DaoException {
         connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE)) {

@@ -20,10 +20,6 @@ public abstract class BaseDaoImpl<T extends AbstractEntity> implements BaseDao<T
         throw new DaoException("Method unavailable");
     }
 
-    public T findEntityById(Integer id) throws DaoException{
-        throw new DaoException("Method unavailable");
-    }
-
     public void update(T t) throws DaoException{
         throw new DaoException("Method unavailable");
     }

@@ -5,7 +5,6 @@ import by.mozgo.craps.entity.User;
 import java.util.List;
 
 public interface UserService extends Service<User> {
-
     boolean checkUser(String enterLogin, String enterPass);
 
     User findUserByEmail(String login);

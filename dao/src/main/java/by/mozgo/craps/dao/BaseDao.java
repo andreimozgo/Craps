@@ -6,8 +6,6 @@ public interface BaseDao<T extends AbstractEntity> {
 
     int create(T entity) throws DaoException;
 
-    T findEntityById(Integer id) throws DaoException;
-
     void update(T t) throws DaoException;
 
     void delete(Integer id) throws DaoException;

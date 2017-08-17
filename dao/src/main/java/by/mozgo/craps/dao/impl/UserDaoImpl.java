@@ -37,19 +37,24 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     @Override
-    public String findPassword(String email) throws DaoException {
+    public int create(User entity) throws DaoException {
+        Integer id;
         connection = ConnectionPool.getInstance().getConnection();
-        String pass = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_PASSWORD)) {
-            preparedStatement.setString(1, email);
-            ResultSet result = preparedStatement.executeQuery();
-            if(result.next()) {
-                pass = result.getString(1);
+        try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT)) {
+            ps.setString(1, entity.getEmail());
+            ps.setString(2, entity.getPassword());
+            ps.setString(3, entity.getUsername());
+            ps.executeUpdate();
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                id = generatedKeys.getInt(1);
+            } else {
+                throw new DaoException("Unable to create entity");
             }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return pass;
+        return id;
     }
 
     @Override
@@ -75,30 +80,47 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
         return user;
     }
 
-    @Override
-    public int create(User entity) throws DaoException {
-        Integer id;
+    public void update(User entity) throws DaoException {
         connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT)) {
+        try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE)) {
+            ps.setString(1, entity.getEmail());
+            ps.setString(2, entity.getUsername());
+            ps.setBigDecimal(3, entity.getBalance());
+            ps.setInt(4, entity.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public void updateWithPass(User entity) throws DaoException {
+        connection = ConnectionPool.getInstance().getConnection();
+        try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE_WITH_PASS)) {
             ps.setString(1, entity.getEmail());
             ps.setString(2, entity.getPassword());
             ps.setString(3, entity.getUsername());
+            ps.setBigDecimal(4, entity.getBalance());
+            ps.setInt(5, entity.getId());
             ps.executeUpdate();
-            ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                id = generatedKeys.getInt(1);
-            } else {
-                throw new DaoException("Unable to create entity");
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public String findPassword(String email) throws DaoException {
+        connection = ConnectionPool.getInstance().getConnection();
+        String pass = null;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_PASSWORD)) {
+            preparedStatement.setString(1, email);
+            ResultSet result = preparedStatement.executeQuery();
+            if(result.next()) {
+                pass = result.getString(1);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        return id;
-    }
-
-    @Override
-    public User findEntityById(Integer id) {
-        return null;
+        return pass;
     }
 
     @Override
@@ -148,32 +170,5 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
             throw new DaoException(e);
         }
         return amount;
-    }
-
-    public void update(User entity) throws DaoException {
-        connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE)) {
-            ps.setString(1, entity.getEmail());
-            ps.setString(2, entity.getUsername());
-            ps.setBigDecimal(3, entity.getBalance());
-            ps.setInt(4, entity.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
-
-    public void updateWithPass(User entity) throws DaoException {
-        connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE_WITH_PASS)) {
-            ps.setString(1, entity.getEmail());
-            ps.setString(2, entity.getPassword());
-            ps.setString(3, entity.getUsername());
-            ps.setBigDecimal(4, entity.getBalance());
-            ps.setInt(5, entity.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
     }
 }

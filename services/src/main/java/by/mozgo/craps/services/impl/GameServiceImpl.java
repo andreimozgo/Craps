@@ -29,19 +29,6 @@ public class GameServiceImpl extends ServiceImpl<Game> implements GameService {
     }
 
     @Override
-    public Game findEntityById(Integer id) {
-        return null;
-    }
-
-    @Override
-    public void delete(Integer id) {
-    }
-
-    @Override
-    public void update(Game game) {
-    }
-
-    @Override
     public int findGamesNumber(int userId){
         int number = 0;
         try {

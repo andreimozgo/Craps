@@ -32,16 +32,6 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         return instance;
     }
 
-    public boolean checkUser(String email, String password) {
-        boolean result = false;
-        try {
-            result = (hash(password)).equals(userDao.findPassword(email));
-        } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception {}", e);
-        }
-        return result;
-    }
-
     @Override
     public int create(User user) {
         Integer id = null;
@@ -52,18 +42,6 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
             LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }
         return id;
-    }
-
-    public User findEntityById(Integer id) {
-        return null;
-    }
-
-    public void delete(Integer id) {
-        try {
-            userDao.delete(id);
-        } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception in DAO {}", e);
-        }
     }
 
     public User findUserByEmail(String email) {
@@ -94,6 +72,24 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
                 LOG.log(Level.ERROR, "Exception in DAO {}", e);
             }
         }
+    }
+
+    public void delete(Integer id) {
+        try {
+            userDao.delete(id);
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+        }
+    }
+
+    public boolean checkUser(String email, String password) {
+        boolean result = false;
+        try {
+            result = (hash(password)).equals(userDao.findPassword(email));
+        } catch (DaoException e) {
+            LOG.log(Level.ERROR, "Exception {}", e);
+        }
+        return result;
     }
 
     public List<User> findAll(int recordsOnPage, int currentPage) {
@@ -149,6 +145,4 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         }
         return md5Hashed;
     }
-
-
 }

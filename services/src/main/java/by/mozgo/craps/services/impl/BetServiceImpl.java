@@ -28,25 +28,6 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
         return instance;
     }
 
-
-    @Override
-    public Bet findEntityById(Integer id) {
-        return null;
-    }
-
-    @Override
-    public void delete(Integer id) {
-    }
-
-    @Override
-    public void update(Bet bet) {
-        try {
-            betDao.update(bet);
-        } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception in DAO {}", e);
-        }
-    }
-
     @Override
     public int findBetsNumber(int userId) {
         int number = 0;
