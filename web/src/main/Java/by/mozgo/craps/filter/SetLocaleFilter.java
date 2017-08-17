@@ -31,7 +31,7 @@ public class SetLocaleFilter implements Filter {
         if (localeStr != null) {
             locale = LocaleLogic.getLocaleByString(localeStr);
             session.setAttribute(CrapsConstant.ATTRIBUTE_LOCALE, locale);
-            ((HttpServletResponse) response).addCookie(new Cookie("locale", localeStr));
+            ((HttpServletResponse) response).addCookie(new Cookie(CrapsConstant.ATTRIBUTE_LOCALE, localeStr));
         } else {
             //if no locale at request get locale from session
             locale = (Locale) session.getAttribute(COOKIE_LOCALE);
@@ -58,7 +58,7 @@ public class SetLocaleFilter implements Filter {
                         localeStr = browserLocale;
                         locale = LocaleLogic.getLocaleByString(localeStr);
                         session.setAttribute(CrapsConstant.ATTRIBUTE_LOCALE, locale);
-                        ((HttpServletResponse) response).addCookie(new Cookie("locale", localeStr));
+                        ((HttpServletResponse) response).addCookie(new Cookie(CrapsConstant.ATTRIBUTE_LOCALE, localeStr));
                     }
                 }
             }

@@ -1,6 +1,5 @@
 package by.mozgo.craps.dao;
 
-import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.entity.AbstractEntity;
 
 public interface BaseDao<T extends AbstractEntity> {

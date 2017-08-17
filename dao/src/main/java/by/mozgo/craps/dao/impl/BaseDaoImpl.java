@@ -1,7 +1,7 @@
 package by.mozgo.craps.dao.impl;
 
 import by.mozgo.craps.dao.BaseDao;
-import by.mozgo.craps.dao.exception.DaoException;
+import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.entity.AbstractEntity;
 import by.mozgo.craps.util.ConnectionPool;
 import by.mozgo.craps.util.ConnectionWrapper;

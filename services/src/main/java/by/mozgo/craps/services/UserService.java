@@ -10,9 +10,9 @@ public interface UserService extends Service<User> {
 
     User findUserByEmail(String login);
 
-    int getNumberOfPages(int recordsPerPage);
+    int findPagesNumber(int recordsOnPage);
 
-    List<User> getAll(int recordsPerPage, int currentPage);
+    List<User> findAll(int recordsOnPage, int currentPage);
 
     void updateRole(Integer userId, int role);
 

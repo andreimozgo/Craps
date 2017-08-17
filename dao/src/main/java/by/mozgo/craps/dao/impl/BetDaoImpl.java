@@ -1,7 +1,7 @@
 package by.mozgo.craps.dao.impl;
 
 import by.mozgo.craps.dao.BetDao;
-import by.mozgo.craps.dao.exception.DaoException;
+import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.entity.Bet;
 import by.mozgo.craps.util.ConnectionPool;
 
@@ -26,7 +26,9 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
     }
 
     public static BetDaoImpl getInstance() {
-        if (instance == null) instance = new BetDaoImpl();
+        if (instance == null) {
+            instance = new BetDaoImpl();
+        }
         return instance;
     }
 
@@ -70,7 +72,7 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
     }
 
     @Override
-    public int getBetsNumber(int userId) throws DaoException {
+    public int findBetsNumber(int userId) throws DaoException {
         connection = ConnectionPool.getInstance().getConnection();
         int number;
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NUMBER_BY_USER)) {
@@ -85,7 +87,7 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
     }
 
     @Override
-    public int getWonBetsNumber(int userId) throws DaoException {
+    public int findWonBetsNumber(int userId) throws DaoException {
         connection = ConnectionPool.getInstance().getConnection();
         int number;
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NUMBER_WON_BY_USER)) {

@@ -28,6 +28,7 @@
         </div>
         <br>
         <div>
+            <div><fmt:message key="user.balance"/>: ${user.balance}</div>
             <div><fmt:message key="stats.games.played"/>: ${gamesNumber}</div>
             <div><fmt:message key="stats.bets.made"/>: ${betsNumber}</div>
             <div><fmt:message key="stats.bets.won"/>: ${wonBetsNumber}</div>

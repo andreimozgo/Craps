@@ -11,12 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 public class DeleteUserCommand implements ActionCommand {
+    private static final String USER_ID = "user_id";
+
     @Override
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
         String page;
 
-        int id = Integer.parseInt(request.getParameter("user_id"));
+        int id = Integer.parseInt(request.getParameter(USER_ID));
         userService.delete(id);
 
         page = ConfigurationManager.getProperty("command.adminpage");

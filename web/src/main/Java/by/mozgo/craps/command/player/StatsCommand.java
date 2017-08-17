@@ -3,6 +3,7 @@ package by.mozgo.craps.command.player;
 import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionResult;
 import by.mozgo.craps.command.ConfigurationManager;
+import by.mozgo.craps.command.CrapsConstant;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.BetService;
 import by.mozgo.craps.services.GameService;
@@ -18,6 +19,10 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
  * Created by Andrei Mozgo. 2017.
  */
 public class StatsCommand implements ActionCommand {
+    private static final String NUMBER_OF_GAMES = "gamesNumber";
+    private static final String NUMBER_OF_BETS = "betsNumber";
+    private static final String NUMBER_OF_BETS_WON = "wonBetsNumber";
+
 
     @Override
     public ActionResult execute(HttpServletRequest request) {
@@ -25,14 +30,14 @@ public class StatsCommand implements ActionCommand {
         BetService betService = BetServiceImpl.getInstance();
         HttpSession session = request.getSession();
 
-        User user = (User) session.getAttribute("user");
-        int gamesNumber = gameService.getGamesNumber(user.getId());
-        int betsNumber = betService.getBetsNumber(user.getId());
-        int wonBetsNumber = betService.getWonBetsNumber(user.getId());
+        User user = (User) session.getAttribute(CrapsConstant.USER);
+        int gamesNumber = gameService.findGamesNumber(user.getId());
+        int betsNumber = betService.findBetsNumber(user.getId());
+        int wonBetsNumber = betService.findWonBetsNumber(user.getId());
 
-        request.setAttribute("gamesNumber", gamesNumber);
-        request.setAttribute("betsNumber", betsNumber);
-        request.setAttribute("wonBetsNumber", wonBetsNumber);
+        request.setAttribute(NUMBER_OF_GAMES, gamesNumber);
+        request.setAttribute(NUMBER_OF_BETS, betsNumber);
+        request.setAttribute(NUMBER_OF_BETS_WON, wonBetsNumber);
 
         String page = ConfigurationManager.getProperty("path.page.stats");
         return new ActionResult(FORWARD, page);

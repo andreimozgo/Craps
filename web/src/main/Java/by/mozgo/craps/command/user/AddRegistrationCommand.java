@@ -4,8 +4,8 @@ import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.manager.AvatarManager;
 import by.mozgo.craps.services.UserService;
-import by.mozgo.craps.services.Validator;
 import by.mozgo.craps.services.impl.UserServiceImpl;
+import by.mozgo.craps.services.validator.Validator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,6 +21,11 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
 
 public class AddRegistrationCommand implements ActionCommand {
+    private static final String PASSWORD = "pwd1";
+    private static final String PASSWORD_REPEAT = "pwd2";
+    private static final String USERNAME = "username";
+    private static final String AGE = "age";
+    private static final String PHOTO = "photo";
     private static final Logger LOG = LogManager.getLogger();
 
     @Override
@@ -30,16 +35,16 @@ public class AddRegistrationCommand implements ActionCommand {
         boolean validation = true;
         Part part = null;
 
-        String email = request.getParameter("email");
-        String pass1 = request.getParameter("pwd1");
-        String pass2 = request.getParameter("pwd2");
-        String name = request.getParameter("username");
-        String age = request.getParameter("age");
+        String email = request.getParameter(CrapsConstant.EMAIL);
+        String pass1 = request.getParameter(PASSWORD);
+        String pass2 = request.getParameter(PASSWORD_REPEAT);
+        String name = request.getParameter(USERNAME);
+        String age = request.getParameter(AGE);
 
         String page = ConfigurationManager.getProperty("path.page.registration");
-        request.setAttribute("email", email);
-        request.setAttribute("username", name);
-        request.setAttribute("age", age);
+        request.setAttribute(CrapsConstant.EMAIL, email);
+        request.setAttribute(USERNAME, name);
+        request.setAttribute(AGE, age);
         ActionResult result = new ActionResult(FORWARD, page);
 
         if (!Validator.validateEmail(email)) {
@@ -62,7 +67,7 @@ public class AddRegistrationCommand implements ActionCommand {
             validation = false;
         } else {
             try {
-                part = request.getPart("photo");
+                part = request.getPart(PHOTO);
             } catch (IOException e) {
                 LOG.log(Level.ERROR, "Unable to save file: {}", e);
             } catch (ServletException e) {
@@ -85,7 +90,7 @@ public class AddRegistrationCommand implements ActionCommand {
             AvatarManager uploader = new AvatarManager(request.getServletContext());
             uploader.uploadPhoto(part, user.getId());
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
+            session.setAttribute(CrapsConstant.USER, user);
             page = ConfigurationManager.getProperty("path.page.registered");
             result = new ActionResult(REDIRECT, page);
         }

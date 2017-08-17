@@ -33,28 +33,24 @@
         <form method="POST" action="craps">
             <fieldset>
                 <div><input type="hidden" name="command" value="pay"/></div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label" for="card-holder-name"><fmt:message key="card.name"/></label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" name="card-holder-name" id="card-holder-name"
-                               placeholder=
-                               <fmt:message key="card.name"/> required>
+                <div>
+                    <label><fmt:message key="card.name"/></label>
+                    <div>
+                        <input type="text" placeholder=<fmt:message key="card.name"/> required>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label" for="card-number"><fmt:message key="card.number"/></label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" name="card-number" id="card-number" placeholder=
-                        <fmt:message key="card.number"/> required>
+                <div>
+                    <label><fmt:message key="card.number"/></label>
+                    <div>
+                        <input type="text" placeholder=<fmt:message key="card.number"/> required>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label" for="expiry-month"><fmt:message
-                            key="card.expiration"/></label>
-                    <div class="col-sm-9">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <select class="form-control col-sm-2" name="expiry-month" id="expiry-month">
+                <div>
+                    <label><fmt:message key="card.expiration"/></label>
+                    <div>
+                        <div>
+                            <div>
+                                <select name="expiry-month">
                                     <option><fmt:message key="card.month"/></option>
                                     <option value="01">Jan (01)</option>
                                     <option value="02">Feb (02)</option>
@@ -70,8 +66,8 @@
                                     <option value="12">Dec (12)</option>
                                 </select>
                             </div>
-                            <div class="col-xs-3">
-                                <select class="form-control" name="expiry-year">
+                            <div>
+                                <select name="expiry-year">
                                     <option><fmt:message key="card.year"/></option>
                                     <option value="17">2017</option>
                                     <option value="18">2018</option>
@@ -85,26 +81,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label" for="cvv">CVV</label>
-                    <div class="col-sm-3">
-                        <input type="text" class="form-control" name="cvv" id="cvv" placeholder="CVV" required>
+                <div>
+                    <label>CVV</label>
+                    <div>
+                        <input type="text"name="cvv"placeholder="CVV" required>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label" for="amount"><fmt:message key="card.money"/></label>
-                    <div class="col-sm-3">
-                        <input type="number" min="10" max="10000" value="10" step="10" class="form-control" name="amount"
-                               id="amount" placeholder=<fmt:message key="card.money"/> required>
+                <div>
+                    <label><fmt:message key="card.money"/></label>
+                    <div>
+                        <input type="number" min="10" max="10000" value="10" step="10"name="amount"
+                               placeholder=<fmt:message key="card.money"/> required>
                     </div>
                 </div>
                 <br>
                 <div>
                     <div>
-                        <button type="submit"><fmt:message
-                                key="user.button.payment"/></button>
-                        <button type="reset"><fmt:message
-                                key="user.button.reset"/></button>
+                        <button type="submit"><fmt:message key="user.button.payment"/></button>
+                        <button type="reset"><fmt:message key="user.button.reset"/></button>
                     </div>
                 </div>
             </fieldset>

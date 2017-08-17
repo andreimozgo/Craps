@@ -8,7 +8,15 @@ import java.math.BigDecimal;
  */
 public class Bet extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
+    public enum BetType {
+        PASS, DONTPASS, COME, DONTCOME;
 
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+
+    }
     private Integer gameId;
     private BetType betType;
     private BigDecimal amount;
@@ -69,13 +77,5 @@ public class Bet extends AbstractEntity implements Serializable {
         this.point = point;
     }
 
-    public enum BetType {
-        PASS, DONTPASS, COME, DONTCOME;
 
-        @Override
-        public String toString() {
-            return super.toString().toLowerCase();
-        }
-
-    }
 }

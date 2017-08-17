@@ -1,4 +1,4 @@
-package by.mozgo.craps.dao.exception;
+package by.mozgo.craps.dao;
 
 public class DaoException extends Exception {
 

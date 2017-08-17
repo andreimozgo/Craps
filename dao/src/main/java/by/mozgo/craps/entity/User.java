@@ -6,7 +6,15 @@ import java.time.LocalDateTime;
 
 public class User extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
+    public enum UserRole {
+        ADMIN, USER, BLOCKED;
 
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+
+    }
     private String email;
     private String password;
     private String username;
@@ -84,14 +92,6 @@ public class User extends AbstractEntity implements Serializable {
                 '}';
     }
 
-    public enum UserRole {
-        ADMIN, USER, BLOCKED;
 
-        @Override
-        public String toString() {
-            return super.toString().toLowerCase();
-        }
-
-    }
 }
 

@@ -10,11 +10,6 @@ public class MessageManager {
     private MessageManager() {
     }
 
-    public static String getProperty(String key) {
-        resourceBundle = ResourceBundle.getBundle("i18n/jsp", Locale.ENGLISH);
-        return resourceBundle.getString(key);
-    }
-
     public static String getProperty(String key, Locale locale) {
         resourceBundle = ResourceBundle.getBundle("i18n/jsp", locale);
         return resourceBundle.getString(key);

@@ -3,8 +3,8 @@ package by.mozgo.craps.command.player;
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.UserService;
-import by.mozgo.craps.services.Validator;
 import by.mozgo.craps.services.impl.UserServiceImpl;
+import by.mozgo.craps.services.validator.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,23 +16,27 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
  * Created by Andrei Mozgo. 2017.
  */
 public class ChangePwdCommand implements ActionCommand {
+    private static final String OLD_PASSWORD = "oldPwd";
+    private static final String NEW_PASSWORD = "newPwd1";
+    private static final String NEW_PASSWORD_REPEAT = "newPwd2";
+
     @Override
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession();
         Locale locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
-        User user = (User) session.getAttribute("user");
-        String oldPwd = request.getParameter("oldPwd");
+        User user = (User) session.getAttribute(CrapsConstant.USER);
+        String oldPwd = request.getParameter(OLD_PASSWORD);
         String page;
 
         if (oldPwd != null) {
             if (Validator.validatePassword(oldPwd)) {
                 oldPwd = oldPwd.trim();
-                String newPwd1 = request.getParameter("newPwd1");
+                String newPwd1 = request.getParameter(NEW_PASSWORD);
                 //if old pass is valid check new password
                 if (Validator.validatePassword(newPwd1)) {
                     newPwd1 = newPwd1.trim();
-                    String newPwd2 = request.getParameter("newPwd2");
+                    String newPwd2 = request.getParameter(NEW_PASSWORD_REPEAT);
                     // if old and new passwords are valid check new password repeat
                     if (Validator.validatePassword(newPwd2)) {
                         newPwd2 = newPwd2.trim();

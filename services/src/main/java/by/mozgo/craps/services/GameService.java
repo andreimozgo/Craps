@@ -9,6 +9,6 @@ public interface GameService extends Service<Game> {
 
     int create (Game game);
 
-    int getGamesNumber(int userId);
+    int findGamesNumber(int userId);
 
 }

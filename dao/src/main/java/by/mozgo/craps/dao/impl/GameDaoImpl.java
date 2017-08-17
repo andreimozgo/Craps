@@ -1,7 +1,7 @@
 package by.mozgo.craps.dao.impl;
 
+import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.dao.GameDao;
-import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.entity.Game;
 import by.mozgo.craps.util.ConnectionPool;
 
@@ -24,7 +24,9 @@ public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     }
 
     public static GameDaoImpl getInstance() {
-        if (instance == null) instance = new GameDaoImpl();
+        if (instance == null) {
+            instance = new GameDaoImpl();
+        }
         return instance;
     }
 
@@ -50,7 +52,7 @@ public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     }
 
     @Override
-    public int getGamesNumber(int userId) throws DaoException {
+    public int findGamesNumber(int userId) throws DaoException {
         connection = ConnectionPool.getInstance().getConnection();
         int number;
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NUMBER_BY_USER)) {

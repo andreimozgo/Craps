@@ -17,38 +17,45 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
  * Created by Andrei Mozgo. 2017.
  */
 public class ShowUsersCommand implements ActionCommand {
+    private static final String RECORDS_ON_PAGE = "recordsPerPage";
+    private static final String CURRENT_PAGE = "currentPage";
+    private static final String USERS = "users";
+    private static final String NUMBER_OF_PAGES = "numberOfPages";
+    private static final int RECORDS_ON_PAGE_DEFAULT = 5;
+    private static final int DEFAULT_CURRENT_PAGE = 1;
+
     @Override
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession();
         String page;
-        int currentPage;
-        int recordsPerPage;
 
-        if (request.getParameter("recordsPerPage") != null) {
-            recordsPerPage = Integer.parseInt(request.getParameter("recordsPerPage"));
-        } else if (session.getAttribute("recordsPerPage") != null) {
-            recordsPerPage = (Integer) session.getAttribute("recordsPerPage");
-        } else {
-            recordsPerPage = 5;
+        int recordsOnPage = RECORDS_ON_PAGE_DEFAULT;
+        int currentPage = DEFAULT_CURRENT_PAGE;
+        String recordsOnPageString = request.getParameter(RECORDS_ON_PAGE);
+        String currentPageString = request.getParameter(CURRENT_PAGE);
+
+        if (recordsOnPageString != null) {
+            recordsOnPage = Integer.parseInt(recordsOnPageString);
+        } else if (session.getAttribute(RECORDS_ON_PAGE) != null) {
+            recordsOnPage = (Integer) session.getAttribute(RECORDS_ON_PAGE);
         }
 
-        if (request.getParameter("currentPage") != null) {
-            currentPage = Integer.parseInt(request.getParameter("currentPage"));
-        } else if (session.getAttribute("currentPage") != null) {
-            currentPage = (Integer) session.getAttribute("currentPage");
-        } else {
-            currentPage = 1;
+        if (currentPageString != null) {
+            currentPage = Integer.parseInt(currentPageString);
+        } else if (session.getAttribute(CURRENT_PAGE) != null) {
+            currentPage = (Integer) session.getAttribute(CURRENT_PAGE);
         }
-        int numberOfPages = userService.getNumberOfPages(recordsPerPage);
+
+        int numberOfPages = userService.findPagesNumber(recordsOnPage);
         if (currentPage > numberOfPages) {
             currentPage = numberOfPages;
         }
-        List<User> users = userService.getAll(recordsPerPage, currentPage);
-        request.setAttribute("users", users);
-        request.setAttribute("numberOfPages", numberOfPages);
-        session.setAttribute("currentPage", currentPage);
-        session.setAttribute("recordsPerPage", recordsPerPage);
+        List<User> users = userService.findAll(recordsOnPage, currentPage);
+        request.setAttribute(USERS, users);
+        request.setAttribute(NUMBER_OF_PAGES, numberOfPages);
+        session.setAttribute(CURRENT_PAGE, currentPage);
+        session.setAttribute(RECORDS_ON_PAGE, recordsOnPage);
 
         page = ConfigurationManager.getProperty("path.page.adminusers");
         return new ActionResult(FORWARD, page);

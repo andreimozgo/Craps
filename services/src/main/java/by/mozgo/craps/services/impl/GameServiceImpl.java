@@ -1,7 +1,7 @@
 package by.mozgo.craps.services.impl;
 
+import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.dao.GameDao;
-import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.dao.impl.GameDaoImpl;
 import by.mozgo.craps.entity.Game;
 import by.mozgo.craps.services.GameService;
@@ -22,7 +22,9 @@ public class GameServiceImpl extends ServiceImpl<Game> implements GameService {
     }
 
     public static GameServiceImpl getInstance() {
-        if (instance == null) instance = new GameServiceImpl();
+        if (instance == null) {
+            instance = new GameServiceImpl();
+        }
         return instance;
     }
 
@@ -40,10 +42,10 @@ public class GameServiceImpl extends ServiceImpl<Game> implements GameService {
     }
 
     @Override
-    public int getGamesNumber(int userId){
+    public int findGamesNumber(int userId){
         int number = 0;
         try {
-            number = gameDao.getGamesNumber(userId);
+            number = gameDao.findGamesNumber(userId);
         } catch (DaoException e) {
             LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }

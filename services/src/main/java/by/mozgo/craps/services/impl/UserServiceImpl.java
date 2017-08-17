@@ -1,7 +1,7 @@
 package by.mozgo.craps.services.impl;
 
+import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.dao.UserDao;
-import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.dao.impl.UserDaoImpl;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.UserService;
@@ -26,14 +26,16 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     }
 
     public static UserServiceImpl getInstance() {
-        if (instance == null) instance = new UserServiceImpl();
+        if (instance == null) {
+            instance = new UserServiceImpl();
+        }
         return instance;
     }
 
     public boolean checkUser(String email, String password) {
         boolean result = false;
         try {
-            result = (hash(password)).equals(userDao.getPassword(email));
+            result = (hash(password)).equals(userDao.findPassword(email));
         } catch (DaoException e) {
             LOG.log(Level.ERROR, "Exception {}", e);
         }
@@ -94,10 +96,10 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         }
     }
 
-    public List<User> getAll(int recordsPerPage, int currentPage) {
+    public List<User> findAll(int recordsOnPage, int currentPage) {
         List<User> users = null;
         try {
-            users = userDao.getAll(recordsPerPage, currentPage);
+            users = userDao.findAll(recordsOnPage, currentPage);
         } catch (DaoException e) {
             LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }
@@ -112,12 +114,12 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         }
     }
 
-    public int getNumberOfPages(int recordsPerPage) {
+    public int findPagesNumber(int recordsOnPage) {
         int numberOfPages = 1;
         try {
-            int numberOfRecords = userDao.getNumber();
-            numberOfPages = Math.round(numberOfRecords / recordsPerPage);
-            if ((numberOfRecords % recordsPerPage) > 0) numberOfPages++;
+            int numberOfRecords = userDao.findNumber();
+            numberOfPages = Math.round(numberOfRecords / recordsOnPage);
+            if ((numberOfRecords % recordsOnPage) > 0) numberOfPages++;
             LOG.info("Count of flight pages: " + numberOfPages);
         } catch (DaoException e) {
             LOG.log(Level.ERROR, "Exception in DAO {}", e);

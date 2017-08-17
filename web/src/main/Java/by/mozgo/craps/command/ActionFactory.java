@@ -7,12 +7,13 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 public class ActionFactory {
+    private static final String COMMAND = "command";
     private static final Logger LOG = LogManager.getLogger();
 
     public ActionCommand defineCommand(HttpServletRequest request) {
         ActionCommand current = new EmptyCommand();
         // get command from request
-        String action = request.getParameter("command");
+        String action = request.getParameter(COMMAND);
         if (!(action == null || action.isEmpty())) {
             // call of the corresponding object
             try {

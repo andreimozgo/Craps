@@ -46,7 +46,7 @@ public class GameLogic {
     public void addBet(Bet.BetType betType, String amount) {
         if (amount != null && !amount.isEmpty()) {
             Bet bet = new Bet(betType, new BigDecimal(amount));
-            bet.setGameId(getGameId());
+            bet.setGameId(findGameId());
             BigDecimal newUserBalance = user.getBalance().subtract(bet.getAmount());
             try {
                 connection.setAutoCommit(false);
@@ -73,7 +73,7 @@ public class GameLogic {
         }
     }
 
-    private int getGameId() {
+    private int findGameId() {
         int gameId;
         if (user.getGame() != null) {
             gameId = user.getGame().getId();

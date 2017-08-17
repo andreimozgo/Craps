@@ -34,7 +34,7 @@ public class AvatarManager {
     }
 
     public void uploadPhoto(Part part, Integer userId) {
-        String fileExtension = getFileExtension(part);
+        String fileExtension = findFileExtension(part);
 
         if (!fileExtension.isEmpty()) {
             String photoFilePath = servletContext.getRealPath("") + PHOTO_FOLDER + File.separator + userId;
@@ -66,7 +66,7 @@ public class AvatarManager {
     }
 
 
-    private String getFileExtension(Part part) {
+    private String findFileExtension(Part part) {
         String partHeader = part.getHeader(HEADER);
         String fileName = "";
 

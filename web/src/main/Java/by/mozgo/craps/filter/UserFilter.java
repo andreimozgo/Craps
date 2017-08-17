@@ -1,6 +1,7 @@
 package by.mozgo.craps.filter;
 
 import by.mozgo.craps.command.ConfigurationManager;
+import by.mozgo.craps.command.CrapsConstant;
 import by.mozgo.craps.entity.User;
 
 import javax.servlet.*;
@@ -20,7 +21,7 @@ public class UserFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        User user = (User) httpRequest.getSession().getAttribute("user");
+        User user = (User) httpRequest.getSession().getAttribute(CrapsConstant.USER);
         if (user == null) {
             String page = ConfigurationManager.getProperty("path.page.error.404");
             RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(page);

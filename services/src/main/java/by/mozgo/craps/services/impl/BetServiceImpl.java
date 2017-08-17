@@ -1,7 +1,7 @@
 package by.mozgo.craps.services.impl;
 
 import by.mozgo.craps.dao.BetDao;
-import by.mozgo.craps.dao.exception.DaoException;
+import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.dao.impl.BetDaoImpl;
 import by.mozgo.craps.entity.Bet;
 import by.mozgo.craps.services.BetService;
@@ -22,7 +22,9 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
     }
 
     public static BetServiceImpl getInstance() {
-        if (instance == null) instance = new BetServiceImpl();
+        if (instance == null) {
+            instance = new BetServiceImpl();
+        }
         return instance;
     }
 
@@ -46,10 +48,10 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
     }
 
     @Override
-    public int getBetsNumber(int userId) {
+    public int findBetsNumber(int userId) {
         int number = 0;
         try {
-            number = betDao.getBetsNumber(userId);
+            number = betDao.findBetsNumber(userId);
         } catch (DaoException e) {
             LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }
@@ -57,10 +59,10 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
     }
 
     @Override
-    public int getWonBetsNumber(int userId) {
+    public int findWonBetsNumber(int userId) {
         int number = 0;
         try {
-            number = betDao.getWonBetsNumber(userId);
+            number = betDao.findWonBetsNumber(userId);
         } catch (DaoException e) {
             LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }

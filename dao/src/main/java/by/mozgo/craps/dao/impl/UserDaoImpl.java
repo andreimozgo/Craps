@@ -1,7 +1,7 @@
 package by.mozgo.craps.dao.impl;
 
+import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.dao.UserDao;
-import by.mozgo.craps.dao.exception.DaoException;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.util.ConnectionPool;
 
@@ -30,12 +30,14 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     public static UserDaoImpl getInstance() {
-        if (instance == null) instance = new UserDaoImpl();
+        if (instance == null) {
+            instance = new UserDaoImpl();
+        }
         return instance;
     }
 
     @Override
-    public String getPassword(String email) throws DaoException {
+    public String findPassword(String email) throws DaoException {
         connection = ConnectionPool.getInstance().getConnection();
         String pass = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_PASSWORD)) {
@@ -100,13 +102,13 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     @Override
-    public List getAll(int recordsPerPage, int currentPage) throws DaoException {
+    public List findAll(int recordsOnPage, int currentPage) throws DaoException {
         connection = ConnectionPool.getInstance().getConnection();
 
         List<User> users = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_ALL)) {
-            preparedStatement.setInt(1, (currentPage - 1) * recordsPerPage);
-            preparedStatement.setInt(2, recordsPerPage);
+            preparedStatement.setInt(1, (currentPage - 1) * recordsOnPage);
+            preparedStatement.setInt(2, recordsOnPage);
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
                 User user = new User();
@@ -118,7 +120,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
                 user.setUserRole(User.UserRole.valueOf(result.getString(6).toUpperCase()));
                 users.add(user);
             }
-            result.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -131,13 +132,12 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
             ps.setInt(1, role);
             ps.setInt(2, userId);
             ps.executeUpdate();
-
         } catch (SQLException e) {
             throw new DaoException(e);
         }
     }
 
-    public int getNumber() throws DaoException {
+    public int findNumber() throws DaoException {
         connection = ConnectionPool.getInstance().getConnection();
         int amount;
         try (Statement statement = connection.createStatement()) {
