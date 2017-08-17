@@ -29,9 +29,9 @@
                 <option>${recordsPerPage}</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
-                <option value="15">15</option>
+                <option value="20">20</option>
             </select>
-            <input type="hidden" name="command" value="adminpage"/>
+            <input type="hidden" name="command" value="showusers"/>
             <input type="submit" value="<fmt:message key="pagination.search"/>"/>
         </form>
         <hr>
@@ -101,10 +101,10 @@
         <c:choose>
             <c:when test="${currentPage != 1}">
                 <td>
-                    <a href="craps?command=adminpage&currentPage=${currentPage - 1}&recordsPerPage=${recordsPerPage}"><fmt:message
+                    <a href="craps?command=showusers&currentPage=${currentPage - 1}&recordsPerPage=${recordsPerPage}"><fmt:message
                             key="pagination.previous"/></a>
                 </td>
-                <td><a href="craps?command=adminpage&currentPage=1&recordsPerPage=${recordsPerPage}">1</a></td>
+                <td><a href="craps?command=showusers&currentPage=1&recordsPerPage=${recordsPerPage}">1</a></td>
             </c:when>
             <c:when test="${currentPage == 1}">
                 <td><fmt:message key="pagination.previous"/></td>
@@ -123,7 +123,7 @@
         <td>${i}</td>
         </c:when>
         <c:otherwise>
-            <option value="craps?command=adminpage&currentPage=${i}&recordsPerPage=${recordsPerPage}">${i}</option>
+            <option value="craps?command=showusers&currentPage=${i}&recordsPerPage=${recordsPerPage}">${i}</option>
         </c:otherwise>
         </c:choose>
         </c:forEach>
@@ -132,10 +132,10 @@
         <c:choose>
             <c:when test="${currentPage lt numberOfPages}">
                 <td>
-                    <a href="craps?command=adminpage&currentPage=${numberOfPages}&recordsPerPage=${recordsPerPage}">${numberOfPages}</a>
+                    <a href="craps?command=showusers&currentPage=${numberOfPages}&recordsPerPage=${recordsPerPage}">${numberOfPages}</a>
                 </td>
                 <td>
-                    <a href="craps?command=adminpage&currentPage=${currentPage + 1}&recordsPerPage=${recordsPerPage}"><fmt:message
+                    <a href="craps?command=showusers&currentPage=${currentPage + 1}&recordsPerPage=${recordsPerPage}"><fmt:message
                             key="pagination.next"/></a>
                 </td>
             </c:when>
