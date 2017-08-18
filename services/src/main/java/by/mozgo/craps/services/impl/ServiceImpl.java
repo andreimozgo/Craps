@@ -43,6 +43,4 @@ public abstract class ServiceImpl<T extends AbstractEntity> implements Service<T
             LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }
     }
-
-
 }

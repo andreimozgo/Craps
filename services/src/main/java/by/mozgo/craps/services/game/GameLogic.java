@@ -9,14 +9,9 @@ import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.services.impl.BetServiceImpl;
 import by.mozgo.craps.services.impl.GameServiceImpl;
 import by.mozgo.craps.services.impl.UserServiceImpl;
-import by.mozgo.craps.util.ConnectionPool;
-import by.mozgo.craps.util.ConnectionWrapper;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import by.mozgo.craps.util.TransactionAssistant;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -25,7 +20,6 @@ import java.util.Random;
  * Created by Andrei Mozgo. 2017.
  */
 public class GameLogic {
-    private static final Logger LOG = LogManager.getLogger();
     private int dice1;
     private int dice2;
     private int sumDice;
@@ -33,7 +27,6 @@ public class GameLogic {
     private User user;
     private List<Bet> newBets = new ArrayList<>();
 
-    ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
     private GameService gameService = GameServiceImpl.getInstance();
     private BetService betService = BetServiceImpl.getInstance();
     private UserService userService = UserServiceImpl.getInstance();
@@ -44,33 +37,16 @@ public class GameLogic {
     }
 
     public void addBet(Bet.BetType betType, String amount) {
-        if (amount != null && !amount.isEmpty()) {
-            Bet bet = new Bet(betType, new BigDecimal(amount));
-            bet.setGameId(findGameId());
-            BigDecimal newUserBalance = user.getBalance().subtract(bet.getAmount());
-            try {
-                connection.setAutoCommit(false);
-                int betId = betService.create(bet);
-                bet.setId(betId);
-                newBets.add(bet);
-                user.setBalance(newUserBalance);
-                userService.update(user);
-                connection.commit();
-            } catch (SQLException e) {
-                LOG.log(Level.ERROR, "Transaction failed. {}", e);
-                try {
-                    connection.rollback();
-                } catch (SQLException e1) {
-                    LOG.log(Level.ERROR, "Transaction rollback failed. {}", e);
-                }
-            } finally {
-                try {
-                    connection.setAutoCommit(true);
-                } catch (SQLException e) {
-                    LOG.log(Level.ERROR, "Transaction failed. {}", e);
-                }
-            }
-        }
+        Bet bet = new Bet(betType, new BigDecimal(amount));
+        bet.setGameId(findGameId());
+        BigDecimal newUserBalance = user.getBalance().subtract(bet.getAmount());
+        TransactionAssistant.startTransaction();
+        int betId = betService.create(bet);
+        bet.setId(betId);
+        newBets.add(bet);
+        user.setBalance(newUserBalance);
+        userService.update(user);
+        TransactionAssistant.endTransaction();
     }
 
     private int findGameId() {
@@ -90,10 +66,11 @@ public class GameLogic {
     private void clearOldBets() {
         if (user.getGame() != null) {
             List<Bet> bets = user.getGame().getBets();
-              bets.removeIf(bet -> bet.getProfit() != null);
+            bets.removeIf(bet -> bet.getProfit() != null);
 
             if (user.getGame().getBets().isEmpty()) {
-                user.setGame(null);            }
+                user.setGame(null);
+            }
         }
     }
 
@@ -113,27 +90,11 @@ public class GameLogic {
                     if (bet.getProfit() != null) {
                         if (bet.getProfit().compareTo(new BigDecimal(0)) > 0) {
                             BigDecimal newUserBalance = user.getBalance().add(bet.getProfit());
-                            try {
-                                connection.setAutoCommit(false);
-                                betService.update(bet);
-                                user.setBalance(newUserBalance);
-                                userService.update(user);
-                                connection.commit();
-                            } catch (SQLException e) {
-                                try {
-                                    connection.rollback();
-                                } catch (SQLException e1) {
-                                    LOG.log(Level.ERROR, "Transaction rollback failed. {}", e);
-                                }
-                                LOG.log(Level.ERROR, "Transaction failed. {}", e);
-
-                            } finally {
-                                try {
-                                    connection.setAutoCommit(true);
-                                } catch (SQLException e) {
-                                    LOG.log(Level.ERROR, "Transaction failed. {}", e);
-                                }
-                            }
+                            TransactionAssistant.startTransaction();
+                            betService.update(bet);
+                            user.setBalance(newUserBalance);
+                            userService.update(user);
+                            TransactionAssistant.endTransaction();
                         }
                     }
                 }
@@ -290,5 +251,4 @@ public class GameLogic {
             bet.setProfit(new BigDecimal(0));
         }
     }
-
 }
