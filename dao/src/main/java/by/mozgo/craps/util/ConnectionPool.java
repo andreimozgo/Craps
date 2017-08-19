@@ -27,9 +27,6 @@ public class ConnectionPool {
     private static AtomicReference<ConnectionPool> instance = new AtomicReference<>();
     private static int VALID_TIMEOUT = 3; // seconds
     private static int RETRIEVE_TIMEOUT = 300; // milliseconds
-    private static ResourceBundle resource = ResourceBundle.getBundle("database");
-    private static int MAX_POOL_SIZE = Integer.parseInt(resource.getString("db.maxPoolSize"));
-    private static int MIN_POOL_SIZE = Integer.parseInt(resource.getString("db.minPoolSize"));
     private static Semaphore semaphore = new Semaphore(1);
     private static AtomicBoolean isEmpty = new AtomicBoolean(true);
     private final ThreadLocal<ConnectionWrapper> threadLocalConnection = new ThreadLocal<>();
@@ -37,13 +34,20 @@ public class ConnectionPool {
     private BlockingQueue<Connection> availableConnections;
     private AtomicBoolean isClosing;
     private Driver driver;
+    private ResourceBundle resource;
+    private ConnectorDB connectorDB;
+    private int minPoolSize;
+    private int maxPoolSize;
 
 
     private ConnectionPool() {
 
+        connectorDB = new ConnectorDB();
+        minPoolSize = connectorDB.getMinPoolSize();
+        maxPoolSize = connectorDB.getMaxPoolSize();
         isClosing = new AtomicBoolean(false);
         connectionsCount = new AtomicInteger();
-        availableConnections = new ArrayBlockingQueue<>(MAX_POOL_SIZE);
+        availableConnections = new ArrayBlockingQueue<>(maxPoolSize);
 
         try {
             driver = new com.mysql.jdbc.Driver();
@@ -52,11 +56,12 @@ public class ConnectionPool {
             LOG.log(Level.FATAL, "Unable to register DB driver. {}", e, e);
             throw new RuntimeException("Unable to load db driver.\n" + e.getMessage(), e);
         }
-        for (int i = 0; i < MIN_POOL_SIZE; i++) {
+
+        for (int i = 0; i < minPoolSize; i++) {
             availableConnections.add(createConnection());
         }
-        if (getAvailableConnectionsCount() < MIN_POOL_SIZE) {
-            for (int i = getAvailableConnectionsCount(); i < MIN_POOL_SIZE; i++) {
+        if (getAvailableConnectionsCount() < minPoolSize) {
+            for (int i = getAvailableConnectionsCount(); i < minPoolSize; i++) {
                 availableConnections.add(createConnection());
             }
         }
@@ -90,8 +95,7 @@ public class ConnectionPool {
     private Connection createConnection() {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(resource.getString("db.url"), resource.getString("db.user"),
-                    resource.getString("db.password"));
+            conn = connectorDB.getConnection();
             connectionsCount.incrementAndGet();
         } catch (SQLException e) {
             LOG.log(Level.ERROR, "Unable to establish database connection. {}", e, e);
@@ -104,10 +108,9 @@ public class ConnectionPool {
      */
     public void closePool() {
         isClosing.set(true);
-        while (connectionsCount.get() > 0) {
+        for (int i = 0; i < connectionsCount.get(); i++) {
             try {
                 availableConnections.take().close();
-                connectionsCount.decrementAndGet();
             } catch (SQLException e) {
                 LOG.log(Level.ERROR, "Unable to close connection", e, e);
             } catch (InterruptedException e) {
@@ -135,7 +138,7 @@ public class ConnectionPool {
             try {
                 conn = availableConnections.poll(RETRIEVE_TIMEOUT, TimeUnit.MILLISECONDS);
                 if (conn == null) {
-                    if (connectionsCount.get() < MAX_POOL_SIZE) {
+                    if (connectionsCount.get() < maxPoolSize) {
                         conn = this.createConnection();
                     } else {
                         conn = availableConnections.take();
@@ -167,7 +170,7 @@ public class ConnectionPool {
      * @param conn
      */
     void releaseConnection(Connection conn) {
-        if (availableConnections.size() < MIN_POOL_SIZE) {
+        if (availableConnections.size() < minPoolSize) {
             try {
                 availableConnections.put(conn);
             } catch (InterruptedException e) {
