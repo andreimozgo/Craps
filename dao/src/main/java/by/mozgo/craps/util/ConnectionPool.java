@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
@@ -22,11 +21,11 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class ConnectionPool {
 
-    private static final String UNEXPECTED_INTERRUPT = "Unexpected interrupt";
     private static final Logger LOG = LogManager.getLogger();
+    private static final String UNEXPECTED_INTERRUPT = "Unexpected interrupt";
+    private static final int VALID_TIMEOUT = 3; // seconds
+    private static final int RETRIEVE_TIMEOUT = 300; // milliseconds
     private static AtomicReference<ConnectionPool> instance = new AtomicReference<>();
-    private static int VALID_TIMEOUT = 3; // seconds
-    private static int RETRIEVE_TIMEOUT = 300; // milliseconds
     private static Semaphore semaphore = new Semaphore(1);
     private static AtomicBoolean isEmpty = new AtomicBoolean(true);
     private final ThreadLocal<ConnectionWrapper> threadLocalConnection = new ThreadLocal<>();
@@ -34,11 +33,9 @@ public class ConnectionPool {
     private BlockingQueue<Connection> availableConnections;
     private AtomicBoolean isClosing;
     private Driver driver;
-    private ResourceBundle resource;
     private ConnectorDB connectorDB;
     private int minPoolSize;
     private int maxPoolSize;
-
 
     private ConnectionPool() {
 
@@ -107,8 +104,11 @@ public class ConnectionPool {
      * Method closes pool and all connections.
      */
     public void closePool() {
+        if (this.isConnectionOpen()) {
+            this.getConnection().close();
+        }
         isClosing.set(true);
-        for (int i = 0; i < connectionsCount.get(); i++) {
+        for(int i = 0; i < connectionsCount.get(); i++) {
             try {
                 availableConnections.take().close();
             } catch (SQLException e) {

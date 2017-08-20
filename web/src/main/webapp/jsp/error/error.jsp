@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="${curLocale}">
 <head>
-    <meta charset="UTF-8" http-equiv="refresh" content="4;/craps">
+    <meta charset="UTF-8">
     <title><fmt:message key="header.title"/></title>
     <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../css/normalize.css">
@@ -21,7 +21,7 @@
         <br>
         <fmt:message key="error.404"/>
         <br>
-        <fmt:message key="redirect.main"/>
+        <a href="/craps"><fmt:message key="redirect.main"/></a>
     </div>
     <div>
         <!-- Request from ${pageContext.errorData.requestURI} is failed

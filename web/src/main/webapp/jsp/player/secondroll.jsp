@@ -28,7 +28,9 @@
         <form method="POST" action="craps">
             <fieldset>
                 <div><input type="hidden" name="command" value="play"/></div>
-                <div><div>Come</div><input type="number" name="comeBet" placeholder="Enter your bet"/></div>
+                <div>
+                    <div>Come</div>
+                    <input type="number" name="comeBet" placeholder="Enter your bet"/></div>
                 <div>Don't Come<input type="number" name="dontComeBet" placeholder="Enter your bet"/></div>
                 <div><input type="submit" value="<fmt:message key="button.roll" />"/></div>
             </fieldset>
@@ -44,7 +46,7 @@
                 <th></th>
             </tr>
             <tbody align="center">
-            <c:forEach items="${user.game.bets}" var="bet">
+            <c:forEach items="${betList}" var="bet">
                 <tr>
                     <td>
                         <div><c:out value="${bet.betType}"/></div>

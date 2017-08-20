@@ -8,24 +8,15 @@ import java.math.BigDecimal;
  */
 public class Bet extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public enum BetType {
-        PASS, DONTPASS, COME, DONTCOME;
-
-        @Override
-        public String toString() {
-            return super.toString().toLowerCase();
-        }
-
-    }
     private Integer gameId;
-    private BetType betType;
+    private Integer betTypeId;
     private BigDecimal amount;
     private BigDecimal profit;
     private boolean isFirstRoll = true;
     private Integer point = 0;
 
-    public Bet(BetType betType, BigDecimal amount){
-        this.betType = betType;
+    public Bet(Integer betTypeId, BigDecimal amount){
+        this.betTypeId = betTypeId;
         this.amount = amount;
     }
 
@@ -37,12 +28,12 @@ public class Bet extends AbstractEntity implements Serializable {
         this.gameId = gameId;
     }
 
-    public BetType getBetType() {
-        return betType;
+    public Integer getBetTypeId() {
+        return betTypeId;
     }
 
-    public void setBetType(BetType betType) {
-        this.betType = betType;
+    public void setBetTypeId(Integer betTypeId) {
+        this.betTypeId = betTypeId;
     }
 
     public BigDecimal getAmount() {
@@ -76,6 +67,4 @@ public class Bet extends AbstractEntity implements Serializable {
     public void setPoint(int point) {
         this.point = point;
     }
-
-
 }

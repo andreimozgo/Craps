@@ -4,6 +4,7 @@ import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.dao.UserDao;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.util.ConnectionPool;
+import by.mozgo.craps.util.ConnectionWrapper;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +21,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     private static final String QUERY_UPDATE_ROLE = "UPDATE user SET role_id = ? WHERE id = ?";
     private static final String QUERY_GET_ALL = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id ORDER BY user.id LIMIT ?,?";
     private static final String QUERY_GET_USERS_NUMBER = "SELECT COUNT(*) FROM user";
-    private static final String QUERY_GET_PASSWORD = "SELECT password FROM user WHERE email = ?";
+    private static final String QUERY_FIND_PASSWORD = "SELECT password FROM user WHERE email = ?";
     private static final String QUERY_FIND_USER = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id WHERE email = ?";
 
     private static UserDaoImpl instance = null;
@@ -39,7 +40,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     @Override
     public int create(User entity) throws DaoException {
         Integer id;
-        connection = ConnectionPool.getInstance().getConnection();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT)) {
             ps.setString(1, entity.getEmail());
             ps.setString(2, entity.getPassword());
@@ -59,7 +60,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
     public User findUserByEmail(String email) throws DaoException {
-        connection = ConnectionPool.getInstance().getConnection();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         User user = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_USER)) {
             preparedStatement.setString(1, email);
@@ -81,7 +82,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     public void update(User entity) throws DaoException {
-        connection = ConnectionPool.getInstance().getConnection();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE)) {
             ps.setString(1, entity.getEmail());
             ps.setString(2, entity.getUsername());
@@ -94,7 +95,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     public void updateWithPass(User entity) throws DaoException {
-        connection = ConnectionPool.getInstance().getConnection();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE_WITH_PASS)) {
             ps.setString(1, entity.getEmail());
             ps.setString(2, entity.getPassword());
@@ -109,9 +110,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
     public String findPassword(String email) throws DaoException {
-        connection = ConnectionPool.getInstance().getConnection();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         String pass = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_PASSWORD)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_PASSWORD)) {
             preparedStatement.setString(1, email);
             ResultSet result = preparedStatement.executeQuery();
             if(result.next()) {
@@ -125,8 +126,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
     public List findAll(int recordsOnPage, int currentPage) throws DaoException {
-        connection = ConnectionPool.getInstance().getConnection();
-
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         List<User> users = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_ALL)) {
             preparedStatement.setInt(1, (currentPage - 1) * recordsOnPage);
@@ -149,7 +149,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     public void updateRole(Integer userId, int role) throws DaoException {
-        connection = ConnectionPool.getInstance().getConnection();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE_ROLE)) {
             ps.setInt(1, role);
             ps.setInt(2, userId);
@@ -160,7 +160,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     public int findNumber() throws DaoException {
-        connection = ConnectionPool.getInstance().getConnection();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         int amount;
         try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(QUERY_GET_USERS_NUMBER);

@@ -102,9 +102,9 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         return users;
     }
 
-    public void updateRole(Integer userId, int role) {
+    public void updateRole(Integer userId, int roleId) {
         try {
-            userDao.updateRole(userId, role);
+            userDao.updateRole(userId, roleId);
         } catch (DaoException e) {
             LOG.log(Level.ERROR, "Exception in DAO {}", e);
         }

@@ -5,7 +5,6 @@ import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 import by.mozgo.craps.services.validator.Validator;
-import by.mozgo.craps.util.ConnectionPool;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,7 +44,6 @@ public class LoginCommand implements ActionCommand {
                 result = new ActionResult(REDIRECT, page);
             }
         }
-        ConnectionPool.getInstance().closePool();
         return result;
     }
 }

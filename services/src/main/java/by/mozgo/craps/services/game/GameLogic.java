@@ -20,6 +20,10 @@ import java.util.Random;
  * Created by Andrei Mozgo. 2017.
  */
 public class GameLogic {
+    private static final int passBetId = 1;
+    private static final int dontPassBetId = 2;
+    private static final int comeBetId = 3;
+    private static final int dontComeBetId = 4;
     private int dice1;
     private int dice2;
     private int sumDice;
@@ -36,8 +40,8 @@ public class GameLogic {
         clearOldBets();
     }
 
-    public void addBet(Bet.BetType betType, String amount) {
-        Bet bet = new Bet(betType, new BigDecimal(amount));
+    public void addBet(int betTypeId, String amount) {
+        Bet bet = new Bet(betTypeId, new BigDecimal(amount));
         bet.setGameId(findGameId());
         BigDecimal newUserBalance = user.getBalance().subtract(bet.getAmount());
         TransactionAssistant.startTransaction();
@@ -110,29 +114,29 @@ public class GameLogic {
     }
 
     private void checkBet(Bet bet) {
-        switch (bet.getBetType()) {
-            case PASS:
+        switch (bet.getBetTypeId()) {
+            case passBetId:
                 if (bet.isFirstRoll()) {
                     checkPassLineFirst(bet);
                 } else {
                     checkPassLineOneMore(bet);
                 }
                 break;
-            case DONTPASS:
+            case dontPassBetId:
                 if (bet.isFirstRoll()) {
                     checkDoNotPassLineFirst(bet);
                 } else {
                     checkDoNotPassLineOneMore(bet);
                 }
                 break;
-            case COME:
+            case comeBetId:
                 if (bet.isFirstRoll()) {
                     checkComeFirst(bet);
                 } else {
                     checkComeOneMore(bet);
                 }
                 break;
-            case DONTCOME:
+            case dontComeBetId:
                 if (bet.isFirstRoll()) {
                     checkDoNotComeFirst(bet);
                 } else {

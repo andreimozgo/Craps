@@ -13,7 +13,7 @@ public interface UserService extends Service<User> {
 
     List<User> findAll(int recordsOnPage, int currentPage);
 
-    void updateRole(Integer userId, int role);
+    void updateRole(Integer userId, int roleId);
 
     User makePayment(User user, String amount);
 }

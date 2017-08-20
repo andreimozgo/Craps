@@ -13,7 +13,6 @@ import java.sql.SQLException;
  * Created by Andrei Mozgo. 2017.
  */
 public abstract class BaseDaoImpl<T extends AbstractEntity> implements BaseDao<T> {
-    protected ConnectionWrapper connection;
     protected String tableName;
 
     public int create(T entity) throws DaoException{
@@ -27,7 +26,7 @@ public abstract class BaseDaoImpl<T extends AbstractEntity> implements BaseDao<T
     @Override
     public void delete(Integer id) throws DaoException {
         String query = "DELETE FROM " + tableName + " WHERE id = ?";
-        connection = ConnectionPool.getInstance().getConnection();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, id);
             ps.executeUpdate();

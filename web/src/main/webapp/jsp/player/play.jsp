@@ -50,7 +50,7 @@
                     <th></th>
                 </tr>
                 <tbody align="center">
-                <c:forEach items="${user.game.bets}" var="bet">
+                <c:forEach items="${betList}" var="bet">
                     <tr>
                         <td>
                             <div><c:out value="${bet.betType}"/></div>
@@ -86,6 +86,11 @@
 </section>
 <jsp:include page="/jsp/elements/footer.jsp"/>
 <script>
+    function get(name){
+        if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+            return decodeURIComponent(name[1]);
+    }
+
     function isBets() {
         var result = true;
 
@@ -96,12 +101,15 @@
         playMessage.innerHTML = "";
 
         var pass = document.forms[0]["passBet"].value,
-            dontPass = document.forms[0]["dontPassBet"].value;
+            dontPass = document.forms[0]["dontPassBet"].value,
+            bets = "${betList}";
 
-        if (!pass) {
-            if(!dontPass) {
-                playMessage.innerHTML = FILL_FIELD;
-                result = false;
+        if(!bets) {
+            if (!pass) {
+                if (!dontPass) {
+                    playMessage.innerHTML = FILL_FIELD;
+                    result = false;
+                }
             }
         }
         return result;
