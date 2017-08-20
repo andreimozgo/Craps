@@ -5,7 +5,7 @@ import by.mozgo.craps.dao.GameDao;
 import by.mozgo.craps.dao.impl.GameDaoImpl;
 import by.mozgo.craps.entity.Game;
 import by.mozgo.craps.services.GameService;
-import org.apache.logging.log4j.Level;
+import by.mozgo.craps.services.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,12 +29,12 @@ public class GameServiceImpl extends ServiceImpl<Game> implements GameService {
     }
 
     @Override
-    public int findGamesNumber(int userId){
+    public int findGamesNumber(int userId) throws ServiceException {
         int number = 0;
         try {
             number = gameDao.findGamesNumber(userId);
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+            throw new ServiceException("Exception in DAO. " + e.getMessage(), e);
         }
         return number;
     }

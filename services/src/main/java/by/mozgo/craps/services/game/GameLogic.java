@@ -5,11 +5,13 @@ import by.mozgo.craps.entity.Game;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.BetService;
 import by.mozgo.craps.services.GameService;
+import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.services.impl.BetServiceImpl;
 import by.mozgo.craps.services.impl.GameServiceImpl;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 import by.mozgo.craps.util.TransactionAssistant;
+import by.mozgo.craps.util.TransactionAssistantException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -40,20 +42,37 @@ public class GameLogic {
         clearOldBets();
     }
 
-    public void addBet(int betTypeId, String amount) {
+    public void addBet(int betTypeId, String amount) throws ServiceException {
         Bet bet = new Bet(betTypeId, new BigDecimal(amount));
         bet.setGameId(findGameId());
         BigDecimal newUserBalance = user.getBalance().subtract(bet.getAmount());
-        TransactionAssistant.startTransaction();
-        int betId = betService.create(bet);
-        bet.setId(betId);
-        newBets.add(bet);
-        user.setBalance(newUserBalance);
-        userService.update(user);
-        TransactionAssistant.endTransaction();
+        try {
+            TransactionAssistant.startTransaction();
+        } catch (TransactionAssistantException e) {
+            throw new ServiceException("Unable to add bet.\n" + e.getMessage(), e);
+        }
+        try {
+            int betId = betService.create(bet);
+            bet.setId(betId);
+            newBets.add(bet);
+            user.setBalance(newUserBalance);
+            userService.update(user);
+        } catch (ServiceException e) {
+            try {
+                TransactionAssistant.rollBackTransaction();
+            } catch (TransactionAssistantException e1) {
+                throw new ServiceException("Unable to add bet.\n" + e.getMessage() + "\n" + e1.getMessage(), e);
+            }
+            throw new ServiceException("Unable to add bet.\n" + e.getMessage() + "\n", e);
+        }
+        try {
+            TransactionAssistant.endTransaction();
+        } catch (TransactionAssistantException e) {
+            throw new ServiceException("Unable to add bet.\n" + e.getMessage(), e);
+        }
     }
 
-    private int findGameId() {
+    private int findGameId() throws ServiceException {
         int gameId;
         if (user.getGame() != null) {
             gameId = user.getGame().getId();
@@ -78,7 +97,7 @@ public class GameLogic {
         }
     }
 
-    public RollResult roll() {
+    public RollResult roll() throws ServiceException {
         if (user.getGame() != null) {
             isGame = true;
             if (!newBets.isEmpty()) {
@@ -94,11 +113,28 @@ public class GameLogic {
                     if (bet.getProfit() != null) {
                         if (bet.getProfit().compareTo(new BigDecimal(0)) > 0) {
                             BigDecimal newUserBalance = user.getBalance().add(bet.getProfit());
-                            TransactionAssistant.startTransaction();
-                            betService.update(bet);
-                            user.setBalance(newUserBalance);
-                            userService.update(user);
-                            TransactionAssistant.endTransaction();
+                            try {
+                                TransactionAssistant.startTransaction();
+                            } catch (TransactionAssistantException e) {
+                                throw new ServiceException("Game logic error.\n" + e.getMessage(), e);
+                            }
+                            try {
+                                betService.update(bet);
+                                user.setBalance(newUserBalance);
+                                userService.update(user);
+                            } catch (ServiceException e) {
+                                try {
+                                    TransactionAssistant.rollBackTransaction();
+                                } catch (TransactionAssistantException e1) {
+                                    throw new ServiceException("Game logic error.\n" + e.getMessage() + "\n" + e1.getMessage(), e);
+                                }
+                                throw new ServiceException("Game logic error.\n" + e.getMessage(), e);
+                            }
+                            try {
+                                TransactionAssistant.endTransaction();
+                            } catch (TransactionAssistantException e) {
+                                throw new ServiceException("Unable to add bet.\n" + e.getMessage(), e);
+                            }
                         }
                     }
                 }

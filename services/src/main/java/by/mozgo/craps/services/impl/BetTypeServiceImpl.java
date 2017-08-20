@@ -5,15 +5,12 @@ import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.dao.impl.BetTypeDaoImpl;
 import by.mozgo.craps.entity.BetType;
 import by.mozgo.craps.services.BetTypeService;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import by.mozgo.craps.services.ServiceException;
 
 /**
  * Created by Andrei Mozgo. 2017.
  */
 public class BetTypeServiceImpl extends ServiceImpl<BetType>  implements BetTypeService {
-    private static final Logger LOG = LogManager.getLogger();
     private static BetTypeServiceImpl instance = null;
     private BetTypeDao betTypeDao = BetTypeDaoImpl.getInstance();
 
@@ -29,12 +26,12 @@ public class BetTypeServiceImpl extends ServiceImpl<BetType>  implements BetType
     }
 
     @Override
-    public String getNameById(Integer id) {
+    public String getNameById(Integer id) throws ServiceException {
         String name = null;
         try {
             name = betTypeDao.findNameById(id);
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+            throw new ServiceException("Exception in DAO. " + e.getMessage(), e);
         }
         return name;
     }

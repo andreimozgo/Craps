@@ -2,6 +2,7 @@ package by.mozgo.craps.command.user;
 
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
+import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 import by.mozgo.craps.services.validator.Validator;
@@ -17,8 +18,8 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
 
 public class LoginCommand implements ActionCommand {
-    private static final String PASSWORD = "password";
     private static final Logger LOG = LogManager.getLogger();
+    private static final String PASSWORD = "password";
 
     @Override
     public ActionResult execute(HttpServletRequest request) {
@@ -36,12 +37,18 @@ public class LoginCommand implements ActionCommand {
         if (Validator.validateEmail(email) && Validator.validatePassword(pass)) {
             email = email.trim();
             pass = pass.trim();
-            if (userService.checkUser(email, pass)) {
-                User user = userService.findUserByEmail(email);
-                session.setAttribute(CrapsConstant.USER, user);
-                LOG.log(Level.INFO, "User {} logged in successfully", email);
-                page = ConfigurationManager.getProperty("command.empty");
-                result = new ActionResult(REDIRECT, page);
+            try {
+                if (userService.checkUser(email, pass)) {
+                    User user = userService.findUserByEmail(email);
+                    session.setAttribute(CrapsConstant.USER, user);
+                    LOG.log(Level.INFO, "User {} logged in successfully", email);
+                    page = ConfigurationManager.getProperty("command.empty");
+                    result = new ActionResult(REDIRECT, page);
+                }
+            } catch (ServiceException e) {
+                LOG.log(Level.ERROR, "Unable to make the payment.\n" + e.getMessage());
+                page = ConfigurationManager.getProperty("path.page.error");
+                new ActionResult(FORWARD, page);
             }
         }
         return result;

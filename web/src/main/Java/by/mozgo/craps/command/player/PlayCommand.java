@@ -2,11 +2,15 @@ package by.mozgo.craps.command.player;
 
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
+import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.game.GameLogic;
 import by.mozgo.craps.services.game.RollResult;
 import by.mozgo.craps.services.impl.BetServiceImpl;
 import by.mozgo.craps.services.validator.Validator;
 import by.mozgo.craps.services.vo.BetVO;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,6 +24,7 @@ import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
  * Created by Andrei Mozgo. 2017.
  */
 public class PlayCommand implements ActionCommand {
+    private static final Logger LOG = LogManager.getLogger();
     private static final String BET_ON_PASS = "passBet";
     private static final String BET_ON_DONT_PASS = "dontPassBet";
     private static final String BET_ON_COME = "comeBet";
@@ -42,56 +47,61 @@ public class PlayCommand implements ActionCommand {
         if (user != null) {
             GameLogic gameLogic = new GameLogic(user);
             String passBet = request.getParameter(BET_ON_PASS);
-            if (Validator.validateMoney(passBet)) {
-                passBet = passBet.trim();
-                if (checkBalance(passBet, user)) {
-                    gameLogic.addBet(passBetId, passBet);
+            try {
+                if (Validator.validateMoney(passBet)) {
+                    passBet = passBet.trim();
+                    if (checkBalance(passBet, user)) {
+                        gameLogic.addBet(passBetId, passBet);
+                    } else {
+                        isEnoughMoney = false;
+                    }
+                }
+                String dontPassBet = request.getParameter(BET_ON_DONT_PASS);
+                if (Validator.validateMoney(dontPassBet)) {
+                    dontPassBet = dontPassBet.trim();
+                    if (checkBalance(dontPassBet, user)) {
+                        gameLogic.addBet(dontPassBetId, dontPassBet);
+                    } else {
+                        isEnoughMoney = false;
+                    }
+                }
+                String comeBet = request.getParameter(BET_ON_COME);
+                if (Validator.validateMoney(comeBet)) {
+                    comeBet = comeBet.trim();
+                    if (checkBalance(comeBet, user)) {
+                        gameLogic.addBet(comeBetId, comeBet);
+                    } else {
+                        isEnoughMoney = false;
+                    }
+                }
+                String dontComeBet = request.getParameter(BET_ON_DONT_COME);
+                if (Validator.validateMoney(dontComeBet)) {
+                    dontComeBet = dontComeBet.trim();
+                    if (checkBalance(dontComeBet, user)) {
+                        gameLogic.addBet(dontComeBetId, dontComeBet);
+                    } else {
+                        isEnoughMoney = false;
+                    }
+                }
+                if (user.getGame() != null) {
+                    RollResult rollResult = gameLogic.roll();
+                    request.setAttribute(DICE, rollResult);
+                    List<BetVO> betVOList = BetServiceImpl.getInstance().generateBetVO(user.getGame().getBets());
+                    request.setAttribute(BET_LIST, betVOList);
+                    if (!user.getGame().isFirstRoll()) {
+                        page = ConfigurationManager.getProperty("path.page.secondroll");
+                    }
                 } else {
-                    isEnoughMoney = false;
+                    locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
+                    request.setAttribute(MESSAGE, MessageManager.getProperty("play.make", locale));
                 }
-            }
-            String dontPassBet = request.getParameter(BET_ON_DONT_PASS);
-            if (Validator.validateMoney(dontPassBet)) {
-                dontPassBet = dontPassBet.trim();
-                if (checkBalance(dontPassBet, user)) {
-                    gameLogic.addBet(dontPassBetId, dontPassBet);
-                } else {
-                    isEnoughMoney = false;
+                if (!isEnoughMoney) {
+                    locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
+                    request.setAttribute(MESSAGE, MessageManager.getProperty("play.badbalance", locale));
                 }
-            }
-            String comeBet = request.getParameter(BET_ON_COME);
-            if (Validator.validateMoney(comeBet)) {
-                comeBet = comeBet.trim();
-                if (checkBalance(comeBet, user)) {
-                    gameLogic.addBet(comeBetId, comeBet);
-                } else {
-                    isEnoughMoney = false;
-                }
-            }
-            String dontComeBet = request.getParameter(BET_ON_DONT_COME);
-            if (Validator.validateMoney(dontComeBet)) {
-                dontComeBet = dontComeBet.trim();
-                if (checkBalance(dontComeBet, user)) {
-                    gameLogic.addBet(dontComeBetId, dontComeBet);
-                } else {
-                    isEnoughMoney = false;
-                }
-            }
-            if (user.getGame() != null) {
-                RollResult rollResult = gameLogic.roll();
-                request.setAttribute(DICE, rollResult);
-                List<BetVO> betVOList = BetServiceImpl.getInstance().generateBetVO(user.getGame().getBets());
-                request.setAttribute(BET_LIST, betVOList);
-                if (!user.getGame().isFirstRoll()) {
-                    page = ConfigurationManager.getProperty("path.page.secondroll");
-                }
-            } else {
-                locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
-                request.setAttribute(MESSAGE, MessageManager.getProperty("play.make", locale));
-            }
-            if (!isEnoughMoney){
-                locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
-                request.setAttribute(MESSAGE, MessageManager.getProperty("play.badbalance", locale));
+            } catch (ServiceException e) {
+                LOG.log(Level.ERROR, e.getMessage());
+                page = ConfigurationManager.getProperty("path.page.error");
             }
         }
         return new ActionResult(FORWARD, page);

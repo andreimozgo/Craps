@@ -9,9 +9,9 @@ import java.util.List;
  * Created by Andrei Mozgo. 2017.
  */
 public interface BetService extends Service<Bet> {
-    int findBetsNumber(int userId);
+    int findBetsNumber(int userId) throws ServiceException;
 
-    int findWonBetsNumber(int userId);
+    int findWonBetsNumber(int userId) throws ServiceException;
 
-    List<BetVO> generateBetVO(List<Bet> bets);
+    List<BetVO> generateBetVO(List<Bet> bets) throws ServiceException;
 }

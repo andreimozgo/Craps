@@ -6,8 +6,8 @@ import by.mozgo.craps.dao.impl.BetDaoImpl;
 import by.mozgo.craps.entity.Bet;
 import by.mozgo.craps.services.BetService;
 import by.mozgo.craps.services.BetTypeService;
+import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.vo.BetVO;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,29 +35,29 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
     }
 
     @Override
-    public int findBetsNumber(int userId) {
+    public int findBetsNumber(int userId) throws ServiceException {
         int number = 0;
         try {
             number = betDao.findBetsNumber(userId);
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+            throw new ServiceException("Exception in DAO. " + e.getMessage(), e);
         }
         return number;
     }
 
     @Override
-    public int findWonBetsNumber(int userId) {
+    public int findWonBetsNumber(int userId) throws ServiceException {
         int number = 0;
         try {
             number = betDao.findWonBetsNumber(userId);
         } catch (DaoException e) {
-            LOG.log(Level.ERROR, "Exception in DAO {}", e);
+            throw new ServiceException("Exception in DAO. " + e.getMessage(), e);
         }
         return number;
     }
 
     @Override
-    public List<BetVO> generateBetVO(List<Bet> bets) {
+    public List<BetVO> generateBetVO(List<Bet> bets) throws ServiceException {
         List<BetVO> betVOs = new ArrayList<>();
      for(Bet bet: bets){
          String betTypeName = betTypeService.getNameById(bet.getBetTypeId());
