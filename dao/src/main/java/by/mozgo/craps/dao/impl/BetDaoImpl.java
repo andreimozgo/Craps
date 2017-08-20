@@ -61,8 +61,8 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
             ps.setInt(1, entity.getGameId());
             ps.setBigDecimal(2, entity.getAmount());
             ps.setBigDecimal(3, entity.getProfit());
-            ps.setInt(4, entity.getId());
-            ps.setInt(5, entity.getBetTypeId());
+            ps.setInt(4, entity.getBetTypeId());
+            ps.setInt(5, entity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);

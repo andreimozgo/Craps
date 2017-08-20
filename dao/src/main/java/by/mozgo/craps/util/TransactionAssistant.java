@@ -11,10 +11,9 @@ import java.sql.SQLException;
  */
 public class TransactionAssistant {
     private static final Logger LOG = LogManager.getLogger();
-    private static ConnectionWrapper connection;
 
     public static void startTransaction(){
-        connection = ConnectionPool.getInstance().getConnection();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
@@ -23,7 +22,7 @@ public class TransactionAssistant {
     }
 
     public static void endTransaction(){
-        connection = ConnectionPool.getInstance().getConnection();
+        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.commit();
         } catch (SQLException e1) {
