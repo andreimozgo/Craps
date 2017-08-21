@@ -1,6 +1,10 @@
 package by.mozgo.craps.command.player;
 
-import by.mozgo.craps.command.*;
+import by.mozgo.craps.StringConstant;
+import by.mozgo.craps.command.ActionCommand;
+import by.mozgo.craps.command.ActionResult;
+import by.mozgo.craps.command.ConfigurationManager;
+import by.mozgo.craps.command.MessageManager;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.UserService;
@@ -17,7 +21,10 @@ import java.util.Locale;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ *  ActionCommand implementation. Changes user password.
+ *
+ *  @author Mozgo Andrei
+ *
  */
 public class ChangePwdCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
@@ -29,8 +36,8 @@ public class ChangePwdCommand implements ActionCommand {
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession();
-        Locale locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
-        User user = (User) session.getAttribute(CrapsConstant.USER);
+        Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+        User user = (User) session.getAttribute(StringConstant.USER);
         String oldPwd = request.getParameter(OLD_PASSWORD);
         String page = ConfigurationManager.getProperty("path.page.password");
 

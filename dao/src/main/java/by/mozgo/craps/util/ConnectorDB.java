@@ -12,7 +12,10 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Reads database properties file and establish connections to database.
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class ConnectorDB {
     private static final Logger LOG = LogManager.getLogger();
@@ -44,6 +47,12 @@ public class ConnectorDB {
         MAX_POOL_SIZE = Integer.parseInt(props.getProperty("maxPoolSize", MAX_POOL_SIZE_DEFAULT));
     }
 
+    /**
+     * Attempts to establish a connection to the database
+     *
+     * @return a connection to the database
+     * @throws SQLException if a database access error occurs
+     */
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASSWORD);
     }

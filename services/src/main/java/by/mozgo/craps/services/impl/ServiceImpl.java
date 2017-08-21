@@ -5,14 +5,14 @@ import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.entity.AbstractEntity;
 import by.mozgo.craps.services.Service;
 import by.mozgo.craps.services.ServiceException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Contains base service implementation
+ *
+ * @author Mozgo Andrei
+ *
  */
 public abstract class ServiceImpl<T extends AbstractEntity> implements Service<T> {
-    private static final Logger LOG = LogManager.getLogger();
     protected BaseDao baseDao;
 
     @Override

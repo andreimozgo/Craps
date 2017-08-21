@@ -1,4 +1,4 @@
-package by.mozgo.craps.manager;
+package by.mozgo.craps.command;
 
 
 import org.apache.logging.log4j.Level;
@@ -15,9 +15,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Contains methods to find or save user avatar
+ *
+ * @author Mozgo Andrei
+ */
 public class AvatarManager {
     private static final String PHOTO_FOLDER = "img\\avatars";
-    private static final String PATTERN_PHOTO_EXTENSION = "(.png$)|(.jpg$)";
+    private static final String PATTERN_PHOTO_EXTENSION = "(.png$)|(.jpg$)|(.jpeg$)";
     private static final String PHOTO_EXTENSION = ".png;.jpg";
     private static final String EXTENSION_DELIMITER = ";";
     private static final String DEFAULT_AVATAR = "noavatar.png";
@@ -33,28 +38,34 @@ public class AvatarManager {
         this.servletContext = servletContext;
     }
 
-    public void uploadPhoto(Part part, Integer userId) {
+    /**
+     * Uploads and saves user avatar
+     *
+     * @param part
+     * @param userId
+     */
+    public void uploadAvatar(Part part, Integer userId) throws AvatarManagerException {
         String fileExtension = findFileExtension(part);
 
         if (!fileExtension.isEmpty()) {
             String photoFilePath = servletContext.getRealPath("") + PHOTO_FOLDER + File.separator + userId;
-            deletePhoto(photoFilePath);
+            deleteAvatar(photoFilePath);
             try {
                 part.write(photoFilePath + fileExtension);
             } catch (IOException e) {
                 LOG.log(Level.ERROR, "Error while saving avatar: {}", e);
             }
         } else {
-            LOG.log(Level.WARN, "Incorrect avatar extension.");
+            throw new AvatarManagerException("Incorrect avatar extension.");
         }
     }
 
     /**
-     * delete user's photo
+     * Deletes user avatar
      *
      * @param photoFilePath
      */
-    private void deletePhoto(String photoFilePath) {
+    private void deleteAvatar(String photoFilePath) {
         String[] extensionsArray = PHOTO_EXTENSION.split(EXTENSION_DELIMITER);
         List<String> extensions = new ArrayList<>(Arrays.asList(extensionsArray));
         for (String extension : extensions) {
@@ -65,18 +76,23 @@ public class AvatarManager {
         }
     }
 
-
-    private String findFileExtension(Part part) {
+    /**
+     * Finds extension of uploaded avatar file
+     *
+     * @param part
+     * @return
+     */
+    public String findFileExtension(Part part) {
         String partHeader = part.getHeader(HEADER);
         String fileName = "";
 
-        // extract file name
+        // extracts file name
         for (String content : partHeader.split(PARAMS_DELIMITER)) {
             if (content.trim().startsWith(PARAMETER)) {
                 fileName = content.substring(content.indexOf(VALUE_DELIMITER) + 1).trim().replace(QUOTE, "");
             }
         }
-        // try to find file supported extension
+        // tries to find file supported extension
         Pattern pattern = Pattern.compile(PATTERN_PHOTO_EXTENSION);
         Matcher match = pattern.matcher(fileName.toLowerCase());
         if (match.find()) {

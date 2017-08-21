@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * The persistent class for the game database table.
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class Game extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;

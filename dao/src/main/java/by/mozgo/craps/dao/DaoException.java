@@ -1,5 +1,10 @@
 package by.mozgo.craps.dao;
 
+/**
+ * DAO layer exception
+ *
+ * @author Mozgo Andrei
+ */
 public class DaoException extends Exception {
 
     public DaoException() {

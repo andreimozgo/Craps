@@ -1,7 +1,9 @@
 package by.mozgo.craps.services;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Logic layer exception
+ * @author Mozgo Andrei
+ *
  */
 public class ServiceException extends Exception {
 

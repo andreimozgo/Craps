@@ -12,7 +12,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * GameDao implementation for MYSQL DB
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     private static final String TABLE_NAME = "game";

@@ -7,11 +7,19 @@ import org.apache.logging.log4j.Logger;
 import java.sql.SQLException;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Manages transactions.
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class TransactionAssistant {
     private static final Logger LOG = LogManager.getLogger();
 
+    /**
+     * Sets AutoCommit of the current connection to the false state
+     *
+     * @throws TransactionAssistantException if a database access error occurs
+     */
     public static void startTransaction() throws TransactionAssistantException {
         ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try {
@@ -21,6 +29,12 @@ public class TransactionAssistant {
         }
     }
 
+    /**
+     * Attempts to commit transaction and to set AutoCommit state to true.
+     * Tries to rollback transaction if any database access error occurs.
+     *
+     * @throws TransactionAssistantException if a database access error occurs
+     */
     public static void endTransaction() throws TransactionAssistantException {
         ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try {
@@ -42,6 +56,11 @@ public class TransactionAssistant {
         }
     }
 
+    /**
+     * Attempts to rollback current transaction and to set AutoCommit state to true.
+     *
+     * @throws TransactionAssistantException if a database access error occurs
+     */
     public static void rollBackTransaction() throws TransactionAssistantException {
         ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try {
@@ -55,6 +74,5 @@ public class TransactionAssistant {
                 throw new TransactionAssistantException("Unable to change autocommit state. " + e.getMessage(), e);
             }
         }
-
     }
 }

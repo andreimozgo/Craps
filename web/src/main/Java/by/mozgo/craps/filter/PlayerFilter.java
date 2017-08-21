@@ -1,7 +1,7 @@
 package by.mozgo.craps.filter;
 
+import by.mozgo.craps.StringConstant;
 import by.mozgo.craps.command.ConfigurationManager;
-import by.mozgo.craps.command.CrapsConstant;
 import by.mozgo.craps.entity.User;
 
 import javax.servlet.*;
@@ -10,18 +10,28 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Servlet Filter implementation class AdminFilter checks user type,
+ * compares user permission to get player pages and prevents
+ * unauthorized access.
+ *
+ * @author Mozgo Andrei
  */
 @WebFilter(dispatcherTypes = {DispatcherType.FORWARD, DispatcherType.REQUEST}, urlPatterns = {"/jsp/user/*"})
-public class UserFilter implements Filter {
+public class PlayerFilter implements Filter {
+    /**
+     * @see Filter#init(FilterConfig)
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
 
+    /**
+     * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        User user = (User) httpRequest.getSession().getAttribute(CrapsConstant.USER);
+        User user = (User) httpRequest.getSession().getAttribute(StringConstant.USER);
         if (user == null) {
             String page = ConfigurationManager.getProperty("path.page.error.404");
             RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(page);
@@ -34,6 +44,9 @@ public class UserFilter implements Filter {
         chain.doFilter(request, response);
     }
 
+    /**
+     * @see Filter#destroy()
+     */
     @Override
     public void destroy() {
     }

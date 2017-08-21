@@ -17,7 +17,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Creates pool of database connections and manages it.
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class ConnectionPool {
 
@@ -85,7 +88,7 @@ public class ConnectionPool {
     }
 
     /**
-     * Estasblish and return new db connection
+     * Establish and return new db connection
      *
      * @return
      */

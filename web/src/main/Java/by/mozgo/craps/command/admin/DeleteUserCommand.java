@@ -14,6 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
+/**
+ * ActionCommand implementation. Deletes user.
+ *
+ * @author Mozgo Andrei
+ */
 public class DeleteUserCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
     private static final String USER_ID = "user_id";

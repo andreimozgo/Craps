@@ -3,7 +3,10 @@ package by.mozgo.craps.services.vo;
 import java.math.BigDecimal;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Entity that used to show to the user bets information
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class BetVO {
     private String betType;

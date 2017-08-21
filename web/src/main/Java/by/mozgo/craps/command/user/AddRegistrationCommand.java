@@ -1,8 +1,8 @@
 package by.mozgo.craps.command.user;
 
+import by.mozgo.craps.StringConstant;
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
-import by.mozgo.craps.manager.AvatarManager;
 import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.UserService;
 import by.mozgo.craps.services.impl.UserServiceImpl;
@@ -21,6 +21,12 @@ import java.util.Locale;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
 
+/**
+ * ActionCommand implementation.
+ * Adds new user registration.
+ *
+ * @author Mozgo Andrei
+ */
 public class AddRegistrationCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
     private static final String PASSWORD = "pwd1";
@@ -32,21 +38,17 @@ public class AddRegistrationCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
-        Locale locale = (Locale) request.getSession().getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
+        Locale locale = (Locale) request.getSession().getAttribute(StringConstant.ATTRIBUTE_LOCALE);
         boolean validation = true;
         Part part = null;
 
-        String email = request.getParameter(CrapsConstant.EMAIL);
+        String email = request.getParameter(StringConstant.EMAIL);
         String pass1 = request.getParameter(PASSWORD);
         String pass2 = request.getParameter(PASSWORD_REPEAT);
         String name = request.getParameter(USERNAME);
         String age = request.getParameter(AGE);
-
-        String page = ConfigurationManager.getProperty("path.page.registration");
-        request.setAttribute(CrapsConstant.EMAIL, email);
-        request.setAttribute(USERNAME, name);
-        request.setAttribute(AGE, age);
-        ActionResult result = new ActionResult(FORWARD, page);
+        String page;
+        ActionResult result;
 
         try {
             if (!Validator.validateEmail(email)) {
@@ -89,15 +91,29 @@ public class AddRegistrationCommand implements ActionCommand {
                 userService.create(user);
                 LOG.log(Level.INFO, "New registration added successfully");
                 user = userService.findUserByEmail(user.getEmail());
-                AvatarManager uploader = new AvatarManager(request.getServletContext());
-                uploader.uploadPhoto(part, user.getId());
+                if (part.getSize() > 0) {
+                    AvatarManager uploader = new AvatarManager(request.getServletContext());
+                    try {
+                        uploader.uploadAvatar(part, user.getId());
+                    } catch (AvatarManagerException e) {
+                        LOG.log(Level.WARN, "Incorrect file extension.\n" + e.getMessage());
+                    }
+                }
                 HttpSession session = request.getSession();
-                session.setAttribute(CrapsConstant.USER, user);
+                session.setAttribute(StringConstant.USER, user);
                 page = ConfigurationManager.getProperty("path.page.registered");
                 result = new ActionResult(REDIRECT, page);
+            } else {
+                request.setAttribute(StringConstant.EMAIL, email);
+                request.setAttribute(USERNAME, name);
+                request.setAttribute(PASSWORD, pass1);
+                request.setAttribute(PASSWORD_REPEAT, pass2);
+                request.setAttribute(AGE, age);
+                page = ConfigurationManager.getProperty("path.page.registration");
+                result = new ActionResult(FORWARD, page);
             }
         } catch (ServiceException e) {
-            LOG.log(Level.ERROR, "Unable to show stats page.\n" + e.getMessage());
+            LOG.log(Level.ERROR, "Error during adding registration.\n" + e.getMessage());
             page = ConfigurationManager.getProperty("path.page.error");
             result = new ActionResult(REDIRECT, page);
         }

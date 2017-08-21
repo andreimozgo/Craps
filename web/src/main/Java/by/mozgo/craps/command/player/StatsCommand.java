@@ -1,9 +1,9 @@
 package by.mozgo.craps.command.player;
 
+import by.mozgo.craps.StringConstant;
 import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionResult;
 import by.mozgo.craps.command.ConfigurationManager;
-import by.mozgo.craps.command.CrapsConstant;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.BetService;
 import by.mozgo.craps.services.GameService;
@@ -20,7 +20,11 @@ import javax.servlet.http.HttpSession;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ *  ActionCommand implementation.
+ *  Shows stats page.
+ *
+ *  @author Mozgo Andrei
+ *
  */
 public class StatsCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
@@ -37,7 +41,7 @@ public class StatsCommand implements ActionCommand {
         String page = ConfigurationManager.getProperty("path.page.stats");
 
         try {
-            User user = (User) session.getAttribute(CrapsConstant.USER);
+            User user = (User) session.getAttribute(StringConstant.USER);
             int gamesNumber = gameService.findGamesNumber(user.getId());
             int betsNumber = betService.findBetsNumber(user.getId());
             int wonBetsNumber = betService.findWonBetsNumber(user.getId());

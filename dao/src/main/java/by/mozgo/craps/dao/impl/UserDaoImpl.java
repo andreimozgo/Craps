@@ -13,6 +13,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * UserDao implementation for MYSQL DB
+ *
+ * @author Mozgo Andrei
+ */
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     private static final String TABLE_NAME = "user";
     private static final String QUERY_INSERT = "INSERT INTO user (email, password, username) VALUES (?, ?, ?)";
@@ -41,17 +46,14 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     public int create(User entity) throws DaoException {
         Integer id;
         ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT)) {
+        try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, entity.getEmail());
             ps.setString(2, entity.getPassword());
             ps.setString(3, entity.getUsername());
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                id = generatedKeys.getInt(1);
-            } else {
-                throw new DaoException("Unable to create entity");
-            }
+            generatedKeys.next();
+            id = generatedKeys.getInt(1);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -115,7 +117,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_PASSWORD)) {
             preparedStatement.setString(1, email);
             ResultSet result = preparedStatement.executeQuery();
-            if(result.next()) {
+            if (result.next()) {
                 pass = result.getString(1);
             }
         } catch (SQLException e) {

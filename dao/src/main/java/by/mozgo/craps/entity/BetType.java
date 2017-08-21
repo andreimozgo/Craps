@@ -3,7 +3,10 @@ package by.mozgo.craps.entity;
 import java.io.Serializable;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * The persistent class for the bet_type database table.
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class BetType extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;

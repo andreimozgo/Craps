@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
+/**
+ * ActionCommand implementation. Forwards application to admin page
+ *
+ * @author Mozgo Andrei
+ */
 public class AdminPageCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {

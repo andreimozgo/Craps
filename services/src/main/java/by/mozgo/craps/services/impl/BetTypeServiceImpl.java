@@ -8,7 +8,10 @@ import by.mozgo.craps.services.BetTypeService;
 import by.mozgo.craps.services.ServiceException;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Contains bet type service implementation
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class BetTypeServiceImpl extends ServiceImpl<BetType>  implements BetTypeService {
     private static BetTypeServiceImpl instance = null;

@@ -10,12 +10,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * BaseDao implementation for MYSQL DB
+ *
+ * @author Mozgo Andrei
+ *
  */
 public abstract class BaseDaoImpl<T extends AbstractEntity> implements BaseDao<T> {
     protected String tableName;
 
-    public int create(T entity) throws DaoException{
+    public int create(T t) throws DaoException {
         throw new DaoException("Method unavailable");
     }
 

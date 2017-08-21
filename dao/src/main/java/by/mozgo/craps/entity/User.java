@@ -4,17 +4,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * The persistent class for the user database table.
+ *
+ * @author Mozgo Andrei
+ */
 public class User extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    public enum UserRole {
-        ADMIN, USER, BLOCKED;
-
-        @Override
-        public String toString() {
-            return super.toString().toLowerCase();
-        }
-
-    }
     private String email;
     private String password;
     private String username;
@@ -90,6 +86,16 @@ public class User extends AbstractEntity implements Serializable {
                 ", login='" + email + '\'' +
                 ", userRole='" + userRole + '\'' +
                 '}';
+    }
+
+    public enum UserRole {
+        ADMIN, USER, BLOCKED;
+
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+
     }
 
 

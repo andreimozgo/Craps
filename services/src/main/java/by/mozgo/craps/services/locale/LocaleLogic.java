@@ -1,9 +1,9 @@
-package by.mozgo.craps.command;
+package by.mozgo.craps.services.locale;
 
 import java.util.Locale;
 
 /**
- * Contain supported locales and methods
+ * Contains supported locales and methods
  */
 public class LocaleLogic {
 
@@ -12,7 +12,7 @@ public class LocaleLogic {
      * default locale
      *
      * @param localeStr
-     * @return
+     * @return locale object
      */
     public static Locale getLocaleByString(String localeStr) {
         SupportedLocale localeEnum;

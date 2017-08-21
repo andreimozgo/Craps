@@ -1,9 +1,9 @@
 package by.mozgo.craps.command.player;
 
+import by.mozgo.craps.StringConstant;
 import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionResult;
 import by.mozgo.craps.command.ConfigurationManager;
-import by.mozgo.craps.command.CrapsConstant;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.UserService;
@@ -19,7 +19,11 @@ import javax.servlet.http.HttpSession;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ *  ActionCommand implementation.
+ *  Shows payment page and then makes a payment to user account from his card.
+ *
+ *  @author Mozgo Andrei
+ *
  */
 public class PayCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
@@ -29,7 +33,7 @@ public class PayCommand implements ActionCommand {
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(CrapsConstant.USER);
+        User user = (User) session.getAttribute(StringConstant.USER);
         String amount = request.getParameter(AMOUNT);
         String page = ConfigurationManager.getProperty("path.page.payment");
 

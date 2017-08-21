@@ -18,7 +18,10 @@ import java.util.List;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ *  ActionCommand implementation. Attempts to show users list.
+ *
+ *  @author Mozgo Andrei
+ *
  */
 public class ShowUsersCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();

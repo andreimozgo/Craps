@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * The persistent class for the bet database table.
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class Bet extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;

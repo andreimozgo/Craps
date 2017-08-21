@@ -11,7 +11,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * BetTypeDao implementation for MYSQL DB
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class BetTypeDaoImpl extends BaseDaoImpl<BetType> implements BetTypeDao {
     private static final String TABLE_NAME = "bet_type";

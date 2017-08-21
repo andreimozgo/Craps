@@ -11,8 +11,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
 
+/**
+ * ActionCommand implementation.
+ * Makes logout action
+ *
+ * @author Mozgo Andrei
+ */
 public class LogoutCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
+
     @Override
     public ActionResult execute(HttpServletRequest request) {
         request.getSession().invalidate();

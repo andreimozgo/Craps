@@ -1,15 +1,27 @@
 package by.mozgo.craps.command;
 
+import by.mozgo.craps.command.user.EmptyCommand;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * ActionFactory.
+ *
+ * @author Mozgo Andrei
+ */
 public class ActionFactory {
     private static final String COMMAND = "command";
     private static final Logger LOG = LogManager.getLogger();
 
+    /**
+     * Defines concrete command by request data
+     *
+     * @param request
+     * @return defined ActionCommand implementation
+     */
     public ActionCommand defineCommand(HttpServletRequest request) {
         ActionCommand current = new EmptyCommand();
         // get command from request

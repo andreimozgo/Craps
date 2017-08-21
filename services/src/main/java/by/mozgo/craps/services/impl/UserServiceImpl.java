@@ -6,9 +6,6 @@ import by.mozgo.craps.dao.impl.UserDaoImpl;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.UserService;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -16,11 +13,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+/**
+ * Contains user service implementation
+ *
+ * @author Mozgo Andrei
+ */
 public class UserServiceImpl extends ServiceImpl<User> implements UserService {
-    private static final Logger LOG = LogManager.getLogger();
+    private static final String DIGEST_ALGORITHM = "MD5";
     private static UserServiceImpl instance = null;
     private UserDao userDao = UserDaoImpl.getInstance();
-
 
     private UserServiceImpl() {
         baseDao = userDao;
@@ -35,7 +36,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
 
     @Override
     public int create(User user) throws ServiceException {
-        Integer id = null;
+        Integer id;
         user.setPassword(hash(user.getPassword()));
         try {
             id = userDao.create(user);
@@ -46,7 +47,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     }
 
     public User findUserByEmail(String email) throws ServiceException {
-        User user = null;
+        User user;
         try {
             user = userDao.findUserByEmail(email);
         } catch (DaoException e) {
@@ -70,7 +71,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
             try {
                 userDao.update(user);
             } catch (DaoException e) {
-                LOG.log(Level.ERROR, "Exception in DAO {}", e);
+                throw new ServiceException("Exception in DAO. " + e.getMessage(), e);
             }
         }
     }
@@ -84,7 +85,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     }
 
     public boolean checkUser(String email, String password) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
             result = (hash(password)).equals(userDao.findPassword(email));
         } catch (DaoException e) {
@@ -94,7 +95,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     }
 
     public List<User> findAll(int recordsOnPage, int currentPage) throws ServiceException {
-        List<User> users = null;
+        List<User> users;
         try {
             users = userDao.findAll(recordsOnPage, currentPage);
         } catch (DaoException e) {
@@ -112,7 +113,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     }
 
     public int findPagesNumber(int recordsOnPage) throws ServiceException {
-        int numberOfPages = 1;
+        int numberOfPages;
         try {
             int numberOfRecords = userDao.findNumber();
             numberOfPages = Math.round(numberOfRecords / recordsOnPage);
@@ -130,18 +131,14 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         return user;
     }
 
-    private String hash(String input) {
-        String md5Hashed = null;
-        if (null == input) {
-            return null;
-        }
+    private String hash(String input) throws ServiceException {
+        String md5Hashed;
         try {
-            MessageDigest digest = MessageDigest.getInstance("MD5");
+            MessageDigest digest = MessageDigest.getInstance(DIGEST_ALGORITHM);
             digest.update(input.getBytes(), 0, input.length());
             md5Hashed = new BigInteger(1, digest.digest()).toString(16);
-
         } catch (NoSuchAlgorithmException e) {
-            LOG.log(Level.ERROR, "Error in hash UserService: {}", e);
+            throw new ServiceException("Exception during hash password.\n " + e.getMessage(), e);
         }
         return md5Hashed;
     }

@@ -6,14 +6,14 @@ import by.mozgo.craps.dao.impl.GameDaoImpl;
 import by.mozgo.craps.entity.Game;
 import by.mozgo.craps.services.GameService;
 import by.mozgo.craps.services.ServiceException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Contains game service implementation
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class GameServiceImpl extends ServiceImpl<Game> implements GameService {
-    private static final Logger LOG = LogManager.getLogger();
     private static GameServiceImpl instance = null;
     private GameDao gameDao = GameDaoImpl.getInstance();
 

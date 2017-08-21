@@ -1,7 +1,7 @@
 package by.mozgo.craps.customtag;
 
+import by.mozgo.craps.command.AvatarManager;
 import by.mozgo.craps.entity.User;
-import by.mozgo.craps.manager.AvatarManager;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -12,21 +12,13 @@ import java.io.IOException;
 /**
  * Custom tag to define user avatar path and output it as &lt;img&gt; tag
  *
- * @author qqq175
+ * @author Mozgo Andrei
  */
 public class UserAvatarTag extends TagSupport {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     private User user;
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see javax.servlet.jsp.tagext.TagSupport#doEndTag()
-     */
     @Override
     public int doEndTag() throws JspException {
         try {
@@ -40,11 +32,6 @@ public class UserAvatarTag extends TagSupport {
         return EVAL_PAGE;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see javax.servlet.jsp.tagext.TagSupport#doStartTag()
-     */
     @Override
     public int doStartTag() throws JspException {
         AvatarManager avatarManager = new AvatarManager(pageContext.getServletContext());

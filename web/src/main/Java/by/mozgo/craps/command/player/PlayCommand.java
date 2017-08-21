@@ -1,6 +1,10 @@
 package by.mozgo.craps.command.player;
 
-import by.mozgo.craps.command.*;
+import by.mozgo.craps.StringConstant;
+import by.mozgo.craps.command.ActionCommand;
+import by.mozgo.craps.command.ActionResult;
+import by.mozgo.craps.command.ConfigurationManager;
+import by.mozgo.craps.command.MessageManager;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.game.GameLogic;
@@ -21,7 +25,11 @@ import java.util.Locale;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ *  ActionCommand implementation.
+ *  Shows play page and then manages all action happens there.
+ *
+ *  @author Mozgo Andrei
+ *
  */
 public class PlayCommand implements ActionCommand {
     private static final Logger LOG = LogManager.getLogger();
@@ -40,7 +48,7 @@ public class PlayCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(CrapsConstant.USER);
+        User user = (User) session.getAttribute(StringConstant.USER);
         String page = ConfigurationManager.getProperty("path.page.play");
         Locale locale;
         boolean isEnoughMoney = true;
@@ -92,11 +100,11 @@ public class PlayCommand implements ActionCommand {
                         page = ConfigurationManager.getProperty("path.page.secondroll");
                     }
                 } else {
-                    locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
+                    locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
                     request.setAttribute(MESSAGE, MessageManager.getProperty("play.make", locale));
                 }
                 if (!isEnoughMoney) {
-                    locale = (Locale) session.getAttribute(CrapsConstant.ATTRIBUTE_LOCALE);
+                    locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
                     request.setAttribute(MESSAGE, MessageManager.getProperty("play.badbalance", locale));
                 }
             } catch (ServiceException e) {
@@ -107,6 +115,13 @@ public class PlayCommand implements ActionCommand {
         return new ActionResult(FORWARD, page);
     }
 
+    /**
+     * Checks if user has enough money to make a bet
+     *
+     * @param bet  bet amount attribute
+     * @param user who made the bet
+     * @return true if user has enough money, false if doesn't
+     */
     private boolean checkBalance(String bet, User user) {
         return user.getBalance().compareTo(new BigDecimal(bet)) > -1;
     }

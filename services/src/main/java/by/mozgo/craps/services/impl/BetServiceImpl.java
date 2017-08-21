@@ -8,17 +8,17 @@ import by.mozgo.craps.services.BetService;
 import by.mozgo.craps.services.BetTypeService;
 import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.vo.BetVO;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Contains bet service implementation
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
-    private static final Logger LOG = LogManager.getLogger();
     private static BetServiceImpl instance = null;
     private BetDao betDao = BetDaoImpl.getInstance();
     private BetTypeService betTypeService = BetTypeServiceImpl.getInstance();

@@ -19,7 +19,10 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Contains game logic methods.
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class GameLogic {
     private static final int passBetId = 1;
@@ -42,6 +45,13 @@ public class GameLogic {
         clearOldBets();
     }
 
+    /**
+     * Creates new bet, adds bet to the game, charges bet amount from user balance
+     *
+     * @param betTypeId
+     * @param amount
+     * @throws ServiceException
+     */
     public void addBet(int betTypeId, String amount) throws ServiceException {
         Bet bet = new Bet(betTypeId, new BigDecimal(amount));
         bet.setGameId(findGameId());
@@ -72,6 +82,13 @@ public class GameLogic {
         }
     }
 
+    /**
+     * Private access method to get Id of current game. Creates new game
+     * if current doesn" exist
+     *
+     * @return current game Id
+     * @throws ServiceException
+     */
     private int findGameId() throws ServiceException {
         int gameId;
         if (user.getGame() != null) {
@@ -86,17 +103,26 @@ public class GameLogic {
         return gameId;
     }
 
+    /**
+     * Clears played bets from game. Sets game null if game doesn't contain
+     * any bet.
+     */
     private void clearOldBets() {
         if (user.getGame() != null) {
             List<Bet> bets = user.getGame().getBets();
             bets.removeIf(bet -> bet.getProfit() != null);
-
             if (user.getGame().getBets().isEmpty()) {
                 user.setGame(null);
             }
         }
     }
 
+    /**
+     * Rolls dice, calculates bets results, updates data at database
+     *
+     * @return RollResult with dice numbers
+     * @throws ServiceException
+     */
     public RollResult roll() throws ServiceException {
         if (user.getGame() != null) {
             isGame = true;
@@ -143,12 +169,20 @@ public class GameLogic {
         return new RollResult(dice1, dice2);
     }
 
+    /**
+     * Private access method to generate random dice number
+     *
+     * @return dice number
+     */
     private int diceGenerator() {
         Random generator = new Random();
         int dice = generator.nextInt(6) + 1;
         return dice;
     }
 
+    /**
+     * Private access method to check bet
+     */
     private void checkBet(Bet bet) {
         switch (bet.getBetTypeId()) {
             case passBetId:
@@ -182,6 +216,11 @@ public class GameLogic {
         }
     }
 
+    /**
+     * Checks Pass Line bet if it is the first roll
+     *
+     * @param bet
+     */
     private void checkPassLineFirst(Bet bet) {
         if (sumDice == 7 || sumDice == 11) {
             //player win
@@ -198,6 +237,11 @@ public class GameLogic {
         }
     }
 
+    /**
+     * Checks Pass Line bet if it isn't the first roll
+     *
+     * @param bet
+     */
     private void checkPassLineOneMore(Bet bet) {
         if (sumDice == bet.getPoint()) {
             //player win
@@ -210,6 +254,11 @@ public class GameLogic {
         }
     }
 
+    /**
+     * Checks Don't Pass Line bet if it is the first roll
+     *
+     * @param bet
+     */
     private void checkDoNotPassLineFirst(Bet bet) {
         if (sumDice == 2 || sumDice == 3) {
             //player win
@@ -227,6 +276,11 @@ public class GameLogic {
         }
     }
 
+    /**
+     * Checks Don't Pass Line bet if it isn't the first roll
+     *
+     * @param bet
+     */
     private void checkDoNotPassLineOneMore(Bet bet) {
         if (sumDice == 7) {
             //player win
@@ -239,6 +293,11 @@ public class GameLogic {
         }
     }
 
+    /**
+     * Checks Come bet if it is the first roll
+     *
+     * @param bet
+     */
     private void checkComeFirst(Bet bet) {
         if (sumDice == 7 || sumDice == 11) {
             //player win
@@ -254,6 +313,11 @@ public class GameLogic {
         }
     }
 
+    /**
+     * Checks Come bet if it isn't the first roll
+     *
+     * @param bet
+     */
     private void checkComeOneMore(Bet bet) {
         if (sumDice == bet.getPoint()) {
             //player win
@@ -265,6 +329,11 @@ public class GameLogic {
         }
     }
 
+    /**
+     * Checks Don't Come bet if it is the first roll
+     *
+     * @param bet
+     */
     private void checkDoNotComeFirst(Bet bet) {
         if (sumDice == 2 || sumDice == 3) {
             //player win
@@ -281,6 +350,11 @@ public class GameLogic {
         }
     }
 
+    /**
+     * Checks Don't Come bet if it isn't the first roll
+     *
+     * @param bet
+     */
     private void checkDoNotComeOneMore(Bet bet) {
         if (sumDice == 7) {
             //player win

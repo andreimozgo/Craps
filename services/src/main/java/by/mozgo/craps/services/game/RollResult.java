@@ -1,7 +1,10 @@
 package by.mozgo.craps.services.game;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Entity that contains dice values.
+ *
+ * @author Mozgo Andrei
+ *
  */
 public class RollResult {
     private int dice1;

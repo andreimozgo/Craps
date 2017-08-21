@@ -8,6 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
+/**
+ * ActionCommand implementation.
+ * Forwards to registration page.
+ *
+ * @author Mozgo Andrei
+ */
 public class RegistrationCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {

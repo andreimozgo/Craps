@@ -12,7 +12,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * BetDao implementation for MYSQL DB
+ *
+ * @author Mozgo Andrei
  */
 public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
     private static final String TABLE_NAME = "bet";
@@ -43,11 +45,8 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
             ps.setInt(3, entity.getBetTypeId());
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                id = generatedKeys.getInt(1);
-            } else {
-                throw new DaoException("Unable to create entity");
-            }
+            generatedKeys.next();
+            id = generatedKeys.getInt(1);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -84,6 +83,11 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
         return number;
     }
 
+    /**
+     * @param userId
+     * @return
+     * @throws DaoException
+     */
     @Override
     public int findWonBetsNumber(int userId) throws DaoException {
         ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();

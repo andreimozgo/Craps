@@ -10,6 +10,11 @@ import by.mozgo.craps.command.user.LoginCommand;
 import by.mozgo.craps.command.user.LogoutCommand;
 import by.mozgo.craps.command.user.RegistrationCommand;
 
+/**
+ * Contains enum of available commands.
+ *
+ * @author Mozgo Andrei
+ */
 public enum CommandEnum {
     LOGIN {
         {

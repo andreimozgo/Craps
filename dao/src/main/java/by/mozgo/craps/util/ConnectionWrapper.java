@@ -6,7 +6,9 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * Wraps database connection for better security. Works with ConnectionPool methods.
+ *
+ * @author Mozgo Andrei
  */
 public class ConnectionWrapper implements AutoCloseable {
     private static Logger log = LogManager.getLogger();
@@ -23,6 +25,9 @@ public class ConnectionWrapper implements AutoCloseable {
         return isOpen;
     }
 
+    /**
+     * @see by.mozgo.craps.util.ConnectionPool#releaseConnection(Connection)
+     */
     @Override
     public void close() {
         if (isOpen) {

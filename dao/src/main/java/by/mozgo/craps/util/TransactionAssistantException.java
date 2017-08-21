@@ -1,7 +1,9 @@
 package by.mozgo.craps.util;
 
 /**
- * Created by Andrei Mozgo. 2017.
+ * TransactionAssistant exception
+ * @author Mozgo Andrei
+ *
  */
 public class TransactionAssistantException extends Exception {
 
