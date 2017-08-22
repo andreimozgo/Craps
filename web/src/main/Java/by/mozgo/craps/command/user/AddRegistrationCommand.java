@@ -75,11 +75,18 @@ public class AddRegistrationCommand implements ActionCommand {
                 } catch (IOException e) {
                     LOG.log(Level.ERROR, "Unable to save file: {}", e);
                 } catch (ServletException e) {
-                    LOG.log(Level.ERROR, "Unable to save file: {}", e);
+                    // no file
                 } catch (IllegalStateException e) {
                     LOG.log(Level.WARN, "File is too big: {}", e, e);
                     request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.bigfile", locale));
                     validation = false;
+                }
+                if (validation && part.getSize() > 0) {
+                    if (!AvatarManager.checkFileExtension(part)) {
+                        LOG.log(Level.WARN, "Incorrect file extension.");
+                        request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.extension", locale));
+                        validation = false;
+                    }
                 }
             }
 
@@ -93,11 +100,7 @@ public class AddRegistrationCommand implements ActionCommand {
                 user = userService.findUserByEmail(user.getEmail());
                 if (part.getSize() > 0) {
                     AvatarManager uploader = new AvatarManager(request.getServletContext());
-                    try {
-                        uploader.uploadAvatar(part, user.getId());
-                    } catch (AvatarManagerException e) {
-                        LOG.log(Level.WARN, "Incorrect file extension.\n" + e.getMessage());
-                    }
+                    uploader.uploadAvatar(part, user.getId());
                 }
                 HttpSession session = request.getSession();
                 session.setAttribute(StringConstant.USER, user);

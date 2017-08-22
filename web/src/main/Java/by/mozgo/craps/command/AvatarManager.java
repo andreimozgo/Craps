@@ -39,50 +39,12 @@ public class AvatarManager {
     }
 
     /**
-     * Uploads and saves user avatar
-     *
-     * @param part
-     * @param userId
-     */
-    public void uploadAvatar(Part part, Integer userId) throws AvatarManagerException {
-        String fileExtension = findFileExtension(part);
-
-        if (!fileExtension.isEmpty()) {
-            String photoFilePath = servletContext.getRealPath("") + PHOTO_FOLDER + File.separator + userId;
-            deleteAvatar(photoFilePath);
-            try {
-                part.write(photoFilePath + fileExtension);
-            } catch (IOException e) {
-                LOG.log(Level.ERROR, "Error while saving avatar: {}", e);
-            }
-        } else {
-            throw new AvatarManagerException("Incorrect avatar extension.");
-        }
-    }
-
-    /**
-     * Deletes user avatar
-     *
-     * @param photoFilePath
-     */
-    private void deleteAvatar(String photoFilePath) {
-        String[] extensionsArray = PHOTO_EXTENSION.split(EXTENSION_DELIMITER);
-        List<String> extensions = new ArrayList<>(Arrays.asList(extensionsArray));
-        for (String extension : extensions) {
-            File photo = new File(photoFilePath + extension);
-            if (photo.exists()) {
-                photo.delete();
-            }
-        }
-    }
-
-    /**
      * Finds extension of uploaded avatar file
      *
      * @param part
      * @return
      */
-    public String findFileExtension(Part part) {
+    private static String findFileExtension(Part part) {
         String partHeader = part.getHeader(HEADER);
         String fileName = "";
 
@@ -99,6 +61,51 @@ public class AvatarManager {
             return match.group();
         } else {
             return "";
+        }
+    }
+
+    /**
+     * Validates avatar file extension with preset pattern
+     *
+     * @param part
+     * @return {@code true} if extension is valid, otherwise
+     * {@code false}
+     */
+    public static boolean checkFileExtension(Part part) {
+        String extension = findFileExtension(part);
+        return !extension.isEmpty();
+    }
+
+    /**
+     * Saves user avatar. If finds old avatar - deletes it
+     *
+     * @param part
+     * @param userId
+     */
+    public void uploadAvatar(Part part, Integer userId) {
+        String fileExtension = findFileExtension(part);
+        String photoFilePath = servletContext.getRealPath("") + PHOTO_FOLDER + File.separator + userId;
+        deleteAvatar(photoFilePath);
+        try {
+            part.write(photoFilePath + fileExtension);
+        } catch (IOException e) {
+            LOG.log(Level.ERROR, "Error while saving avatar: {}", e);
+        }
+    }
+
+    /**
+     * Deletes user avatar
+     *
+     * @param photoFilePath
+     */
+    private void deleteAvatar(String photoFilePath) {
+        String[] extensionsArray = PHOTO_EXTENSION.split(EXTENSION_DELIMITER);
+        List<String> extensions = new ArrayList<>(Arrays.asList(extensionsArray));
+        for (String extension : extensions) {
+            File photo = new File(photoFilePath + extension);
+            if (photo.exists()) {
+                photo.delete();
+            }
         }
     }
 
