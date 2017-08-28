@@ -13,12 +13,14 @@ import java.sql.*;
 public class ConnectionWrapper implements AutoCloseable {
     private static Logger log = LogManager.getLogger();
     private Connection connection;
+    private boolean autoCommit;
 
     private boolean isOpen;
 
     ConnectionWrapper(Connection connection) {
         this.connection = connection;
         this.isOpen = true;
+        autoCommit = true;
     }
 
     public boolean isOpen() {
@@ -31,9 +33,11 @@ public class ConnectionWrapper implements AutoCloseable {
     @Override
     public void close() {
         if (isOpen) {
-            ConnectionPool.getInstance().releaseConnection(this.connection);
-            this.isOpen = false;
-            connection = null;
+            if (autoCommit) {
+                ConnectionPool.getInstance().releaseConnection(this.connection);
+                this.isOpen = false;
+                connection = null;
+            }
         }
     }
 
@@ -194,6 +198,7 @@ public class ConnectionWrapper implements AutoCloseable {
      */
     public void setAutoCommit(boolean autoCommit) throws SQLException {
         this.assertOpen();
+        this.autoCommit = autoCommit;
         connection.setAutoCommit(autoCommit);
     }
 

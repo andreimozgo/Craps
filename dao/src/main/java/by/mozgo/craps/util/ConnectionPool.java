@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  */
 public class ConnectionPool {
-
     private static final Logger LOG = LogManager.getLogger();
     private static final String UNEXPECTED_INTERRUPT = "Unexpected interrupt";
     private static final int VALID_TIMEOUT = 3; // seconds

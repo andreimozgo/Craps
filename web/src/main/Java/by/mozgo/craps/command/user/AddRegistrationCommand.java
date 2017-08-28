@@ -1,6 +1,5 @@
 package by.mozgo.craps.command.user;
 
-import by.mozgo.craps.StringConstant;
 import by.mozgo.craps.command.*;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.ServiceException;
@@ -18,6 +17,7 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.util.Locale;
 
+import static by.mozgo.craps.StringConstant.*;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
 
@@ -38,11 +38,11 @@ public class AddRegistrationCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
-        Locale locale = (Locale) request.getSession().getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+        Locale locale = (Locale) request.getSession().getAttribute(ATTRIBUTE_LOCALE);
         boolean validation = true;
         Part part = null;
 
-        String email = request.getParameter(StringConstant.EMAIL);
+        String email = request.getParameter(EMAIL);
         String pass1 = request.getParameter(PASSWORD);
         String pass2 = request.getParameter(PASSWORD_REPEAT);
         String name = request.getParameter(USERNAME);
@@ -53,21 +53,27 @@ public class AddRegistrationCommand implements ActionCommand {
         try {
             if (!Validator.validateEmail(email)) {
                 validation = false;
-                request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.bademail", locale));
+                request.setAttribute("registrationResultMessage",
+                        MessageManager.getProperty("registration.bademail", locale));
             } else if (!Validator.validatePassword(pass1)) {
                 validation = false;
-                request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.badpassword", locale));
+                request.setAttribute("registrationResultMessage",
+                        MessageManager.getProperty("registration.badpassword", locale));
             } else if (!pass1.equals(pass2)) {
                 validation = false;
-                request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.repeatpwd", locale));
+                request.setAttribute("registrationResultMessage",
+                        MessageManager.getProperty("registration.error.repeatpwd", locale));
             } else if (!Validator.validateName(name)) {
                 validation = false;
-                request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.badname", locale));
+                request.setAttribute("registrationResultMessage",
+                        MessageManager.getProperty("registration.error.badname", locale));
             } else if (!Validator.validateAge(age)) {
                 validation = false;
-                request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.age", locale));
+                request.setAttribute("registrationResultMessage",
+                        MessageManager.getProperty("registration.error.age", locale));
             } else if (userService.findUserByEmail(email) != null) {
-                request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.failemail", locale));
+                request.setAttribute("registrationResultMessage",
+                        MessageManager.getProperty("registration.failemail", locale));
                 validation = false;
             } else {
                 try {
@@ -78,13 +84,15 @@ public class AddRegistrationCommand implements ActionCommand {
                     // no file
                 } catch (IllegalStateException e) {
                     LOG.log(Level.WARN, "File is too big: {}", e, e);
-                    request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.bigfile", locale));
+                    request.setAttribute("registrationResultMessage",
+                            MessageManager.getProperty("registration.error.bigfile", locale));
                     validation = false;
                 }
                 if (validation && part.getSize() > 0) {
                     if (!AvatarManager.checkFileExtension(part)) {
                         LOG.log(Level.WARN, "Incorrect file extension.");
-                        request.setAttribute("registrationResultMessage", MessageManager.getProperty("registration.error.extension", locale));
+                        request.setAttribute("registrationResultMessage",
+                                MessageManager.getProperty("registration.error.extension", locale));
                         validation = false;
                     }
                 }
@@ -103,14 +111,12 @@ public class AddRegistrationCommand implements ActionCommand {
                     uploader.uploadAvatar(part, user.getId());
                 }
                 HttpSession session = request.getSession();
-                session.setAttribute(StringConstant.USER, user);
+                session.setAttribute(USER, user);
                 page = ConfigurationManager.getProperty("path.page.registered");
                 result = new ActionResult(REDIRECT, page);
             } else {
-                request.setAttribute(StringConstant.EMAIL, email);
+                request.setAttribute(EMAIL, email);
                 request.setAttribute(USERNAME, name);
-                request.setAttribute(PASSWORD, pass1);
-                request.setAttribute(PASSWORD_REPEAT, pass2);
                 request.setAttribute(AGE, age);
                 page = ConfigurationManager.getProperty("path.page.registration");
                 result = new ActionResult(FORWARD, page);

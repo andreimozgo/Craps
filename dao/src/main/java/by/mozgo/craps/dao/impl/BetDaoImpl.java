@@ -38,8 +38,8 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
     @Override
     public int create(Bet entity) throws DaoException {
         Integer id;
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, entity.getGameId());
             ps.setBigDecimal(2, entity.getAmount());
             ps.setInt(3, entity.getBetTypeId());
@@ -55,8 +55,8 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
 
     @Override
     public void update(Bet entity) throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE)) {
             ps.setInt(1, entity.getGameId());
             ps.setBigDecimal(2, entity.getAmount());
             ps.setBigDecimal(3, entity.getProfit());
@@ -70,9 +70,9 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
 
     @Override
     public int findBetsNumber(int userId) throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         int number;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_NUMBER_BY_USER)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_NUMBER_BY_USER)) {
             preparedStatement.setInt(1, userId);
             ResultSet result = preparedStatement.executeQuery();
             result.next();
@@ -90,9 +90,9 @@ public class BetDaoImpl extends BaseDaoImpl<Bet> implements BetDao {
      */
     @Override
     public int findWonBetsNumber(int userId) throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         int number;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NUMBER_WON_BY_USER)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NUMBER_WON_BY_USER)) {
             preparedStatement.setInt(1, userId);
             ResultSet result = preparedStatement.executeQuery();
             result.next();

@@ -1,6 +1,5 @@
 package by.mozgo.craps.command.player;
 
-import by.mozgo.craps.StringConstant;
 import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionResult;
 import by.mozgo.craps.command.ConfigurationManager;
@@ -16,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import static by.mozgo.craps.StringConstant.USER;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 /**
@@ -33,7 +33,7 @@ public class PayCommand implements ActionCommand {
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(StringConstant.USER);
+        User user = (User) session.getAttribute(USER);
         String amount = request.getParameter(AMOUNT);
         String page = ConfigurationManager.getProperty("path.page.payment");
 

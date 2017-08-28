@@ -24,11 +24,11 @@
                 <fmt:message key="registration.success"/>
             </div>
             <div>
-                <fmt:message key="redirect.main"/>
+                <fmt:message key="redirect.auto"/>
             </div>
         </div>
         <br>
-        <a href="/"><fmt:message key="login.login"/></a>
+        <a href="/"><fmt:message key="menu.main"/></a>
         <br>
         <br>
     </div>

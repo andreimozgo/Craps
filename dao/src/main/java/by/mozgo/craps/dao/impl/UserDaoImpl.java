@@ -28,7 +28,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     private static final String QUERY_GET_USERS_NUMBER = "SELECT COUNT(*) FROM user";
     private static final String QUERY_FIND_PASSWORD = "SELECT password FROM user WHERE email = ?";
     private static final String QUERY_FIND_USER = "SELECT user.id, email, username, create_time, money, role FROM user INNER JOIN role ON user.role_id=role.id WHERE email = ?";
-
     private static UserDaoImpl instance = null;
 
     public UserDaoImpl() {
@@ -45,8 +44,8 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     @Override
     public int create(User entity) throws DaoException {
         Integer id;
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, entity.getEmail());
             ps.setString(2, entity.getPassword());
             ps.setString(3, entity.getUsername());
@@ -62,9 +61,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
     public User findUserByEmail(String email) throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         User user = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_USER)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_USER)) {
             preparedStatement.setString(1, email);
             ResultSet result = preparedStatement.executeQuery();
             if (result.isBeforeFirst()) {
@@ -84,8 +83,8 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     public void update(User entity) throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE)) {
             ps.setString(1, entity.getEmail());
             ps.setString(2, entity.getUsername());
             ps.setBigDecimal(3, entity.getBalance());
@@ -97,8 +96,8 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     public void updateWithPass(User entity) throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE_WITH_PASS)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE_WITH_PASS)) {
             ps.setString(1, entity.getEmail());
             ps.setString(2, entity.getPassword());
             ps.setString(3, entity.getUsername());
@@ -112,9 +111,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
     public String findPassword(String email) throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         String pass = null;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_PASSWORD)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_FIND_PASSWORD)) {
             preparedStatement.setString(1, email);
             ResultSet result = preparedStatement.executeQuery();
             if (result.next()) {
@@ -128,9 +127,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
     @Override
     public List findAll(int recordsOnPage, int currentPage) throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         List<User> users = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_ALL)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_ALL)) {
             preparedStatement.setInt(1, (currentPage - 1) * recordsOnPage);
             preparedStatement.setInt(2, recordsOnPage);
             ResultSet result = preparedStatement.executeQuery();
@@ -151,8 +150,8 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     public void updateRole(Integer userId, int role) throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE_ROLE)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE_ROLE)) {
             ps.setInt(1, role);
             ps.setInt(2, userId);
             ps.executeUpdate();
@@ -162,9 +161,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     public int findNumber() throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         int amount;
-        try (Statement statement = connection.createStatement()) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(QUERY_GET_USERS_NUMBER);
             result.next();
             amount = result.getInt(1);

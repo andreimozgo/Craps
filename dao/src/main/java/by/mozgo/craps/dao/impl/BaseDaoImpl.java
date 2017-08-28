@@ -29,8 +29,8 @@ public abstract class BaseDaoImpl<T extends AbstractEntity> implements BaseDao<T
     @Override
     public void delete(Integer id) throws DaoException {
         String query = "DELETE FROM " + tableName + " WHERE id = ?";
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {

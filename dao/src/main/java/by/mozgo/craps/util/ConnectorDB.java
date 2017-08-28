@@ -15,9 +15,8 @@ import java.util.Properties;
  * Reads database properties file and establish connections to database.
  *
  * @author Mozgo Andrei
- *
  */
-public class ConnectorDB {
+class ConnectorDB {
     private static final Logger LOG = LogManager.getLogger();
     private static final String DATABASE_PROPERTIES = "database.properties";
     private static final String MIN_POOL_SIZE_DEFAULT = "5";
@@ -28,9 +27,8 @@ public class ConnectorDB {
     private final int MIN_POOL_SIZE;
     private final int MAX_POOL_SIZE;
 
-    ConnectorDB(){
+    ConnectorDB() {
         Properties props = new Properties();
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         try (InputStream in = getClass().getClassLoader().getResourceAsStream(DATABASE_PROPERTIES)) {
             if (in != null) {
                 props.load(in);
@@ -57,11 +55,11 @@ public class ConnectorDB {
         return DriverManager.getConnection(DB_URL, USER, PASSWORD);
     }
 
-    public int getMinPoolSize() {
+    int getMinPoolSize() {
         return MIN_POOL_SIZE;
     }
 
-    public int getMaxPoolSize() {
+    int getMaxPoolSize() {
         return MAX_POOL_SIZE;
     }
 }

@@ -37,8 +37,8 @@ public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
     @Override
     public int create(Game entity) throws DaoException {
         int id;
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, entity.getUserId());
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();
@@ -52,9 +52,9 @@ public class GameDaoImpl extends BaseDaoImpl<Game> implements GameDao {
 
     @Override
     public int findGamesNumber(int userId) throws DaoException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         int number;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NUMBER_BY_USER)) {
+        try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_GET_NUMBER_BY_USER)) {
             preparedStatement.setInt(1, userId);
             ResultSet result = preparedStatement.executeQuery();
             result.next();

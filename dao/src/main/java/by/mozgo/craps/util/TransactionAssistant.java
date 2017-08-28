@@ -1,78 +1,73 @@
 package by.mozgo.craps.util;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.SQLException;
 
 /**
  * Manages transactions.
  *
  * @author Mozgo Andrei
- *
  */
 public class TransactionAssistant {
-    private static final Logger LOG = LogManager.getLogger();
+    private ConnectionWrapper connection;
 
     /**
-     * Sets AutoCommit of the current connection to the false state
+     * Sets AutoCommit of the current connection to the false state.
+     * Makes current connection available for all daos.
      *
      * @throws TransactionAssistantException if a database access error occurs
+     * @see by.mozgo.craps.util.ConnectionWrapper#setAutoCommit(boolean)
      */
-    public static void startTransaction() throws TransactionAssistantException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+    public void startTransaction() throws TransactionAssistantException {
+        connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
-            throw new TransactionAssistantException("Transaction failed. " + e.getMessage(), e);
+            throw new TransactionAssistantException("Unable to start transaction. " + e.getMessage(), e);
         }
     }
 
     /**
-     * Attempts to commit transaction and to set AutoCommit state to true.
-     * Tries to rollback transaction if any database access error occurs.
-     *
      * @throws TransactionAssistantException if a database access error occurs
+     * @see by.mozgo.craps.util.ConnectionWrapper#commit()
      */
-    public static void endTransaction() throws TransactionAssistantException {
-        ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
+    public void commitTransaction() throws TransactionAssistantException {
         try {
             connection.commit();
-        } catch (SQLException e1) {
-            LOG.log(Level.ERROR, "Transaction failed. {}", e1);
-            try {
-                connection.rollback();
-                throw new TransactionAssistantException("Transaction failed. Transaction rolled back. " + e1.getMessage(), e1);
-            } catch (SQLException e2) {
-                throw new TransactionAssistantException("Transaction failed. Transaction rollback failed. " + e2.getMessage(), e2);
-            }
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                throw new TransactionAssistantException("Unable to change autocommit state. " + e.getMessage(), e);
-            }
+        } catch (SQLException e) {
+            throw new TransactionAssistantException("Unable to commit transaction. " + e.getMessage(), e);
         }
     }
 
     /**
-     * Attempts to rollback current transaction and to set AutoCommit state to true.
+     * Attempts to set AutoCommit of the current connection to the false state.
+     * Closes current connection.
      *
      * @throws TransactionAssistantException if a database access error occurs
+     * @see by.mozgo.craps.util.ConnectionWrapper#setAutoCommit(boolean)
+     * @see ConnectionWrapper#close()
      */
-    public static void rollBackTransaction() throws TransactionAssistantException {
+    public void endTransaction() throws TransactionAssistantException {
+        try {
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            throw new TransactionAssistantException("Unable to change autocommit state. " + e.getMessage(), e);
+        } finally {
+            connection.close();
+        }
+    }
+
+    /**
+     * Attempts to rollback current transaction
+     *
+     * @throws TransactionAssistantException if a database access error occurs
+     * @see ConnectionWrapper#rollback()
+     */
+    public void rollBackTransaction() throws TransactionAssistantException {
         ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
         try {
             connection.rollback();
         } catch (SQLException e) {
             throw new TransactionAssistantException("Transaction rollback failed. " + e.getMessage(), e);
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                throw new TransactionAssistantException("Unable to change autocommit state. " + e.getMessage(), e);
-            }
         }
     }
 }

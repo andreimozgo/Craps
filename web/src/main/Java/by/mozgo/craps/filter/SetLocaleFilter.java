@@ -1,7 +1,6 @@
 package by.mozgo.craps.filter;
 
 
-import by.mozgo.craps.StringConstant;
 import by.mozgo.craps.services.locale.LocaleLogic;
 
 import javax.servlet.*;
@@ -12,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Locale;
+
+import static by.mozgo.craps.StringConstant.ATTRIBUTE_LOCALE;
 
 /**
  * Servlet Filter implementation class SetLocaleFilter sets
@@ -38,16 +39,16 @@ public class SetLocaleFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpSession session = ((HttpServletRequest) request).getSession();
         //gets locale from request
-        String localeStr = request.getParameter(StringConstant.ATTRIBUTE_LOCALE);
+        String localeStr = request.getParameter(ATTRIBUTE_LOCALE);
         Locale locale;
 
         if (localeStr != null) {
             locale = LocaleLogic.getLocaleByString(localeStr);
-            session.setAttribute(StringConstant.ATTRIBUTE_LOCALE, locale);
+            session.setAttribute(ATTRIBUTE_LOCALE, locale);
             ((HttpServletResponse) response).addCookie(new Cookie(COOKIE_LOCALE, localeStr));
         } else {
             //if no locale at request checks locale from session
-            locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+            locale = (Locale) session.getAttribute(ATTRIBUTE_LOCALE);
             if (locale == null) {
 
                 //if no locale at request and session - searches locale cookies
@@ -58,7 +59,7 @@ public class SetLocaleFilter implements Filter {
                         if (cookie.getName().equals(COOKIE_LOCALE)) {
                             localeStr = cookie.getValue();
                             locale = LocaleLogic.getLocaleByString(localeStr);
-                            session.setAttribute(StringConstant.ATTRIBUTE_LOCALE, locale);
+                            session.setAttribute(ATTRIBUTE_LOCALE, locale);
                             break;
                         }
                     }
@@ -70,7 +71,7 @@ public class SetLocaleFilter implements Filter {
                     if (browserLocale != null) {
                         localeStr = browserLocale;
                         locale = LocaleLogic.getLocaleByString(localeStr);
-                        session.setAttribute(StringConstant.ATTRIBUTE_LOCALE, locale);
+                        session.setAttribute(ATTRIBUTE_LOCALE, locale);
                         ((HttpServletResponse) response).addCookie(new Cookie(COOKIE_LOCALE, localeStr));
                     }
                 }

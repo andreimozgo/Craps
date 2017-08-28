@@ -1,6 +1,5 @@
 package by.mozgo.craps.command.player;
 
-import by.mozgo.craps.StringConstant;
 import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionResult;
 import by.mozgo.craps.command.ConfigurationManager;
@@ -22,6 +21,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 
+import static by.mozgo.craps.StringConstant.ATTRIBUTE_LOCALE;
+import static by.mozgo.craps.StringConstant.USER;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 /**
@@ -48,7 +49,7 @@ public class PlayCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(StringConstant.USER);
+        User user = (User) session.getAttribute(USER);
         String page = ConfigurationManager.getProperty("path.page.play");
         Locale locale;
         boolean isEnoughMoney = true;
@@ -100,11 +101,11 @@ public class PlayCommand implements ActionCommand {
                         page = ConfigurationManager.getProperty("path.page.secondroll");
                     }
                 } else {
-                    locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+                    locale = (Locale) session.getAttribute(ATTRIBUTE_LOCALE);
                     request.setAttribute(MESSAGE, MessageManager.getProperty("play.make", locale));
                 }
                 if (!isEnoughMoney) {
-                    locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+                    locale = (Locale) session.getAttribute(ATTRIBUTE_LOCALE);
                     request.setAttribute(MESSAGE, MessageManager.getProperty("play.badbalance", locale));
                 }
             } catch (ServiceException e) {

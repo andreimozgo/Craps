@@ -12,6 +12,9 @@ import by.mozgo.craps.services.impl.GameServiceImpl;
 import by.mozgo.craps.services.impl.UserServiceImpl;
 import by.mozgo.craps.util.TransactionAssistant;
 import by.mozgo.craps.util.TransactionAssistantException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,13 +25,13 @@ import java.util.Random;
  * Contains game logic methods.
  *
  * @author Mozgo Andrei
- *
  */
 public class GameLogic {
-    private static final int passBetId = 1;
-    private static final int dontPassBetId = 2;
-    private static final int comeBetId = 3;
-    private static final int dontComeBetId = 4;
+    private static final Logger LOG = LogManager.getLogger();
+    private static final int PASS_BET_ID = 1;
+    private static final int DONT_PASS_BET_ID = 2;
+    private static final int COME_BET_ID = 3;
+    private static final int DONT_COME_BET_ID = 4;
     private int dice1;
     private int dice2;
     private int sumDice;
@@ -56,29 +59,28 @@ public class GameLogic {
         Bet bet = new Bet(betTypeId, new BigDecimal(amount));
         bet.setGameId(findGameId());
         BigDecimal newUserBalance = user.getBalance().subtract(bet.getAmount());
+        TransactionAssistant transaction = new TransactionAssistant();
         try {
-            TransactionAssistant.startTransaction();
-        } catch (TransactionAssistantException e) {
-            throw new ServiceException("Unable to add bet.\n" + e.getMessage(), e);
-        }
-        try {
+            transaction.startTransaction();
             int betId = betService.create(bet);
             bet.setId(betId);
             newBets.add(bet);
             user.setBalance(newUserBalance);
             userService.update(user);
-        } catch (ServiceException e) {
+            transaction.commitTransaction();
+        } catch (ServiceException | TransactionAssistantException e) {
             try {
-                TransactionAssistant.rollBackTransaction();
+                transaction.rollBackTransaction();
             } catch (TransactionAssistantException e1) {
-                throw new ServiceException("Unable to add bet.\n" + e.getMessage() + "\n" + e1.getMessage(), e);
+                LOG.log(Level.ERROR, "Unable to rollback transaction. {}", e1);
             }
             throw new ServiceException("Unable to add bet.\n" + e.getMessage() + "\n", e);
-        }
-        try {
-            TransactionAssistant.endTransaction();
-        } catch (TransactionAssistantException e) {
-            throw new ServiceException("Unable to add bet.\n" + e.getMessage(), e);
+        } finally {
+            try {
+                transaction.endTransaction();
+            } catch (TransactionAssistantException e) {
+                throw new ServiceException("Exception during ending transaction.\n" + e.getMessage(), e);
+            }
         }
     }
 
@@ -139,27 +141,27 @@ public class GameLogic {
                     if (bet.getProfit() != null) {
                         if (bet.getProfit().compareTo(new BigDecimal(0)) > 0) {
                             BigDecimal newUserBalance = user.getBalance().add(bet.getProfit());
+                            TransactionAssistant transaction = new TransactionAssistant();
                             try {
-                                TransactionAssistant.startTransaction();
-                            } catch (TransactionAssistantException e) {
-                                throw new ServiceException("Game logic error.\n" + e.getMessage(), e);
-                            }
-                            try {
+                                transaction.startTransaction();
                                 betService.update(bet);
                                 user.setBalance(newUserBalance);
                                 userService.update(user);
-                            } catch (ServiceException e) {
+                                transaction.commitTransaction();
+                            } catch (ServiceException | TransactionAssistantException e) {
                                 try {
-                                    TransactionAssistant.rollBackTransaction();
+                                    transaction.rollBackTransaction();
                                 } catch (TransactionAssistantException e1) {
-                                    throw new ServiceException("Game logic error.\n" + e.getMessage() + "\n" + e1.getMessage(), e);
+                                    LOG.log(Level.ERROR, "Unable to rollback transaction. {}", e1);
                                 }
-                                throw new ServiceException("Game logic error.\n" + e.getMessage(), e);
-                            }
-                            try {
-                                TransactionAssistant.endTransaction();
-                            } catch (TransactionAssistantException e) {
-                                throw new ServiceException("Unable to add bet.\n" + e.getMessage(), e);
+                                throw new ServiceException("Unable to add bet.\n" + e.getMessage() + "\n", e);
+                            } finally {
+                                try {
+                                    transaction.endTransaction();
+                                } catch (TransactionAssistantException e) {
+                                    throw new ServiceException("Exception during ending transaction.\n" + e.getMessage(), e);
+                                }
+
                             }
                         }
                     }
@@ -185,28 +187,28 @@ public class GameLogic {
      */
     private void checkBet(Bet bet) {
         switch (bet.getBetTypeId()) {
-            case passBetId:
+            case PASS_BET_ID:
                 if (bet.isFirstRoll()) {
                     checkPassLineFirst(bet);
                 } else {
                     checkPassLineOneMore(bet);
                 }
                 break;
-            case dontPassBetId:
+            case DONT_PASS_BET_ID:
                 if (bet.isFirstRoll()) {
                     checkDoNotPassLineFirst(bet);
                 } else {
                     checkDoNotPassLineOneMore(bet);
                 }
                 break;
-            case comeBetId:
+            case COME_BET_ID:
                 if (bet.isFirstRoll()) {
                     checkComeFirst(bet);
                 } else {
                     checkComeOneMore(bet);
                 }
                 break;
-            case dontComeBetId:
+            case DONT_COME_BET_ID:
                 if (bet.isFirstRoll()) {
                     checkDoNotComeFirst(bet);
                 } else {

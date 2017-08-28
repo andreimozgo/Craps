@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
 
+import static by.mozgo.craps.StringConstant.ATTRIBUTE_LOCALE;
+import static by.mozgo.craps.StringConstant.USER;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 import static by.mozgo.craps.command.ActionResult.ActionType.REDIRECT;
 
@@ -35,7 +37,7 @@ public class LoginCommand implements ActionCommand {
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
         HttpSession session = request.getSession(true);
-        Locale locale = (Locale) session.getAttribute(StringConstant.ATTRIBUTE_LOCALE);
+        Locale locale = (Locale) session.getAttribute(ATTRIBUTE_LOCALE);
 
         String page = ConfigurationManager.getProperty("path.page.login");
         ActionResult result = new ActionResult(FORWARD, page);
@@ -50,7 +52,7 @@ public class LoginCommand implements ActionCommand {
             try {
                 if (userService.checkUser(email, pass)) {
                     User user = userService.findUserByEmail(email);
-                    session.setAttribute(StringConstant.USER, user);
+                    session.setAttribute(USER, user);
                     LOG.log(Level.INFO, "User {} logged in successfully", email);
                     page = ConfigurationManager.getProperty("command.empty");
                     result = new ActionResult(REDIRECT, page);

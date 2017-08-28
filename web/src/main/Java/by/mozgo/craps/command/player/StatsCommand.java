@@ -1,6 +1,5 @@
 package by.mozgo.craps.command.player;
 
-import by.mozgo.craps.StringConstant;
 import by.mozgo.craps.command.ActionCommand;
 import by.mozgo.craps.command.ActionResult;
 import by.mozgo.craps.command.ConfigurationManager;
@@ -17,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import static by.mozgo.craps.StringConstant.USER;
 import static by.mozgo.craps.command.ActionResult.ActionType.FORWARD;
 
 /**
@@ -41,7 +41,7 @@ public class StatsCommand implements ActionCommand {
         String page = ConfigurationManager.getProperty("path.page.stats");
 
         try {
-            User user = (User) session.getAttribute(StringConstant.USER);
+            User user = (User) session.getAttribute(USER);
             int gamesNumber = gameService.findGamesNumber(user.getId());
             int betsNumber = betService.findBetsNumber(user.getId());
             int wonBetsNumber = betService.findWonBetsNumber(user.getId());
