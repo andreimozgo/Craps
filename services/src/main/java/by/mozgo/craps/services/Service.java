@@ -16,7 +16,7 @@ public interface Service<T extends AbstractEntity> {
      * @return Id of inserted entity
      * @throws ServiceException
      */
-    int create(T t) throws ServiceException;
+    long create(T t) throws ServiceException;
 
     /**
      * It's called to update entity
@@ -32,5 +32,5 @@ public interface Service<T extends AbstractEntity> {
      * @param id entity Id to delete
      * @throws ServiceException
      */
-    void delete(Integer id) throws ServiceException;
+    void delete(long id) throws ServiceException;
 }

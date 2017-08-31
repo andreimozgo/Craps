@@ -15,13 +15,13 @@ public class Game extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private LocalDateTime createTime;
-    private Integer userId;
+    private long userId;
     private List<Bet> bets;
     private boolean isFirstRoll = true;
 
     public Game(){}
 
-    public Game(Integer userId){
+    public Game(long userId) {
         this.userId = userId;
         bets = new ArrayList<>();
     }
@@ -34,11 +34,11 @@ public class Game extends AbstractEntity implements Serializable {
         this.createTime = createTime;
     }
 
-    public Integer getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

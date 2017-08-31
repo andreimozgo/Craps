@@ -31,8 +31,8 @@ public class ChangeRoleCommand implements ActionCommand {
         UserService userService = UserServiceImpl.getInstance();
         String page = ConfigurationManager.getProperty("command.adminpage");
 
-        int id = Integer.parseInt(request.getParameter(USER_ID));
-        int newRole = Integer.parseInt(request.getParameter(NEW_ROLE));
+        long id = Long.parseLong(request.getParameter(USER_ID));
+        byte newRole = Byte.parseByte(request.getParameter(NEW_ROLE));
         try {
             userService.updateRole(id, newRole);
         } catch (ServiceException e) {

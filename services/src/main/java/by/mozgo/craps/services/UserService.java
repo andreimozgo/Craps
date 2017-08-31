@@ -56,7 +56,7 @@ public interface UserService extends Service<User> {
      * @param roleId Id of new user role
      * @throws ServiceException
      */
-    void updateRole(Integer userId, int roleId) throws ServiceException;
+    void updateRole(long userId, byte roleId) throws ServiceException;
 
     /**
      * Makes a payment from user balance

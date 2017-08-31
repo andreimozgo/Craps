@@ -10,11 +10,16 @@ import java.io.Serializable;
  */
 public class BetType extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Integer id;
     private String name;
 
-    public BetType(Integer id, String name){
-        this.id = id;
+    public BetType() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
 }

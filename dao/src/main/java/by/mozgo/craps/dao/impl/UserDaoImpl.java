@@ -42,8 +42,8 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     @Override
-    public int create(User entity) throws DaoException {
-        Integer id;
+    public long create(User entity) throws DaoException {
+        long id;
         try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement ps = connection.prepareStatement(QUERY_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, entity.getEmail());
@@ -52,7 +52,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
             ps.executeUpdate();
             ResultSet generatedKeys = ps.getGeneratedKeys();
             generatedKeys.next();
-            id = generatedKeys.getInt(1);
+            id = generatedKeys.getLong(1);
         } catch (SQLException e) {
             throw new DaoException(e);
         }
@@ -88,7 +88,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
             ps.setString(1, entity.getEmail());
             ps.setString(2, entity.getUsername());
             ps.setBigDecimal(3, entity.getBalance());
-            ps.setInt(4, entity.getId());
+            ps.setLong(4, entity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -102,7 +102,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
             ps.setString(2, entity.getPassword());
             ps.setString(3, entity.getUsername());
             ps.setBigDecimal(4, entity.getBalance());
-            ps.setInt(5, entity.getId());
+            ps.setLong(5, entity.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -149,24 +149,24 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
         return users;
     }
 
-    public void updateRole(Integer userId, int role) throws DaoException {
+    public void updateRole(long userId, byte role) throws DaoException {
         try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement ps = connection.prepareStatement(QUERY_UPDATE_ROLE)) {
-            ps.setInt(1, role);
-            ps.setInt(2, userId);
+            ps.setByte(1, role);
+            ps.setLong(2, userId);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
     }
 
-    public int findNumber() throws DaoException {
-        int amount;
+    public long findNumber() throws DaoException {
+        long amount;
         try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(QUERY_GET_USERS_NUMBER);
             result.next();
-            amount = result.getInt(1);
+            amount = result.getLong(1);
         } catch (SQLException e) {
             throw new DaoException(e);
         }

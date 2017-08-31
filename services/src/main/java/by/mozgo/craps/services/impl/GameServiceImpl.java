@@ -29,8 +29,8 @@ public class GameServiceImpl extends ServiceImpl<Game> implements GameService {
     }
 
     @Override
-    public int findGamesNumber(int userId) throws ServiceException {
-        int number = 0;
+    public int findGamesNumber(long userId) throws ServiceException {
+        int number;
         try {
             number = gameDao.findGamesNumber(userId);
         } catch (DaoException e) {

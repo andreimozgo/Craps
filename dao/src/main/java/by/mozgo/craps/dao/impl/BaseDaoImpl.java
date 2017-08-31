@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public abstract class BaseDaoImpl<T extends AbstractEntity> implements BaseDao<T> {
     protected String tableName;
 
-    public int create(T t) throws DaoException {
+    public long create(T t) throws DaoException {
         throw new DaoException("Method unavailable");
     }
 
@@ -27,11 +27,11 @@ public abstract class BaseDaoImpl<T extends AbstractEntity> implements BaseDao<T
     }
 
     @Override
-    public void delete(Integer id) throws DaoException {
+    public void delete(long id) throws DaoException {
         String query = "DELETE FROM " + tableName + " WHERE id = ?";
         try (ConnectionWrapper connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, id);
+            ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);

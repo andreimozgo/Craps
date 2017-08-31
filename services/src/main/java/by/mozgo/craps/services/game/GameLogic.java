@@ -32,9 +32,9 @@ public class GameLogic {
     private static final int DONT_PASS_BET_ID = 2;
     private static final int COME_BET_ID = 3;
     private static final int DONT_COME_BET_ID = 4;
-    private int dice1;
-    private int dice2;
-    private int sumDice;
+    private byte dice1;
+    private byte dice2;
+    private byte sumDice;
     private boolean isGame = false;
     private User user;
     private List<Bet> newBets = new ArrayList<>();
@@ -55,14 +55,14 @@ public class GameLogic {
      * @param amount
      * @throws ServiceException
      */
-    public void addBet(int betTypeId, String amount) throws ServiceException {
+    public void addBet(byte betTypeId, String amount) throws ServiceException {
         Bet bet = new Bet(betTypeId, new BigDecimal(amount));
         bet.setGameId(findGameId());
         BigDecimal newUserBalance = user.getBalance().subtract(bet.getAmount());
         TransactionAssistant transaction = new TransactionAssistant();
         try {
             transaction.startTransaction();
-            int betId = betService.create(bet);
+            long betId = betService.create(bet);
             bet.setId(betId);
             newBets.add(bet);
             user.setBalance(newUserBalance);
@@ -91,8 +91,8 @@ public class GameLogic {
      * @return current game Id
      * @throws ServiceException
      */
-    private int findGameId() throws ServiceException {
-        int gameId;
+    private long findGameId() throws ServiceException {
+        long gameId;
         if (user.getGame() != null) {
             gameId = user.getGame().getId();
         } else {
@@ -135,7 +135,7 @@ public class GameLogic {
                 List<Bet> bets = user.getGame().getBets();
                 dice1 = diceGenerator();
                 dice2 = diceGenerator();
-                sumDice = dice1 + dice2;
+                sumDice = (byte) (dice1 + dice2);
                 for (Bet bet : bets) {
                     checkBet(bet);
                     if (bet.getProfit() != null) {
@@ -176,10 +176,9 @@ public class GameLogic {
      *
      * @return dice number
      */
-    private int diceGenerator() {
+    private byte diceGenerator() {
         Random generator = new Random();
-        int dice = generator.nextInt(6) + 1;
-        return dice;
+        return (byte) (generator.nextInt(6) + 1);
     }
 
     /**

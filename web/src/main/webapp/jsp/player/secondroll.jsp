@@ -30,8 +30,9 @@
                 <div><input type="hidden" name="command" value="play"/></div>
                 <div>
                     <div>Come</div>
-                    <input type="number" name="comeBet" placeholder="Enter your bet"/></div>
-                <div>Don't Come<input type="number" name="dontComeBet" placeholder="Enter your bet"/></div>
+                    <input type="number" name="comeBet" placeholder="<fmt:message key="play.enter" />"/></div>
+                <div>Don't Come<input type="number" name="dontComeBet" placeholder="<fmt:message key="play.enter" />"/>
+                </div>
                 <div><input type="submit" value="<fmt:message key="button.roll" />"/></div>
             </fieldset>
         </form>

@@ -19,7 +19,7 @@ public interface BetService extends Service<Bet> {
      * @return number of bets was made by user
      * @throws ServiceException
      */
-    int findBetsNumber(int userId) throws ServiceException;
+    int findBetsNumber(long userId) throws ServiceException;
 
     /**
      * Finds number of bets was won by user
@@ -28,7 +28,7 @@ public interface BetService extends Service<Bet> {
      * @return number of bets was won by user
      * @throws ServiceException
      */
-    int findWonBetsNumber(int userId) throws ServiceException;
+    int findWonBetsNumber(long userId) throws ServiceException;
 
     /**
      * Generates list of BetVO entities from list of Bet entities

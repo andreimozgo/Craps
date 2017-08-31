@@ -46,7 +46,7 @@ public interface UserDao extends BaseDao<User> {
      * @param role   Id of new user role
      * @throws DaoException if a database access error occurs
      */
-    void updateRole(Integer userId, int role) throws DaoException;
+    void updateRole(long userId, byte role) throws DaoException;
 
     /**
      * Finds number of users stored at database
@@ -54,7 +54,7 @@ public interface UserDao extends BaseDao<User> {
      * @return number of users
      * @throws DaoException if a database access error occurs
      */
-    int findNumber() throws DaoException;
+    long findNumber() throws DaoException;
 
     /**
      * Updates entity User with its password attribute

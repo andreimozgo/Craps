@@ -12,9 +12,9 @@ public class BetVO {
     private String betType;
     private BigDecimal amount;
     private BigDecimal profit;
-    private int point;
+    private byte point;
 
-    public BetVO(String betType, BigDecimal amount, BigDecimal profit, int point){
+    public BetVO(String betType, BigDecimal amount, BigDecimal profit, byte point) {
         this.betType = betType;
         this.amount = amount;
         this.profit = profit;
@@ -33,7 +33,7 @@ public class BetVO {
         return profit;
     }
 
-    public int getPoint() {
+    public byte getPoint() {
         return point;
     }
 }

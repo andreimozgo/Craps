@@ -16,8 +16,8 @@ public abstract class ServiceImpl<T extends AbstractEntity> implements Service<T
     protected BaseDao baseDao;
 
     @Override
-    public int create(T t) throws ServiceException {
-        int id;
+    public long create(T t) throws ServiceException {
+        long id;
         try {
             id = baseDao.create(t);
         } catch (DaoException e) {
@@ -36,7 +36,7 @@ public abstract class ServiceImpl<T extends AbstractEntity> implements Service<T
     }
 
     @Override
-    public void delete(Integer id) throws ServiceException {
+    public void delete(long id) throws ServiceException {
         try {
             baseDao.delete(id);
         } catch (DaoException e) {

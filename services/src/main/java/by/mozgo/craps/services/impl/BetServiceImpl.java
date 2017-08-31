@@ -5,7 +5,6 @@ import by.mozgo.craps.dao.DaoException;
 import by.mozgo.craps.dao.impl.BetDaoImpl;
 import by.mozgo.craps.entity.Bet;
 import by.mozgo.craps.services.BetService;
-import by.mozgo.craps.services.BetTypeService;
 import by.mozgo.craps.services.ServiceException;
 import by.mozgo.craps.services.vo.BetVO;
 
@@ -16,12 +15,10 @@ import java.util.List;
  * Contains bet service implementation
  *
  * @author Mozgo Andrei
- *
  */
-public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
+public class BetServiceImpl extends ServiceImpl<Bet> implements BetService {
     private static BetServiceImpl instance = null;
     private BetDao betDao = BetDaoImpl.getInstance();
-    private BetTypeService betTypeService = BetTypeServiceImpl.getInstance();
 
     private BetServiceImpl() {
         baseDao = betDao;
@@ -35,8 +32,8 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
     }
 
     @Override
-    public int findBetsNumber(int userId) throws ServiceException {
-        int number = 0;
+    public int findBetsNumber(long userId) throws ServiceException {
+        int number;
         try {
             number = betDao.findBetsNumber(userId);
         } catch (DaoException e) {
@@ -46,8 +43,8 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
     }
 
     @Override
-    public int findWonBetsNumber(int userId) throws ServiceException {
-        int number = 0;
+    public int findWonBetsNumber(long userId) throws ServiceException {
+        int number;
         try {
             number = betDao.findWonBetsNumber(userId);
         } catch (DaoException e) {
@@ -59,10 +56,14 @@ public class BetServiceImpl extends ServiceImpl<Bet>  implements BetService {
     @Override
     public List<BetVO> generateBetVO(List<Bet> bets) throws ServiceException {
         List<BetVO> betVOs = new ArrayList<>();
-     for(Bet bet: bets){
-         String betTypeName = betTypeService.getNameById(bet.getBetTypeId());
-         betVOs.add(new BetVO(betTypeName, bet.getAmount(), bet.getProfit(), bet.getPoint()));
-     }
+        try {
+            for (Bet bet : bets) {
+                String betTypeName = betDao.findTypeNameById(bet.getBetTypeId());
+                betVOs.add(new BetVO(betTypeName, bet.getAmount(), bet.getProfit(), bet.getPoint()));
+            }
+        } catch (DaoException e) {
+            throw new ServiceException("Exception in DAO. " + e.getMessage(), e);
+        }
         return betVOs;
     }
 }

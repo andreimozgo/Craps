@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
  * @author Mozgo Andrei
  */
 public class AvatarManager {
+    private static final Logger LOG = LogManager.getLogger();
     private static final String PHOTO_FOLDER = "img\\avatars";
     private static final String PATTERN_PHOTO_EXTENSION = "(.png$)|(.jpg$)|(.jpeg$)";
     private static final String PHOTO_EXTENSION = ".png;.jpg";
@@ -31,7 +32,6 @@ public class AvatarManager {
     private static final String PARAMS_DELIMITER = ";";
     private static final String VALUE_DELIMITER = ";";
     private static final String QUOTE = "\"";
-    private static final Logger LOG = LogManager.getLogger();
     private ServletContext servletContext;
 
     public AvatarManager(ServletContext servletContext) {
@@ -82,7 +82,7 @@ public class AvatarManager {
      * @param part
      * @param userId
      */
-    public void uploadAvatar(Part part, Integer userId) {
+    public void uploadAvatar(Part part, long userId) {
         String fileExtension = findFileExtension(part);
         String photoFilePath = servletContext.getRealPath("") + PHOTO_FOLDER + File.separator + userId;
         deleteAvatar(photoFilePath);
@@ -109,7 +109,7 @@ public class AvatarManager {
         }
     }
 
-    public String findPhotoRelativePath(Integer userId) {
+    public String findPhotoRelativePath(long userId) {
         String photoDirPath = servletContext.getRealPath("") + PHOTO_FOLDER + File.separator;
         String photoFilePath = null;
         String[] extensionsArray = PHOTO_EXTENSION.split(EXTENSION_DELIMITER);

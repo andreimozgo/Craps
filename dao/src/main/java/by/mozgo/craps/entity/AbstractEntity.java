@@ -6,13 +6,13 @@ package by.mozgo.craps.entity;
  * @author Mozgo Andrei
  */
 public abstract class AbstractEntity {
-    private Integer id;
+    private long id;
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

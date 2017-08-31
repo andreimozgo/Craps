@@ -16,5 +16,5 @@ public interface GameService extends Service<Game> {
      * @return number of games
      * @throws ServiceException
      */
-    int findGamesNumber(int userId) throws ServiceException;
+    int findGamesNumber(long userId) throws ServiceException;
 }

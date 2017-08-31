@@ -16,7 +16,7 @@ public interface BaseDao<T extends AbstractEntity> {
      * @return Id of inserted entity
      * @throws DaoException if a database access error occurs or method unavailable
      */
-    int create(T t) throws DaoException;
+    long create(T t) throws DaoException;
 
     /**
      * Updates entity at database
@@ -32,5 +32,5 @@ public interface BaseDao<T extends AbstractEntity> {
      * @param id entity Id to delete
      * @throws DaoException if a database access error occurs
      */
-    void delete(Integer id) throws DaoException;
+    void delete(long id) throws DaoException;
 }

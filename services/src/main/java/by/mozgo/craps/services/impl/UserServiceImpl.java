@@ -35,8 +35,8 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     }
 
     @Override
-    public int create(User user) throws ServiceException {
-        Integer id;
+    public long create(User user) throws ServiceException {
+        long id;
         user.setPassword(hash(user.getPassword()));
         try {
             id = userDao.create(user);
@@ -76,7 +76,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         }
     }
 
-    public void delete(Integer id) throws ServiceException {
+    public void delete(long id) throws ServiceException {
         try {
             userDao.delete(id);
         } catch (DaoException e) {
@@ -104,7 +104,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
         return users;
     }
 
-    public void updateRole(Integer userId, int roleId) throws ServiceException {
+    public void updateRole(long userId, byte roleId) throws ServiceException {
         try {
             userDao.updateRole(userId, roleId);
         } catch (DaoException e) {
@@ -115,7 +115,7 @@ public class UserServiceImpl extends ServiceImpl<User> implements UserService {
     public int findPagesNumber(int recordsOnPage) throws ServiceException {
         int numberOfPages;
         try {
-            int numberOfRecords = userDao.findNumber();
+            long numberOfRecords = userDao.findNumber();
             numberOfPages = Math.round(numberOfRecords / recordsOnPage);
             if ((numberOfRecords % recordsOnPage) > 0) numberOfPages++;
         } catch (DaoException e) {

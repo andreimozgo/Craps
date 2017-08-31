@@ -41,10 +41,10 @@ public class PlayCommand implements ActionCommand {
     private static final String DICE = "dice";
     private static final String MESSAGE = "playMessage";
     private static final String BET_LIST = "betList";
-    private static final int passBetId = 1;
-    private static final int dontPassBetId = 2;
-    private static final int comeBetId = 3;
-    private static final int dontComeBetId = 4;
+    private static final byte passBetId = 1;
+    private static final byte dontPassBetId = 2;
+    private static final byte comeBetId = 3;
+    private static final byte dontComeBetId = 4;
 
     @Override
     public ActionResult execute(HttpServletRequest request) {

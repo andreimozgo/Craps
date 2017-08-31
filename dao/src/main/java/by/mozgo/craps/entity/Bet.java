@@ -11,31 +11,34 @@ import java.math.BigDecimal;
  */
 public class Bet extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Integer gameId;
-    private Integer betTypeId;
+    private long gameId;
+    private byte betTypeId;
     private BigDecimal amount;
     private BigDecimal profit;
     private boolean isFirstRoll = true;
-    private Integer point = 0;
+    private byte point = 0;
 
-    public Bet(Integer betTypeId, BigDecimal amount){
+    public Bet() {
+    }
+
+    public Bet(byte betTypeId, BigDecimal amount) {
         this.betTypeId = betTypeId;
         this.amount = amount;
     }
 
-    public Integer getGameId() {
+    public long getGameId() {
         return gameId;
     }
 
-    public void setGameId(Integer gameId) {
+    public void setGameId(long gameId) {
         this.gameId = gameId;
     }
 
-    public Integer getBetTypeId() {
+    public byte getBetTypeId() {
         return betTypeId;
     }
 
-    public void setBetTypeId(Integer betTypeId) {
+    public void setBetTypeId(byte betTypeId) {
         this.betTypeId = betTypeId;
     }
 
@@ -63,11 +66,11 @@ public class Bet extends AbstractEntity implements Serializable {
         isFirstRoll = firstRoll;
     }
 
-    public int getPoint() {
+    public byte getPoint() {
         return point;
     }
 
-    public void setPoint(int point) {
+    public void setPoint(byte point) {
         this.point = point;
     }
 }
