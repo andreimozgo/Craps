@@ -5,8 +5,8 @@ package by.mozgo.craps;
  *
  * @author Mozgo Andrei
  */
-public interface StringConstant {
-    String ATTRIBUTE_LOCALE = "curLocale";
-    String USER = "user";
-    String EMAIL = "email";
+public abstract class StringConstant {
+    public static final String ATTRIBUTE_LOCALE = "curLocale";
+    public static final String USER = "user";
+    public static final String EMAIL = "email";
 }
