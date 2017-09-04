@@ -77,7 +77,7 @@ public class Bet extends AbstractEntity implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Bet)) return false;
+        if (getClass() != o.getClass()) return false;
 
         Bet bet = (Bet) o;
 

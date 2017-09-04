@@ -19,7 +19,7 @@ public abstract class AbstractEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AbstractEntity)) return false;
+        if (getClass() != o.getClass()) return false;
 
         AbstractEntity that = (AbstractEntity) o;
 

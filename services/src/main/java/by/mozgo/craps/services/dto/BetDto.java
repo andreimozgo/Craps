@@ -40,7 +40,7 @@ public class BetDto {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BetDto)) return false;
+        if (getClass() != o.getClass()) return false;
 
         BetDto betDto = (BetDto) o;
 

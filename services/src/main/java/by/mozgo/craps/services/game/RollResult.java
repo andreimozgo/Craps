@@ -26,7 +26,7 @@ public class RollResult {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RollResult)) return false;
+        if (getClass() != o.getClass()) return false;
 
         RollResult that = (RollResult) o;
 

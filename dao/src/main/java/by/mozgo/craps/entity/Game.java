@@ -61,7 +61,7 @@ public class Game extends AbstractEntity implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Game)) return false;
+        if (getClass() != o.getClass()) return false;
 
         Game game = (Game) o;
 

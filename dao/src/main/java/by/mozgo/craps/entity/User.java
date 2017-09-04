@@ -81,7 +81,7 @@ public class User extends AbstractEntity implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (getClass() != o.getClass()) return false;
 
         User user = (User) o;
 
