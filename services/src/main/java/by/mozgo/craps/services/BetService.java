@@ -1,7 +1,7 @@
 package by.mozgo.craps.services;
 
 import by.mozgo.craps.entity.Bet;
-import by.mozgo.craps.services.vo.BetVO;
+import by.mozgo.craps.services.dto.BetDto;
 
 import java.util.List;
 
@@ -31,11 +31,11 @@ public interface BetService extends Service<Bet> {
     int findWonBetsNumber(long userId) throws ServiceException;
 
     /**
-     * Generates list of BetVO entities from list of Bet entities
+     * Generates list of BetDto entities from list of Bet entities
      *
      * @param bets
-     * @return list of BetVO entities
+     * @return list of BetDto entities
      * @throws ServiceException
      */
-    List<BetVO> generateBetVO(List<Bet> bets) throws ServiceException;
+    List<BetDto> generateBetDto(List<Bet> bets) throws ServiceException;
 }

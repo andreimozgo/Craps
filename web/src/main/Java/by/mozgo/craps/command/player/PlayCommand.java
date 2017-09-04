@@ -6,11 +6,11 @@ import by.mozgo.craps.command.ConfigurationManager;
 import by.mozgo.craps.command.MessageManager;
 import by.mozgo.craps.entity.User;
 import by.mozgo.craps.services.ServiceException;
+import by.mozgo.craps.services.dto.BetDto;
 import by.mozgo.craps.services.game.GameLogic;
 import by.mozgo.craps.services.game.RollResult;
 import by.mozgo.craps.services.impl.BetServiceImpl;
 import by.mozgo.craps.services.validator.Validator;
-import by.mozgo.craps.services.vo.BetVO;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -95,8 +95,8 @@ public class PlayCommand implements ActionCommand {
                 if (user.getGame() != null) {
                     RollResult rollResult = gameLogic.roll();
                     request.setAttribute(DICE, rollResult);
-                    List<BetVO> betVOList = BetServiceImpl.getInstance().generateBetVO(user.getGame().getBets());
-                    request.setAttribute(BET_LIST, betVOList);
+                    List<BetDto> betDtoList = BetServiceImpl.getInstance().generateBetDto(user.getGame().getBets());
+                    request.setAttribute(BET_LIST, betDtoList);
                     if (!user.getGame().isFirstRoll()) {
                         page = ConfigurationManager.getProperty("path.page.secondroll");
                     }

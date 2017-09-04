@@ -1,4 +1,4 @@
-package by.mozgo.craps.services.vo;
+package by.mozgo.craps.services.dto;
 
 import java.math.BigDecimal;
 
@@ -8,13 +8,13 @@ import java.math.BigDecimal;
  * @author Mozgo Andrei
  *
  */
-public class BetVO {
+public class BetDto {
     private String betType;
     private BigDecimal amount;
     private BigDecimal profit;
     private byte point;
 
-    public BetVO(String betType, BigDecimal amount, BigDecimal profit, byte point) {
+    public BetDto(String betType, BigDecimal amount, BigDecimal profit, byte point) {
         this.betType = betType;
         this.amount = amount;
         this.profit = profit;
@@ -40,14 +40,14 @@ public class BetVO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BetVO)) return false;
+        if (!(o instanceof BetDto)) return false;
 
-        BetVO betVO = (BetVO) o;
+        BetDto betDto = (BetDto) o;
 
-        if (point != betVO.point) return false;
-        if (!betType.equals(betVO.betType)) return false;
-        if (!amount.equals(betVO.amount)) return false;
-        return profit.equals(betVO.profit);
+        if (point != betDto.point) return false;
+        if (!betType.equals(betDto.betType)) return false;
+        if (!amount.equals(betDto.amount)) return false;
+        return profit.equals(betDto.profit);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class BetVO {
 
     @Override
     public String toString() {
-        return "BetVO{" +
+        return "BetDto{" +
                 "betType='" + betType + '\'' +
                 ", amount=" + amount +
                 ", profit=" + profit +

@@ -6,7 +6,7 @@ import by.mozgo.craps.dao.impl.BetDaoImpl;
 import by.mozgo.craps.entity.Bet;
 import by.mozgo.craps.services.BetService;
 import by.mozgo.craps.services.ServiceException;
-import by.mozgo.craps.services.vo.BetVO;
+import by.mozgo.craps.services.dto.BetDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,16 +54,16 @@ public class BetServiceImpl extends ServiceImpl<Bet> implements BetService {
     }
 
     @Override
-    public List<BetVO> generateBetVO(List<Bet> bets) throws ServiceException {
-        List<BetVO> betVOs = new ArrayList<>();
+    public List<BetDto> generateBetDto(List<Bet> bets) throws ServiceException {
+        List<BetDto> betDtos = new ArrayList<>();
         try {
             for (Bet bet : bets) {
                 String betTypeName = betDao.findTypeNameById(bet.getBetTypeId());
-                betVOs.add(new BetVO(betTypeName, bet.getAmount(), bet.getProfit(), bet.getPoint()));
+                betDtos.add(new BetDto(betTypeName, bet.getAmount(), bet.getProfit(), bet.getPoint()));
             }
         } catch (DaoException e) {
             throw new ServiceException("Exception in DAO. " + e.getMessage(), e);
         }
-        return betVOs;
+        return betDtos;
     }
 }
