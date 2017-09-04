@@ -29,7 +29,7 @@ public class ChangeRoleCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
-        String page = ConfigurationManager.getProperty("command.adminpage");
+        String page = ConfigurationManager.getProperty("command.showusers");
 
         long id = Long.parseLong(request.getParameter(USER_ID));
         byte newRole = Byte.parseByte(request.getParameter(NEW_ROLE));

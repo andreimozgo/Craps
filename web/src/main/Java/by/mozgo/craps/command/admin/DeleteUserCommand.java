@@ -26,7 +26,7 @@ public class DeleteUserCommand implements ActionCommand {
     @Override
     public ActionResult execute(HttpServletRequest request) {
         UserService userService = UserServiceImpl.getInstance();
-        String page = ConfigurationManager.getProperty("command.adminpage");
+        String page = ConfigurationManager.getProperty("command.showusers");
 
         int id = Integer.parseInt(request.getParameter(USER_ID));
         try {
