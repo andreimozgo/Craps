@@ -36,4 +36,36 @@ public class BetVO {
     public byte getPoint() {
         return point;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BetVO)) return false;
+
+        BetVO betVO = (BetVO) o;
+
+        if (point != betVO.point) return false;
+        if (!betType.equals(betVO.betType)) return false;
+        if (!amount.equals(betVO.amount)) return false;
+        return profit.equals(betVO.profit);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = betType.hashCode();
+        result = 31 * result + amount.hashCode();
+        result = 31 * result + profit.hashCode();
+        result = 31 * result + (int) point;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "BetVO{" +
+                "betType='" + betType + '\'' +
+                ", amount=" + amount +
+                ", profit=" + profit +
+                ", point=" + point +
+                '}';
+    }
 }

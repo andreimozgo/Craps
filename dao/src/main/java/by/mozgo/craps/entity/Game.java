@@ -57,4 +57,36 @@ public class Game extends AbstractEntity implements Serializable {
     public void setFirstRoll(boolean firstRoll) {
         isFirstRoll = firstRoll;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Game)) return false;
+
+        Game game = (Game) o;
+
+        if (userId != game.userId) return false;
+        if (isFirstRoll != game.isFirstRoll) return false;
+        if (createTime != null ? !createTime.equals(game.createTime) : game.createTime != null) return false;
+        return bets != null ? bets.equals(game.bets) : game.bets == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = createTime != null ? createTime.hashCode() : 0;
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (bets != null ? bets.hashCode() : 0);
+        result = 31 * result + (isFirstRoll ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "createTime=" + createTime +
+                ", userId=" + userId +
+                ", bets=" + bets +
+                ", isFirstRoll=" + isFirstRoll +
+                "} " + super.toString();
+    }
 }

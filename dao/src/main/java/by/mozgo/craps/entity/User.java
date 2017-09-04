@@ -79,13 +79,44 @@ public class User extends AbstractEntity implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (createTime != null ? !createTime.equals(user.createTime) : user.createTime != null) return false;
+        if (balance != null ? !balance.equals(user.balance) : user.balance != null) return false;
+        if (userRole != user.userRole) return false;
+        return game != null ? game.equals(user.game) : user.game == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = email != null ? email.hashCode() : 0;
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
+        result = 31 * result + (balance != null ? balance.hashCode() : 0);
+        result = 31 * result + (userRole != null ? userRole.hashCode() : 0);
+        result = 31 * result + (game != null ? game.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "User{" +
-                "id=" + super.getId() +
-                ", name='" + email + '\'' +
-                ", login='" + email + '\'' +
-                ", userRole='" + userRole + '\'' +
-                '}';
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                ", createTime=" + createTime +
+                ", balance=" + balance +
+                ", userRole=" + userRole +
+                ", game=" + game +
+                "} " + super.toString();
     }
 
     public enum UserRole {

@@ -73,4 +73,42 @@ public class Bet extends AbstractEntity implements Serializable {
     public void setPoint(byte point) {
         this.point = point;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Bet)) return false;
+
+        Bet bet = (Bet) o;
+
+        if (gameId != bet.gameId) return false;
+        if (betTypeId != bet.betTypeId) return false;
+        if (isFirstRoll != bet.isFirstRoll) return false;
+        if (point != bet.point) return false;
+        if (amount != null ? !amount.equals(bet.amount) : bet.amount != null) return false;
+        return profit != null ? profit.equals(bet.profit) : bet.profit == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (gameId ^ (gameId >>> 32));
+        result = 31 * result + (int) betTypeId;
+        result = 31 * result + (amount != null ? amount.hashCode() : 0);
+        result = 31 * result + (profit != null ? profit.hashCode() : 0);
+        result = 31 * result + (isFirstRoll ? 1 : 0);
+        result = 31 * result + (int) point;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Bet{" +
+                "gameId=" + gameId +
+                ", betTypeId=" + betTypeId +
+                ", amount=" + amount +
+                ", profit=" + profit +
+                ", isFirstRoll=" + isFirstRoll +
+                ", point=" + point +
+                "} " + super.toString();
+    }
 }
